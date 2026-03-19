@@ -92,5 +92,13 @@ export default class UserManager {
     async reloadLang(lang) {
         await eXeLearning.app.locale.setLocaleLang(lang);
         await eXeLearning.app.locale.loadTranslationsStrings();
+
+        if (eXeLearning?.config && typeof eXeLearning.config === 'object') {
+            eXeLearning.config.locale = lang;
+        }
+
+        if (typeof eXeLearning.app.refreshTranslations === 'function') {
+            eXeLearning.app.refreshTranslations();
+        }
     }
 }

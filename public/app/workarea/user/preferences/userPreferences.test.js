@@ -20,6 +20,7 @@ describe('UserPreferences', () => {
 
     // Mock global eXeLearning for server mode (default)
     globalThis.eXeLearning = {
+      config: { locale: 'en' },
       app: {
         capabilities: { storage: { remote: true } }, // Server mode
         api: {
@@ -50,7 +51,8 @@ describe('UserPreferences', () => {
           properties: {
             show: vi.fn()
           }
-        }
+        },
+        refreshTranslations: vi.fn(),
       }
     };
 
@@ -174,7 +176,7 @@ describe('UserPreferences', () => {
       const notice = document.getElementById('preferences-static-notice');
       expect(notice).not.toBeNull();
       expect(notice.className).toBe('alert alert-info');
-      expect(notice.textContent).toBe('Preferences will be applied after refreshing the page.');
+      expect(notice.textContent).toBe('Preferences are saved locally in this static version.');
 
       // Cleanup
       document.body.removeChild(mockModal);
@@ -259,49 +261,6 @@ describe('UserPreferences', () => {
     });
   });
 
-  describe('_showStaticReloadWarning', () => {
-    it('should add warning to modal body', () => {
-      const mockModal = document.createElement('div');
-      mockModal.id = 'modalProperties';
-      const mockBody = document.createElement('div');
-      mockBody.className = 'modal-body';
-      mockModal.appendChild(mockBody);
-      document.body.appendChild(mockModal);
-
-      userPreferences._showStaticReloadWarning();
-
-      const warning = document.getElementById('preferences-reload-warning');
-      expect(warning).not.toBeNull();
-      expect(warning.className).toBe('alert alert-warning');
-
-      // Cleanup
-      document.body.removeChild(mockModal);
-    });
-
-    it('should reuse existing warning element', () => {
-      const mockModal = document.createElement('div');
-      mockModal.id = 'modalProperties';
-      const mockBody = document.createElement('div');
-      mockBody.className = 'modal-body';
-      mockModal.appendChild(mockBody);
-      document.body.appendChild(mockModal);
-
-      // Call twice
-      userPreferences._showStaticReloadWarning();
-      userPreferences._showStaticReloadWarning();
-
-      const warnings = document.querySelectorAll('#preferences-reload-warning');
-      expect(warnings.length).toBe(1);
-
-      // Cleanup
-      document.body.removeChild(mockModal);
-    });
-
-    it('should handle missing modal gracefully', () => {
-      expect(() => userPreferences._showStaticReloadWarning()).not.toThrow();
-    });
-  });
-
   describe('apiSaveProperties (server mode)', () => {
     it('should update local preferences and call api.putSaveUserPreferences', async () => {
       userPreferences.preferences = {
@@ -379,29 +338,16 @@ describe('UserPreferences', () => {
       expect(mockManager.reloadVersionControl).toHaveBeenCalledWith('true');
     });
 
-    it('should show static reload warning when changing locale in static mode', async () => {
+    it('should apply locale immediately in static mode without reloading page', async () => {
       userPreferences.preferences = {
         locale: { value: 'en' }
       };
-
-      // Create mock modal for the warning
-      const mockModal = document.createElement('div');
-      mockModal.id = 'modalProperties';
-      const mockBody = document.createElement('div');
-      mockBody.className = 'modal-body';
-      mockModal.appendChild(mockBody);
-      document.body.appendChild(mockModal);
 
       await userPreferences.apiSaveProperties({
         locale: 'es'
       });
 
-      // Should show warning instead of reloading page
-      const warning = document.getElementById('preferences-reload-warning');
-      expect(warning).not.toBeNull();
-
-      // Cleanup
-      document.body.removeChild(mockModal);
+      expect(mockManager.reloadLang).toHaveBeenCalledWith('es');
     });
   });
 

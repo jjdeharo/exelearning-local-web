@@ -99,7 +99,7 @@ export default class UserPreferences {
     }
 
     /**
-     * Add notice for static mode users that preferences require page refresh
+     * Add notice for static mode users about preference behavior
      * @private
      */
     _addStaticModeNotice() {
@@ -114,7 +114,7 @@ export default class UserPreferences {
         notice.id = 'preferences-static-notice';
         notice.className = 'alert alert-info';
         notice.setAttribute('role', 'alert');
-        notice.textContent = _('Preferences will be applied after refreshing the page.');
+        notice.textContent = _('Preferences are saved locally in this static version.');
 
         // Insert at the beginning of the body
         body.prepend(notice);
@@ -231,35 +231,15 @@ export default class UserPreferences {
         // Update interface lang
         if (preferences.locale) await this.manager.reloadLang(preferences.locale);
 
-        // Reloading of the page so that it takes a possible change of language in the user preferences
+        // In static mode, apply language changes immediately without reloading.
+        // In server mode, keep the full reload to match the existing flow.
         if (params['locale'] !== undefined) {
             if (isStaticMode) {
-                this._showStaticReloadWarning();
                 return;
             }
             window.UnsavedChangesHelper?.removeBeforeUnloadHandler();
             window.onbeforeunload = null;
             window.location.reload();
         }
-    }
-
-    _showStaticReloadWarning() {
-        const modal = document.getElementById('modalProperties');
-        const body = modal?.querySelector('.modal-body');
-        if (!body) return;
-
-        const message = typeof _ === 'function'
-            ? _('Changes require a page reload to take effect. Please download your project first to avoid losing your work, then reload the page.')
-            : 'Changes require a page reload to take effect. Please download your project first to avoid losing your work, then reload the page.';
-
-        let warning = body.querySelector('#preferences-reload-warning');
-        if (!warning) {
-            warning = document.createElement('div');
-            warning.id = 'preferences-reload-warning';
-            warning.className = 'alert alert-warning';
-            warning.setAttribute('role', 'alert');
-            body.prepend(warning);
-        }
-        warning.textContent = message;
     }
 }
