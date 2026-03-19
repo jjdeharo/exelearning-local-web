@@ -29,6 +29,32 @@ var $punnettsquare = {
             phenotypeRatio: 'Proporción fenotípica',
             solution: 'Solución',
         },
+        ca: {
+            punnettSquare: 'Quadre de Punnett',
+            possibleGametes: 'Gàmetes possibles',
+            parent1Gametes: 'Gàmetes del progenitor 1',
+            parent2Gametes: 'Gàmetes del progenitor 2',
+            punnettSquareCell: 'Cel·la del quadre de Punnett',
+            parent1: 'Progenitor 1',
+            parent2: 'Progenitor 2',
+            writeGametes: 'Escriu els gàmetes separats per comes.',
+            genotypeRatio: 'Proporció genotípica',
+            phenotypeRatio: 'Proporció fenotípica',
+            solution: 'Solució',
+        },
+        va: {
+            punnettSquare: 'Quadre de Punnett',
+            possibleGametes: 'Gàmetes possibles',
+            parent1Gametes: 'Gàmetes del progenitor 1',
+            parent2Gametes: 'Gàmetes del progenitor 2',
+            punnettSquareCell: 'Cel·la del quadre de Punnett',
+            parent1: 'Progenitor 1',
+            parent2: 'Progenitor 2',
+            writeGametes: 'Escriu els gàmetes separats per comes.',
+            genotypeRatio: 'Proporció genotípica',
+            phenotypeRatio: 'Proporció fenotípica',
+            solution: 'Solució',
+        },
     },
 
     renderView(data, accessibility, template, ideviceId) {
@@ -192,7 +218,11 @@ var $punnettsquare = {
             $('html').attr('lang') ||
             navigator.language ||
             'en';
-        return String(lang).toLowerCase().startsWith('es') ? 'es' : 'en';
+        const normalized = String(lang).toLowerCase().replace('_', '-');
+        if (normalized.startsWith('ca')) return 'ca';
+        if (normalized.startsWith('va')) return 'va';
+        if (normalized.startsWith('es')) return 'es';
+        return 'en';
     },
 
     t(key) {
