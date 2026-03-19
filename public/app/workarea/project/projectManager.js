@@ -5,6 +5,7 @@ import ImportProgress from '../interface/importProgress.js';
 
 // Use global AppLogger for debug-controlled logging
 const Logger = window.AppLogger || console;
+const STATIC_PROJECT_ID_SESSION_KEY = 'exe-static-project-id';
 
 /**
  * IndexedDB store name and key for pending local file imports.
@@ -622,6 +623,9 @@ export default class projectManager {
             case 'new': {
                 if (isStaticMode) {
                     // Static/Electron: reload generates a fresh UUID automatically
+                    try {
+                        sessionStorage.removeItem(STATIC_PROJECT_ID_SESSION_KEY);
+                    } catch (_) {}
                     window.location.reload();
                 } else {
                     const resp = await fetch(`${basePath}/api/project/create-quick`, {
@@ -642,6 +646,9 @@ export default class projectManager {
                 if (isStaticMode) {
                     // Static/Electron: set projectId and reload (no server routes)
                     window.eXeLearning.projectId = projectUuid;
+                    try {
+                        sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectUuid);
+                    } catch (_) {}
                     window.location.reload();
                 } else {
                     window.location.href = `${basePath}/workarea?project=${projectUuid}`;
@@ -652,6 +659,9 @@ export default class projectManager {
                 await storePendingImport(file);
                 if (isStaticMode) {
                     // Signal for _processPendingImport after reload
+                    try {
+                        sessionStorage.removeItem(STATIC_PROJECT_ID_SESSION_KEY);
+                    } catch (_) {}
                     sessionStorage.setItem('exe-pending-import', '1');
                     window.location.reload();
                 } else {
@@ -1629,11 +1639,17 @@ export default class projectManager {
 
         // Static mode UI adjustments (save button label)
         if (installationType === 'static') {
-            document.querySelector('#head-top-download-button').innerHTML =
-                'save';
-            document
-                .querySelector('#head-top-download-button')
-                .setAttribute('title', _('Save'));
+            const downloadButton = document.querySelector('#head-top-download-button');
+            const saveButton = document.querySelector('#head-top-save-button');
+            downloadButton.innerHTML = 'save';
+            downloadButton.setAttribute('title', _('Save'));
+
+            // In static mode the relabeled download button is the real file-save action.
+            // Hide the server-save button to avoid two visible "Save" buttons with different behavior.
+            if (saveButton) {
+                saveButton.style.display = 'none';
+                saveButton.setAttribute('aria-hidden', 'true');
+            }
 
             // Expose a stable project key for Electron (per-project save path)
             if (window.electronAPI) {
@@ -1663,6 +1679,25 @@ export default class projectManager {
         try {
             // Yjs mode: save Yjs document to server
             if (this._yjsEnabled && this._yjsBridge) {
+                const isStaticMode = this.app?.capabilities?.storage?.remote === false;
+                if (isStaticMode && this.exportToElpxViaYjs) {
+                    const exportResult = await this.exportToElpxViaYjs();
+                    if (exportResult?.saved === false) {
+                        toast.remove();
+                        return;
+                    }
+
+                    const documentManager = this._yjsBridge.getDocumentManager?.();
+                    if (documentManager?.markClean) {
+                        documentManager.markClean();
+                    }
+
+                    this.app.interface.connectionTime.loadLasUpdatedInInterface();
+                    toast.toastBody.innerHTML = _('File saved.');
+                    Logger.log('[ProjectManager] Static Yjs project exported and marked clean');
+                    return;
+                }
+
                 const documentManager = this._yjsBridge.getDocumentManager();
                 if (documentManager) {
                     const result = await documentManager.save();

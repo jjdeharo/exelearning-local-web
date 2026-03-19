@@ -491,6 +491,19 @@ describe('YjsDocumentManager', () => {
       expect(global.localStorage.getItem(manager._dirtyStateKey)).toBeNull();
     });
 
+    it('markClean clears static recovery keys', () => {
+      window.__EXE_STATIC_MODE__ = true;
+      global.localStorage.setItem(manager._recoverOnOpenKey, 'true');
+      global.localStorage.setItem(manager._recoverProjectIdKey, manager.projectId);
+
+      manager.markClean();
+
+      expect(global.localStorage.getItem(manager._recoverOnOpenKey)).toBeNull();
+      expect(global.localStorage.getItem(manager._recoverProjectIdKey)).toBeNull();
+
+      delete window.__EXE_STATIC_MODE__;
+    });
+
     it('hasUnsavedChanges returns isDirty', () => {
       expect(manager.hasUnsavedChanges()).toBe(false);
       manager.markDirty();
@@ -638,6 +651,20 @@ describe('YjsDocumentManager', () => {
       manager._persistDirtyState(false);
 
       expect(removeItemSpy).toHaveBeenCalledWith(manager._dirtyStateKey);
+    });
+
+    it('removes recovery keys too when static mode becomes clean', async () => {
+      await manager.initialize();
+      window.__EXE_STATIC_MODE__ = true;
+      const removeItemSpy = spyOn(localStorage, 'removeItem');
+
+      manager._persistDirtyState(false);
+
+      expect(removeItemSpy).toHaveBeenCalledWith(manager._dirtyStateKey);
+      expect(removeItemSpy).toHaveBeenCalledWith(manager._recoverOnOpenKey);
+      expect(removeItemSpy).toHaveBeenCalledWith(manager._recoverProjectIdKey);
+
+      delete window.__EXE_STATIC_MODE__;
     });
   });
 
@@ -2463,6 +2490,10 @@ describe('YjsDocumentManager', () => {
       expect(global.localStorage.setItem).toHaveBeenCalledWith(
         'exe-recover-on-open-test-project-123',
         'true',
+      );
+      expect(global.localStorage.setItem).toHaveBeenCalledWith(
+        'exe-static-recover-project-id',
+        'test-project-123',
       );
       expect(global.localStorage.setItem).not.toHaveBeenCalledWith(
         'exe-needs-cleanup-test-project-123',

@@ -115,6 +115,43 @@
             });
         }
 
+        const STATIC_PROJECT_ID_SESSION_KEY = 'exe-static-project-id';
+        const STATIC_RECOVER_PROJECT_ID_KEY = 'exe-static-recover-project-id';
+
+        function persistStaticProjectId(projectId) {
+            if (!projectId) return;
+            try {
+                sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectId);
+            } catch (e) {}
+        }
+
+        function clearRecoveredStaticProjectId() {
+            try {
+                localStorage.removeItem(STATIC_RECOVER_PROJECT_ID_KEY);
+            } catch (e) {}
+        }
+
+        function resolveInitialStaticProjectId() {
+            try {
+                const sessionProjectId = sessionStorage.getItem(STATIC_PROJECT_ID_SESSION_KEY);
+                if (sessionProjectId) {
+                    return sessionProjectId;
+                }
+            } catch (e) {}
+
+            try {
+                const recoverProjectId = localStorage.getItem(STATIC_RECOVER_PROJECT_ID_KEY);
+                if (recoverProjectId) {
+                    persistStaticProjectId(recoverProjectId);
+                    return recoverProjectId;
+                }
+            } catch (e) {}
+
+            const projectId = generateUUID();
+            persistStaticProjectId(projectId);
+            return projectId;
+        }
+
         window.eXeLearning = {
             version: "{{BUILD_VERSION}}",
             expires: "",
@@ -140,7 +177,7 @@
                 themeTypeUser: 'user',
                 clientCallWaitingTime: 5000
             }),
-            projectId: generateUUID()  // Set synchronously so app.bundle.js can start
+            projectId: resolveInitialStaticProjectId()  // Set synchronously so app.bundle.js can start
         };
 
         // MathJax configuration with relative paths for static mode
@@ -417,7 +454,9 @@
 
             // Ensure there is a projectId so app bootstrap can proceed.
             if (!window.eXeLearning.projectId) {
-                window.eXeLearning.projectId = generateUUID();
+                window.eXeLearning.projectId = resolveInitialStaticProjectId();
+            } else {
+                persistStaticProjectId(window.eXeLearning.projectId);
             }
 
             const app = window.eXeLearning?.app;
@@ -501,6 +540,8 @@
         // Create new blank project
         window.newProject = function() {
             const uuid = generateUUID();
+            clearRecoveredStaticProjectId();
+            persistStaticProjectId(uuid);
             window.eXeLearning.projectId = uuid;
             // Reload the page to start fresh
             location.reload();
@@ -508,6 +549,7 @@
 
         // Open existing project from recent list
         window.openProject = async function(uuid) {
+            persistStaticProjectId(uuid);
             window.eXeLearning.projectId = uuid;
             // Reload the page with the new project ID
             location.reload();

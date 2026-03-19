@@ -30,17 +30,49 @@ import DOMTranslator from './locate/domTranslator.js';
 import UnsavedChangesHelper from './utils/unsavedChangesHelper.js';
 window.UnsavedChangesHelper = UnsavedChangesHelper;
 
+const STATIC_PROJECT_ID_SESSION_KEY = 'exe-static-project-id';
+const STATIC_RECOVER_PROJECT_ID_KEY = 'exe-static-recover-project-id';
+
+function persistStaticProjectId(projectId) {
+    if (!projectId) return;
+    try {
+        sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectId);
+    } catch (_) {}
+}
+
 function ensureStaticProjectId(eXeLearning) {
-    if (eXeLearning.projectId) return eXeLearning.projectId;
+    if (eXeLearning.projectId) {
+        persistStaticProjectId(eXeLearning.projectId);
+        return eXeLearning.projectId;
+    }
+
+    try {
+        const existingSessionProjectId = sessionStorage.getItem(STATIC_PROJECT_ID_SESSION_KEY);
+        if (existingSessionProjectId) {
+            eXeLearning.projectId = existingSessionProjectId;
+            return eXeLearning.projectId;
+        }
+    } catch (_) {}
+
+    try {
+        const recoverProjectId = localStorage.getItem(STATIC_RECOVER_PROJECT_ID_KEY);
+        if (recoverProjectId) {
+            eXeLearning.projectId = recoverProjectId;
+            persistStaticProjectId(recoverProjectId);
+            return eXeLearning.projectId;
+        }
+    } catch (_) {}
 
     try {
         if (window.crypto?.randomUUID) {
             eXeLearning.projectId = window.crypto.randomUUID();
+            persistStaticProjectId(eXeLearning.projectId);
             return eXeLearning.projectId;
         }
     } catch (_) {}
 
     eXeLearning.projectId = `local-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    persistStaticProjectId(eXeLearning.projectId);
     return eXeLearning.projectId;
 }
 
@@ -1598,9 +1630,9 @@ window.onload = function () {
     // sessions can be recovered even before the user explicitly opens/imports a file.
     // Recovery prompts still depend on dirty state, so untouched sessions stay silent.
     const runtimeConfig = RuntimeConfig.fromEnvironment();
-    if (runtimeConfig.isStaticMode() && !eXeLearning.projectId) {
-        ensureStaticProjectId(eXeLearning);
-        console.log('[App] Static mode: created local project:', eXeLearning.projectId);
+    if (runtimeConfig.isStaticMode()) {
+        const projectId = ensureStaticProjectId(eXeLearning);
+        console.log('[App] Static mode: active local project:', projectId);
     }
 
     eXeLearning.app.init();

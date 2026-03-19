@@ -84,6 +84,7 @@ class YjsDocumentManager {
     this._dirtyStateKey = `exelearning_dirty_state_${projectId}`;
     // LocalStorage key that signals a recoverable local draft for static mode
     this._recoverOnOpenKey = `exe-recover-on-open-${projectId}`;
+    this._recoverProjectIdKey = 'exe-static-recover-project-id';
 
     // Bind beforeunload handler
     this._beforeUnloadHandler = this._handleBeforeUnload.bind(this);
@@ -1467,6 +1468,10 @@ class YjsDocumentManager {
         localStorage.setItem(this._dirtyStateKey, 'true');
       } else {
         localStorage.removeItem(this._dirtyStateKey);
+        if (this._isStaticMode()) {
+          localStorage.removeItem(this._recoverOnOpenKey);
+          localStorage.removeItem(this._recoverProjectIdKey);
+        }
       }
     } catch (e) {
       // localStorage not available or full
@@ -1819,7 +1824,10 @@ class YjsDocumentManager {
     Logger.log(`[YjsDocumentManager] Last tab closed for project ${this.projectId}, scheduling deferred cleanup`);
 
     if (this._isStaticMode() && this.isDirty) {
-      try { localStorage.setItem(this._recoverOnOpenKey, 'true'); } catch (_) {}
+      try {
+        localStorage.setItem(this._recoverOnOpenKey, 'true');
+        localStorage.setItem(this._recoverProjectIdKey, this.projectId);
+      } catch (_) {}
       return;
     }
 

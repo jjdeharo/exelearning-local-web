@@ -299,12 +299,15 @@ describe('ProjectManager', () => {
             isStaticMode: () => true,
         };
         const button = document.querySelector('#head-top-download-button');
+        const saveButton = document.querySelector('#head-top-save-button');
 
         projectManager.setInstallationTypeAttribute();
 
         expect(document.body.getAttribute('installation-type')).toBe('static');
         expect(button.innerHTML).toBe('save');
         expect(button.getAttribute('title')).toBe('Save');
+        expect(saveButton.style.display).toBe('none');
+        expect(saveButton.getAttribute('aria-hidden')).toBe('true');
     });
 
     it('exposes project key for Electron when electronAPI is available', () => {
@@ -1537,6 +1540,63 @@ describe('ProjectManager', () => {
     });
 
     describe('save', () => {
+        it('uses ELPX export in static Yjs mode and marks the document clean', async () => {
+            vi.useFakeTimers();
+            projectManager._yjsEnabled = true;
+            const markClean = vi.fn();
+            projectManager.exportToElpxViaYjs = vi.fn().mockResolvedValue({ saved: true });
+            projectManager._yjsBridge = {
+                getDocumentManager: vi.fn().mockReturnValue({
+                    markClean,
+                }),
+            };
+            mockApp.capabilities = { storage: { remote: false } };
+            mockApp.toasts = {
+                createToast: vi.fn().mockReturnValue({
+                    toastBody: { innerHTML: '' },
+                    remove: vi.fn(),
+                }),
+            };
+            mockApp.interface.connectionTime = {
+                loadLasUpdatedInInterface: vi.fn(),
+            };
+
+            await projectManager.save();
+            vi.advanceTimersByTime(2000);
+
+            expect(projectManager.exportToElpxViaYjs).toHaveBeenCalled();
+            expect(markClean).toHaveBeenCalled();
+            vi.useRealTimers();
+        });
+
+        it('does nothing after a cancelled static save dialog', async () => {
+            vi.useFakeTimers();
+            const remove = vi.fn();
+            projectManager._yjsEnabled = true;
+            projectManager.exportToElpxViaYjs = vi.fn().mockResolvedValue({ saved: false });
+            projectManager._yjsBridge = {
+                getDocumentManager: vi.fn(),
+            };
+            mockApp.capabilities = { storage: { remote: false } };
+            mockApp.toasts = {
+                createToast: vi.fn().mockReturnValue({
+                    toastBody: { innerHTML: '' },
+                    remove,
+                }),
+            };
+            mockApp.interface.connectionTime = {
+                loadLasUpdatedInInterface: vi.fn(),
+            };
+
+            await projectManager.save();
+            vi.advanceTimersByTime(2000);
+
+            expect(projectManager.exportToElpxViaYjs).toHaveBeenCalled();
+            expect(projectManager._yjsBridge.getDocumentManager).not.toHaveBeenCalled();
+            expect(remove).toHaveBeenCalled();
+            vi.useRealTimers();
+        });
+
         it('uses Yjs mode when enabled', async () => {
             vi.useFakeTimers();
             projectManager._yjsEnabled = true;
@@ -3325,17 +3385,22 @@ describe('ProjectManager', () => {
             });
 
             it('new action: reloads page without server call', async () => {
+                sessionStorage.setItem('exe-static-project-id', 'old-project');
+
                 await projectManager.transitionToProject({ action: 'new' });
 
                 expect(global.fetch).not.toHaveBeenCalled();
+                expect(sessionStorage.getItem('exe-static-project-id')).toBeNull();
                 expect(window.location.reload).toHaveBeenCalled();
             });
 
             it('import action: stores file, sets sessionStorage flag, and reloads', async () => {
                 const file = new File(['content'], 'course.elpx');
+                sessionStorage.setItem('exe-static-project-id', 'old-project');
                 await projectManager.transitionToProject({ action: 'import', file });
 
                 expect(global.fetch).not.toHaveBeenCalled();
+                expect(sessionStorage.getItem('exe-static-project-id')).toBeNull();
                 expect(sessionStorage.getItem('exe-pending-import')).toBe('1');
                 expect(window.location.reload).toHaveBeenCalled();
             });
@@ -3344,6 +3409,7 @@ describe('ProjectManager', () => {
                 await projectManager.transitionToProject({ action: 'open', projectUuid: 'existing-uuid' });
 
                 expect(window.eXeLearning.projectId).toBe('existing-uuid');
+                expect(sessionStorage.getItem('exe-static-project-id')).toBe('existing-uuid');
                 expect(window.location.reload).toHaveBeenCalled();
             });
 
