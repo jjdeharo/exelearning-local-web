@@ -11229,6 +11229,22 @@
         <source>eXeLearning is a free software tool under the GNU Affero GPL that can be used to create educational interactive web contents. eXeLearning can generate interactive contents in different formats and it allows you to create easily navigable web pages. All the educational materials generated with eXeLearning can be exported in different digital formats, to be used independently or to integrate them into a LMS (Learning Management System) like Moodle.</source>
         <target>eXeLearning es una herramienta de software libre bajo licencia GNU Affero GPL que se puede utilizar para crear contenidos web educativos interactivos. eXeLearning puede generar contenidos en diferentes formatos y te permite crear páginas web fácilmente navegables. Todos los materiales educativos generados con eXeLearning se pueden exportar en diferentes formatos digitales para ser utilizados de forma independiente o para integrarlos en un LMS (Learning Management System) como Moodle.</target>
       </trans-unit>
+      <trans-unit id="forkNoticeA1" resname="Fork notice">
+        <source>Fork notice</source>
+        <target>Aviso del fork</target>
+      </trans-unit>
+      <trans-unit id="forkNoticeA2" resname="This installation is a working fork of eXeLearning with local adaptations and custom developments.">
+        <source>This installation is a working fork of eXeLearning with local adaptations and custom developments.</source>
+        <target>Esta instalación es un fork funcional de eXeLearning con adaptaciones locales y desarrollos personalizados.</target>
+      </trans-unit>
+      <trans-unit id="forkNoticeA3" resname="Upstream project: eXeLearning (https://github.com/exelearning/exelearning).">
+        <source>Upstream project: eXeLearning (https://github.com/exelearning/exelearning).</source>
+        <target>Proyecto original: eXeLearning (https://github.com/exelearning/exelearning).</target>
+      </trans-unit>
+      <trans-unit id="forkNoticeA4" resname="Local customizations and additional iDevices in this fork are attributed to Juan José de Haro.">
+        <source>Local customizations and additional iDevices in this fork are attributed to Juan José de Haro.</source>
+        <target>Las personalizaciones locales y los iDevices adicionales de este fork se atribuyen a Juan José de Haro.</target>
+      </trans-unit>
       <trans-unit id="MPi7uDh" resname="1. What is eXeLearning">
         <source>1. What is eXeLearning</source>
         <target>1. ¿Qué es eXeLearning?</target>
