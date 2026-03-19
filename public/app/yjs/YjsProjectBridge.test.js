@@ -155,6 +155,9 @@ describe('YjsProjectBridge', () => {
   const originalDocument = global.document;
 
   beforeEach(() => {
+    delete global.window?.__EXE_WEB_FILE_SYSTEM_STATE__;
+    delete global.window?.showOpenFilePicker;
+    delete global.window?.showSaveFilePicker;
     // Setup global mocks
     global.window = {
       ...(originalWindow || {}),
@@ -4832,6 +4835,37 @@ describe('YjsProjectBridge', () => {
       expect(mockLink.download).toBe('test.elpx');
 
       // Cleanup
+      delete global.eXeLearning;
+    });
+
+    it('overwrites the current web file handle when saving without saveAs', async () => {
+      const mockExporter = {
+        export: mock(() => Promise.resolve({
+          success: true,
+          data: new ArrayBuffer(8),
+          filename: 'test.elpx',
+        })),
+      };
+      global.window.SharedExporters = {
+        createExporter: mock(() => mockExporter),
+      };
+
+      const write = mock(() => Promise.resolve());
+      const close = mock(() => Promise.resolve());
+      global.window.__EXE_WEB_FILE_SYSTEM_STATE__ = {
+        currentFileHandle: {
+          name: 'opened.elpx',
+          createWritable: mock(() => Promise.resolve({ write, close })),
+        },
+      };
+      global.eXeLearning = { config: { isOfflineInstallation: false } };
+
+      const result = await bridge.exportToElpx({ saveAs: false });
+
+      expect(result).toEqual({ saved: true });
+      expect(write).toHaveBeenCalled();
+      expect(close).toHaveBeenCalled();
+
       delete global.eXeLearning;
     });
   });

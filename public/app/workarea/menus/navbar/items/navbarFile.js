@@ -1664,7 +1664,40 @@ export default class NavbarFile {
      * Opens file input for static mode (PWA/offline)
      * Uses ElpxImporter directly without server APIs
      */
-    openFileInputStatic() {
+    async openFileInputStatic() {
+        if (typeof window.showOpenFilePicker === 'function') {
+            try {
+                const [handle] = await window.showOpenFilePicker({
+                    multiple: false,
+                    types: [{
+                        description: 'eXeLearning files',
+                        accept: {
+                            'application/octet-stream': ['.elpx', '.elp', '.zip'],
+                        },
+                    }],
+                });
+                if (!handle) return;
+
+                const file = await handle.getFile();
+                window.__EXE_WEB_FILE_SYSTEM_STATE__ = {
+                    currentFileHandle: handle,
+                };
+                eXeLearning.app.modals.openuserodefiles.largeFilesUpload(file);
+                return;
+            } catch (error) {
+                if (error?.name === 'AbortError') {
+                    return;
+                }
+                if (error?.message) {
+                    eXeLearning.app.modals.alert.show({
+                        title: _('Error opening'),
+                        body: error.message,
+                        contentId: 'error',
+                    });
+                }
+            }
+        }
+
         // Create or reuse a hidden file input
         let fileInput = document.getElementById('static-open-file-input');
         if (!fileInput) {

@@ -15,10 +15,12 @@
  *   await adapter.saveAs(data, 'file.elpx');
  */
 
-export { FileSystemAdapter } from './FileSystemAdapter.js';
-export { ElectronFileSystem } from './ElectronFileSystem.js';
-export { WebFileSystem } from './WebFileSystem.js';
-export { EmbeddedFileSystem } from './EmbeddedFileSystem.js';
+import { FileSystemAdapter } from './FileSystemAdapter.js';
+import { ElectronFileSystem } from './ElectronFileSystem.js';
+import { WebFileSystem } from './WebFileSystem.js';
+import { EmbeddedFileSystem } from './EmbeddedFileSystem.js';
+
+export { FileSystemAdapter, ElectronFileSystem, WebFileSystem, EmbeddedFileSystem };
 
 /**
  * Create the appropriate file system adapter based on environment
@@ -30,20 +32,19 @@ export { EmbeddedFileSystem } from './EmbeddedFileSystem.js';
 export function createFileSystemAdapter(options = {}) {
     // Electron mode takes priority
     if (window.electronAPI) {
-        const { ElectronFileSystem } = require('./ElectronFileSystem.js');
         return new ElectronFileSystem();
     }
 
     // Check for embedded mode (in iframe)
-    const isEmbedded = options.forceEmbedded || (window.parent !== window);
+    const isEmbedded =
+        options.forceEmbedded ||
+        (typeof window.parent !== 'undefined' && window.parent !== window);
     if (isEmbedded) {
-        const { EmbeddedFileSystem } = require('./EmbeddedFileSystem.js');
         return new EmbeddedFileSystem({
             parentOrigin: options.parentOrigin || '*',
         });
     }
 
     // Default to web mode
-    const { WebFileSystem } = require('./WebFileSystem.js');
     return new WebFileSystem();
 }

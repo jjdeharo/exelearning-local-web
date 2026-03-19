@@ -2690,7 +2690,7 @@ class YjsProjectBridge {
    * Filename is automatically generated from project title (sanitized: lowercase, no accents, no special chars)
    * In Electron/Desktop mode, always prompts for save destination (no silent overwrite).
    */
-  async exportToElpx() {
+  async exportToElpx(options = {}) {
     // Ensure exelearning_version is set in metadata before export
     if (this.documentManager?._updateVersionMetadata) {
       await this.documentManager._updateVersionMetadata();
@@ -2734,17 +2734,47 @@ class YjsProjectBridge {
             if (!saved) return { saved: false };
             Logger.log('[YjsProjectBridge] ELPX exported via Electron:', exportFilename);
           } else {
-            // Browser mode: direct download
+            const state = window.__EXE_WEB_FILE_SYSTEM_STATE__ || { currentFileHandle: null };
             const blob = new Blob([result.data], { type: 'application/zip' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = exportFilename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            Logger.log('[YjsProjectBridge] ELPX exported via SharedExporters:', exportFilename);
+
+            const writeToHandle = async (handle) => {
+              const writable = await handle.createWritable();
+              await writable.write(blob);
+              await writable.close();
+              window.__EXE_WEB_FILE_SYSTEM_STATE__ = { currentFileHandle: handle };
+            };
+
+            if (!options?.saveAs && state.currentFileHandle?.createWritable) {
+              await writeToHandle(state.currentFileHandle);
+            } else if (typeof window.showSaveFilePicker === 'function') {
+              let handle;
+              try {
+                handle = await window.showSaveFilePicker({
+                  suggestedName: exportFilename,
+                  types: [{
+                    description: 'eXeLearning files',
+                    accept: { 'application/zip': ['.elpx'] },
+                  }],
+                });
+              } catch (error) {
+                if (error?.name === 'AbortError') {
+                  return { saved: false };
+                }
+                throw error;
+              }
+              await writeToHandle(handle);
+            } else {
+              const url = URL.createObjectURL(blob);
+              const link = document.createElement('a');
+              link.href = url;
+              link.download = exportFilename;
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+              URL.revokeObjectURL(url);
+            }
+
+            Logger.log('[YjsProjectBridge] ELPX exported in browser mode:', exportFilename);
           }
           return { saved: true };
         } else {

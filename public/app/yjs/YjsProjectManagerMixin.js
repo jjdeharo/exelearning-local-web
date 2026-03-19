@@ -527,9 +527,9 @@ const YjsProjectManagerMixin = {
      * Filename is auto-generated from project title (sanitized: lowercase, no accents, no special chars)
      * In Electron/Desktop mode, always prompts for save destination.
      */
-    projectManager.exportToElpxViaYjs = async function () {
+    projectManager.exportToElpxViaYjs = async function (options = {}) {
       if (this._yjsEnabled && this._yjsBridge) {
-        return await this._yjsBridge.exportToElpx();
+        return await this._yjsBridge.exportToElpx(options);
       }
       return { saved: false };
     };

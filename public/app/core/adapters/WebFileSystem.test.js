@@ -8,6 +8,9 @@ describe('WebFileSystem', () => {
     let adapter;
 
     beforeEach(() => {
+        delete window.__EXE_WEB_FILE_SYSTEM_STATE__;
+        delete window.showOpenFilePicker;
+        delete window.showSaveFilePicker;
         adapter = new WebFileSystem();
     });
 
@@ -66,6 +69,24 @@ describe('WebFileSystem', () => {
             expect(result.error).toBe('URL creation failed');
             consoleSpy.mockRestore();
         });
+
+        it('should use showSaveFilePicker when available', async () => {
+            const write = vi.fn();
+            const close = vi.fn();
+            const handle = {
+                name: 'saved.elpx',
+                createWritable: vi.fn().mockResolvedValue({ write, close }),
+            };
+            window.showSaveFilePicker = vi.fn().mockResolvedValue(handle);
+
+            const result = await adapter.saveAs(new Uint8Array([1, 2, 3]), 'saved.elpx');
+
+            expect(result).toEqual({ success: true, path: 'saved.elpx' });
+            expect(window.showSaveFilePicker).toHaveBeenCalled();
+            expect(handle.createWritable).toHaveBeenCalled();
+            expect(write).toHaveBeenCalled();
+            expect(close).toHaveBeenCalled();
+        });
     });
 
     describe('save', () => {
@@ -84,6 +105,21 @@ describe('WebFileSystem', () => {
 
             expect(result.success).toBe(true);
             expect(link.download).toBe('test.txt');
+        });
+
+        it('should overwrite the current file handle when available', async () => {
+            const write = vi.fn();
+            const close = vi.fn();
+            adapter.state.currentFileHandle = {
+                name: 'existing.elpx',
+                createWritable: vi.fn().mockResolvedValue({ write, close }),
+            };
+
+            const result = await adapter.save(new Uint8Array([1, 2, 3]), 'project-123', 'test.txt');
+
+            expect(result).toEqual({ success: true, path: 'existing.elpx' });
+            expect(write).toHaveBeenCalled();
+            expect(close).toHaveBeenCalled();
         });
     });
 
@@ -240,6 +276,23 @@ describe('WebFileSystem', () => {
             expect(result.success).toBe(true);
             expect(result.name).toBe('test.elp');
             expect(result.data).toBeInstanceOf(Uint8Array);
+        });
+
+        it('should use showOpenFilePicker when available', async () => {
+            const file = new File([new Uint8Array([1, 2, 3])], 'picked.elpx', {
+                type: 'application/octet-stream',
+            });
+            const handle = {
+                getFile: vi.fn().mockResolvedValue(file),
+            };
+            window.showOpenFilePicker = vi.fn().mockResolvedValue([handle]);
+
+            const result = await adapter.open(['.elpx']);
+
+            expect(result.success).toBe(true);
+            expect(result.name).toBe('picked.elpx');
+            expect(result.file).toBe(file);
+            expect(adapter.state.currentFileHandle).toBe(handle);
         });
 
         it('should add dots to extensions without them', async () => {

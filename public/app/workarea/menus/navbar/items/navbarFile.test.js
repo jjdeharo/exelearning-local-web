@@ -2732,6 +2732,25 @@ describe('NavbarFile', () => {
             // Verify the input value is empty (reset by the handler)
             expect(input.value).toBe('');
         });
+
+        it('should use showOpenFilePicker when available', async () => {
+            const largeFilesUploadSpy = vi.fn();
+            const file = new File(['test'], 'picked.elpx', {
+                type: 'application/octet-stream',
+            });
+            const handle = {
+                getFile: vi.fn().mockResolvedValue(file),
+            };
+            eXeLearning.app.modals.openuserodefiles = {
+                largeFilesUpload: largeFilesUploadSpy,
+            };
+            window.showOpenFilePicker = vi.fn().mockResolvedValue([handle]);
+
+            await navbarFile.openFileInputStatic();
+
+            expect(window.showOpenFilePicker).toHaveBeenCalled();
+            expect(largeFilesUploadSpy).toHaveBeenCalledWith(file);
+        });
     });
 
     describe('openUserOdeFilesEvent static mode', () => {
