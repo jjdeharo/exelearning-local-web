@@ -310,9 +310,11 @@ var $punnettsquare = {
         const chars = String(pair || '')
             .split('')
             .filter(Boolean)
-            .map((char) =>
-                char.toUpperCase() === dominant ? dominant : recessive
-            )
+            .map((char) => {
+                if (char === dominant) return dominant;
+                if (char === recessive) return recessive;
+                return char === char.toUpperCase() ? dominant : recessive;
+            })
             .sort((a, b) => {
                 if (a === dominant && b === recessive) return -1;
                 if (a === recessive && b === dominant) return 1;
