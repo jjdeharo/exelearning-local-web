@@ -61,15 +61,57 @@ var $exeDevice = {
                 'No valid activities were found in the imported content.',
             'The imported activities have been added successfully.':
                 'The imported activities have been added successfully.',
-            'The activity set has been exported successfully.':
-                'The activity set has been exported successfully.',
             'Please select a valid file (.json or .txt).':
                 'Please select a valid file (.json or .txt).',
             'The file does not contain a valid Punnett square activity set.':
                 'The file does not contain a valid Punnett square activity set.',
+            'Import/Export': 'Import/Export',
+            'Artificial Intelligence': 'Artificial Intelligence',
+            'Import activity set': 'Import activity set',
+            'Export activity set': 'Export activity set',
+            'Choose': 'Choose',
+            'No file selected': 'No file selected',
+            'Supported formats: json, txt': 'Supported formats: json, txt',
+            'You can import a full Punnett square activity set in JSON format or a plain text list of activities.':
+                'You can import a full Punnett square activity set in JSON format or a plain text list of activities.',
             'Export activities': 'Export activities',
-            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
-                'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.',
+            'Generate or import Punnett square activities with AI.':
+                'Generate or import Punnett square activities with AI.',
+            'Copy prompt': 'Copy prompt',
+            'Send to AI': 'Send to AI',
+            'Import text': 'Import text',
+            'Number of activities': 'Number of activities',
+            Topic: 'Topic',
+            Specialty: 'Specialty',
+            Course: 'Course',
+            Create: 'Create',
+            'Prompt to generate activities': 'Prompt to generate activities',
+            'Generated or pasted activities': 'Generated or pasted activities',
+            'Act as a highly experienced teacher.':
+                'Act as a highly experienced teacher.',
+            'Generate Punnett square activities using this exact format, one activity per line:':
+                'Generate Punnett square activities using this exact format, one activity per line:',
+            'Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1':
+                'Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1',
+            'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2':
+                'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2',
+            'Do not include numbering, bullets, explanations or the # character inside any field.':
+                'Do not include numbering, bullets, explanations or the # character inside any field.',
+            'There is no prompt to copy.': 'There is no prompt to copy.',
+            'There is no query to send to the assistant.':
+                'There is no query to send to the assistant.',
+            'Please select an AI assistant.':
+                'Please select an AI assistant.',
+            'Please enter at least one activity.':
+                'Please enter at least one activity.',
+            'Generating activities. Please wait...':
+                'Generating activities. Please wait...',
+            'The activities could not be generated.':
+                'The activities could not be generated.',
+            'The activities could not be generated. Incorrect format':
+                'The activities could not be generated. Incorrect format',
+            'An error occurred while retrieving the activities. Please try again.':
+                'An error occurred while retrieving the activities. Please try again.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'Parent 1 genotype does not match the selected number of genes.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -141,15 +183,57 @@ var $exeDevice = {
                 'No se ha encontrado ninguna actividad válida en el contenido importado.',
             'The imported activities have been added successfully.':
                 'Las actividades importadas se han añadido correctamente.',
-            'The activity set has been exported successfully.':
-                'La batería de actividades se ha exportado correctamente.',
             'Please select a valid file (.json or .txt).':
                 'Selecciona un archivo válido (.json o .txt).',
             'The file does not contain a valid Punnett square activity set.':
                 'El archivo no contiene una batería válida de actividades de cuadro de Punnett.',
+            'Import/Export': 'Importar/Exportar',
+            'Artificial Intelligence': 'Inteligencia artificial',
+            'Import activity set': 'Importar batería de actividades',
+            'Export activity set': 'Exportar batería de actividades',
+            'Choose': 'Elegir',
+            'No file selected': 'Ningún archivo seleccionado',
+            'Supported formats: json, txt': 'Formatos admitidos: json, txt',
+            'You can import a full Punnett square activity set in JSON format or a plain text list of activities.':
+                'Puedes importar una batería completa de actividades de cuadro de Punnett en formato JSON o una lista de actividades en texto plano.',
             'Export activities': 'Exportar actividades',
-            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
-                'Puedes exportar e importar la batería completa de actividades en formato JSON, o importar archivos de texto compatibles generados con prompts de IA.',
+            'Generate or import Punnett square activities with AI.':
+                'Genera o importa actividades de cuadro de Punnett con IA.',
+            'Copy prompt': 'Copiar prompt',
+            'Send to AI': 'Enviar a la IA',
+            'Import text': 'Importar texto',
+            'Number of activities': 'Número de actividades',
+            Topic: 'Tema',
+            Specialty: 'Especialidad',
+            Course: 'Curso',
+            Create: 'Crear',
+            'Prompt to generate activities': 'Prompt para generar actividades',
+            'Generated or pasted activities': 'Actividades generadas o pegadas',
+            'Act as a highly experienced teacher.':
+                'Actúa como un docente con mucha experiencia.',
+            'Generate Punnett square activities using this exact format, one activity per line:':
+                'Genera actividades de cuadro de Punnett usando exactamente este formato, una actividad por línea:',
+            'Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1':
+                'Formato monohíbrido: Título#1#Progenitor1#Progenitor2#LetraGen1#FenotipoDominante1#FenotipoRecesivo1',
+            'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2':
+                'Formato dihíbrido: Título#2#Progenitor1#Progenitor2#LetraGen1#FenotipoDominante1#FenotipoRecesivo1#LetraGen2#FenotipoDominante2#FenotipoRecesivo2',
+            'Do not include numbering, bullets, explanations or the # character inside any field.':
+                'No incluyas numeración, viñetas, explicaciones ni el carácter # dentro de ningún campo.',
+            'There is no prompt to copy.': 'No hay ningún prompt para copiar.',
+            'There is no query to send to the assistant.':
+                'No hay ninguna consulta para enviar al asistente.',
+            'Please select an AI assistant.':
+                'Selecciona un asistente de IA.',
+            'Please enter at least one activity.':
+                'Introduce al menos una actividad.',
+            'Generating activities. Please wait...':
+                'Generando actividades. Espera un momento...',
+            'The activities could not be generated.':
+                'No se han podido generar las actividades.',
+            'The activities could not be generated. Incorrect format':
+                'No se han podido generar las actividades. Formato incorrecto.',
+            'An error occurred while retrieving the activities. Please try again.':
+                'Se ha producido un error al obtener las actividades. Inténtalo de nuevo.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'El genotipo del progenitor 1 no coincide con el número de genes seleccionado.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -220,15 +304,57 @@ var $exeDevice = {
                 'No s\'ha trobat cap activitat vàlida en el contingut importat.',
             'The imported activities have been added successfully.':
                 'Les activitats importades s\'han afegit correctament.',
-            'The activity set has been exported successfully.':
-                'La bateria d\'activitats s\'ha exportat correctament.',
             'Please select a valid file (.json or .txt).':
                 'Selecciona un fitxer vàlid (.json o .txt).',
             'The file does not contain a valid Punnett square activity set.':
                 'El fitxer no conté una bateria vàlida d\'activitats de quadre de Punnett.',
+            'Import/Export': 'Importa/Exporta',
+            'Artificial Intelligence': 'Intel·ligència artificial',
+            'Import activity set': 'Importa bateria d\'activitats',
+            'Export activity set': 'Exporta bateria d\'activitats',
+            'Choose': 'Tria',
+            'No file selected': 'Cap fitxer seleccionat',
+            'Supported formats: json, txt': 'Formats admesos: json, txt',
+            'You can import a full Punnett square activity set in JSON format or a plain text list of activities.':
+                'Pots importar una bateria completa d\'activitats de quadre de Punnett en format JSON o una llista d\'activitats en text pla.',
             'Export activities': 'Exporta activitats',
-            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
-                'Pots exportar i importar la bateria completa d\'activitats en format JSON, o importar fitxers de text compatibles generats amb prompts d\'IA.',
+            'Generate or import Punnett square activities with AI.':
+                'Genera o importa activitats de quadre de Punnett amb IA.',
+            'Copy prompt': 'Copia prompt',
+            'Send to AI': 'Envia a la IA',
+            'Import text': 'Importa text',
+            'Number of activities': 'Nombre d\'activitats',
+            Topic: 'Tema',
+            Specialty: 'Especialitat',
+            Course: 'Curs',
+            Create: 'Crea',
+            'Prompt to generate activities': 'Prompt per a generar activitats',
+            'Generated or pasted activities': 'Activitats generades o apegrades',
+            'Act as a highly experienced teacher.':
+                'Actua com un docent amb molta experiència.',
+            'Generate Punnett square activities using this exact format, one activity per line:':
+                'Genera activitats de quadre de Punnett usant exactament este format, una activitat per línia:',
+            'Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1':
+                'Format monohíbrid: Títol#1#Progenitor1#Progenitor2#LletraGen1#FenotipDominant1#FenotipRecessiu1',
+            'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2':
+                'Format dihíbrid: Títol#2#Progenitor1#Progenitor2#LletraGen1#FenotipDominant1#FenotipRecessiu1#LletraGen2#FenotipDominant2#FenotipRecessiu2',
+            'Do not include numbering, bullets, explanations or the # character inside any field.':
+                'No inclogues numeració, vinyetes, explicacions ni el caràcter # dins de cap camp.',
+            'There is no prompt to copy.': 'No hi ha cap prompt per a copiar.',
+            'There is no query to send to the assistant.':
+                'No hi ha cap consulta per a enviar a l\'assistent.',
+            'Please select an AI assistant.':
+                'Selecciona un assistent d\'IA.',
+            'Please enter at least one activity.':
+                'Introdueix almenys una activitat.',
+            'Generating activities. Please wait...':
+                'Generant activitats. Espera un moment...',
+            'The activities could not be generated.':
+                'No s\'han pogut generar les activitats.',
+            'The activities could not be generated. Incorrect format':
+                'No s\'han pogut generar les activitats. Format incorrecte.',
+            'An error occurred while retrieving the activities. Please try again.':
+                'S\'ha produït un error en obtindre les activitats. Torna-ho a provar.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'El genotip del progenitor 1 no coincideix amb el nombre de gens seleccionat.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -643,8 +769,59 @@ var $exeDevice = {
                 </div>
                 ${$exeDevicesEdition.iDevice.gamification.common.getLanguageTab(this.ci18n)}
                 ${$exeDevicesEdition.iDevice.gamification.scorm.getTab(true, true, true)}
-                ${$exeDevicesEdition.iDevice.gamification.share.getTab(true, 10, true)}
-                ${$exeDevicesEdition.iDevice.gamification.share.getTabIA(10)}
+                <div class="exe-form-tab" title="${this.t('Import/Export')}">
+                    <p class="exe-block-info">${this.t('You can import a full Punnett square activity set in JSON format or a plain text list of activities.')}</p>
+                    <div class="mb-3" data-punnett-upload>
+                        <label for="punnettImportFile" class="form-label mb-1">${this.t('Import activity set')}:</label>
+                        <input type="file" id="punnettImportFile" accept=".json,.txt" class="exe-file-input" />
+                        <button type="button" class="btn btn-primary exe-file-btn" data-punnett-file-trigger>${this.t('Choose')}</button>
+                        <span data-punnett-file-name>${this.t('No file selected')}</span>
+                        <span class="d-block mt-1">${this.t('Supported formats: json, txt')}</span>
+                    </div>
+                    <p class="d-flex align-items-center justify-content-start gap-1">
+                        <input type="button" class="btn btn-primary" id="punnettExportActivities" value="${this.t('Export activities')}" />
+                    </p>
+                </div>
+                <div class="exe-form-tab" title="${this.t('Artificial Intelligence')}">
+                    <p class="exe-block-info">${this.t('Generate or import Punnett square activities with AI.')}</p>
+                    <div id="punnettAIContainer">
+                        <div class="d-flex flex-wrap gap-2 mt-3 mb-3 align-items-end">
+                            <label for="punnettAISpecialty">${this.t('Specialty')}:
+                                <input id="punnettAISpecialty" type="text" value="${_('Biology')}" style="width: 150px;" />
+                            </label>
+                            <label for="punnettAICourse">${this.t('Course')}:
+                                <input id="punnettAICourse" type="text" value="${_('3rd ESO')}" style="width: 130px;" />
+                            </label>
+                            <label for="punnettAINumber">${this.t('Number of activities')}:
+                                <input id="punnettAINumber" type="number" min="1" max="30" value="10" class="form-control form-control-sm" style="width:6ch;" />
+                            </label>
+                            <label for="punnettAITheme">${this.t('Topic')}:
+                                <input id="punnettAITheme" type="text" style="width: 300px;" />
+                            </label>
+                            <button type="button" id="punnettAIGenerate" class="btn btn-success ms-2">${this.t('Create')}</button>
+                        </div>
+                        <p id="punnettAIMessage" class="dp-none"></p>
+                        <label for="punnettAIPrompt" class="form-label">${this.t('Prompt to generate activities')}</label>
+                        <textarea id="punnettAIPrompt" class="form-control font-monospace fs-6 mb-3" style="min-height:220px;"></textarea>
+                        <div class="d-flex justify-content-end border-secondary p-2 gap-2 flex-wrap">
+                            <button type="button" id="punnettAICopyPrompt" class="btn btn-primary">${this.t('Copy prompt')}</button>
+                            <select id="punnettAISelect" name="punnettAISelect" class="form-select form-select-sm w-auto">
+                                <option selected value="https://chatgpt.com/?q=">ChatGPT</option>
+                                <option value="https://claude.ai/new?q=">Claude</option>
+                                <option value="https://www.perplexity.ai/search?q=">Perplexity</option>
+                                <option value="https://chat.mistral.ai/chat/?q=">Le Chat (Mistral)</option>
+                                <option value="https://grok.com/?q=">Grok</option>
+                                <option value="https://chat.qwen.ai/?text=">Qwen</option>
+                            </select>
+                            <button type="button" id="punnettAISend" class="btn btn-primary">${this.t('Send to AI')}</button>
+                        </div>
+                        <label for="punnettAIText" class="form-label mt-3">${this.t('Generated or pasted activities')}</label>
+                        <textarea id="punnettAIText" class="form-control font-monospace fs-6" style="min-height:220px;"></textarea>
+                        <div class="d-flex justify-content-end border-secondary p-2 gap-2 mt-2">
+                            <button type="button" id="punnettAIImportText" class="btn btn-primary">${this.t('Import text')}</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         `;
 
@@ -695,11 +872,9 @@ var $exeDevice = {
             .querySelector('#punnettMode')
             .addEventListener('change', () => this.toggleRandomCount());
         this.toggleRandomCount();
-        $exeDevicesEdition.iDevice.gamification.share.addEvents(
-            10,
-            this.importActivitiesFromLines.bind(this)
-        );
         this.addImportExportEvents();
+        this.addAIEvents();
+        this.updateAIPrompt();
     },
 
     toggleRandomCount() {
@@ -913,59 +1088,174 @@ var $exeDevice = {
     },
 
     addImportExportEvents() {
+        const fileInput = this.ideviceBody.querySelector('#punnettImportFile');
+        const fileName = this.ideviceBody.querySelector('[data-punnett-file-name]');
+        const trigger = this.ideviceBody.querySelector('[data-punnett-file-trigger]');
+        const exportButton = this.ideviceBody.querySelector('#punnettExportActivities');
+
         if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
-            $('#eXeGameExportImport').hide();
+            if (fileInput) fileInput.disabled = true;
+            if (exportButton) exportButton.disabled = true;
             return;
         }
 
-        $('#eXeGameExportImport .exe-field-instructions')
-            .eq(0)
-            .text(`${_('Supported formats')}: json, txt`);
-        $('#eXeGameExportImport').show();
-        $('#eXeGameImportGame').attr('accept', '.json, .txt');
-        $('#eXeGameExportQuestions').val(this.t('Export activities'));
-        $('#eXeGameExportImport .exe-block-info')
-            .eq(1)
-            .text(
-                this.t(
-                    'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.'
-                )
-            );
+        trigger.addEventListener('click', () => fileInput.click());
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            fileName.textContent = file ? file.name : this.t('No file selected');
+            if (!file) return;
 
-        $('#eXeGameImportGame')
-            .off('change.punnett')
-            .on('change.punnett', (e) => {
-                const file = e.target.files[0];
-                if (!file) {
-                    eXe.app.alert(this.t('Please select a valid file (.json or .txt).'));
+            const isJson =
+                /\.json$/i.test(file.name) ||
+                (file.type && file.type.match('application/json'));
+            const isText =
+                /\.txt$/i.test(file.name) ||
+                !file.type ||
+                file.type.match('text/plain');
+
+            if (!isJson && !isText) {
+                eXe.app.alert(this.t('Please select a valid file (.json or .txt).'));
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (readerEvent) => {
+                this.importGame(
+                    readerEvent.target.result,
+                    isJson ? 'application/json' : 'text/plain'
+                );
+            };
+            reader.readAsText(file);
+        });
+        exportButton.addEventListener('click', () => this.exportGame());
+    },
+
+    addAIEvents() {
+        const specialty = this.ideviceBody.querySelector('#punnettAISpecialty');
+        const course = this.ideviceBody.querySelector('#punnettAICourse');
+        const number = this.ideviceBody.querySelector('#punnettAINumber');
+        const theme = this.ideviceBody.querySelector('#punnettAITheme');
+        const prompt = this.ideviceBody.querySelector('#punnettAIPrompt');
+        const text = this.ideviceBody.querySelector('#punnettAIText');
+        const assistant = this.ideviceBody.querySelector('#punnettAISelect');
+
+        if (
+            window.eXeLearning?.app?.user?.preferences?.preferences?.defaultAI?.value
+        ) {
+            const defaultAI =
+                window.eXeLearning.app.user.preferences.preferences.defaultAI.value;
+            if ([...assistant.options].some((option) => option.value === defaultAI)) {
+                assistant.value = defaultAI;
+            }
+        }
+
+        [specialty, course, number, theme].forEach((field) => {
+            field.addEventListener('input', () => this.updateAIPrompt());
+        });
+
+        this.ideviceBody
+            .querySelector('#punnettAICopyPrompt')
+            .addEventListener('click', async () => {
+                const value = prompt.value.trim();
+                if (!value) {
+                    eXe.app.alert(this.t('There is no prompt to copy.'));
                     return;
                 }
+                try {
+                    await navigator.clipboard.writeText(value);
+                } catch (error) {}
+            });
 
-                const isJson =
-                    /\.json$/i.test(file.name) ||
-                    (file.type && file.type.match('application/json'));
-                const isText =
-                    /\.txt$/i.test(file.name) ||
-                    !file.type ||
-                    file.type.match('text/plain');
-
-                if (!isJson && !isText) {
-                    eXe.app.alert(this.t('Please select a valid file (.json or .txt).'));
+        this.ideviceBody
+            .querySelector('#punnettAISend')
+            .addEventListener('click', () => {
+                const value = prompt.value.trim();
+                if (!value) {
+                    eXe.app.alert(this.t('There is no query to send to the assistant.'));
                     return;
                 }
-
-                const reader = new FileReader();
-                reader.onload = (readerEvent) => {
-                    this.importGame(readerEvent.target.result, isJson ? 'application/json' : 'text/plain');
-                };
-                reader.readAsText(file);
+                const baseUrl = assistant.value;
+                if (!baseUrl) {
+                    eXe.app.alert(this.t('Please select an AI assistant.'));
+                    return;
+                }
+                window.open(`${baseUrl}${encodeURIComponent(value)}`, '_blank');
             });
 
-        $('#eXeGameExportQuestions')
-            .off('click.punnett')
-            .on('click.punnett', () => {
-                this.exportGame();
+        this.ideviceBody
+            .querySelector('#punnettAIImportText')
+            .addEventListener('click', () => {
+                const lines = text.value
+                    .split(/\r?\n/)
+                    .map((line) => line.trim())
+                    .filter(Boolean);
+                if (!lines.length) {
+                    eXe.app.alert(this.t('Please enter at least one activity.'));
+                    return;
+                }
+                this.importActivitiesFromLines(lines);
             });
+
+        this.ideviceBody
+            .querySelector('#punnettAIGenerate')
+            .addEventListener('click', () => this.generateActivitiesWithAI());
+    },
+
+    updateAIPrompt() {
+        const specialty = this.ideviceBody.querySelector('#punnettAISpecialty').value.trim();
+        const course = this.ideviceBody.querySelector('#punnettAICourse').value.trim();
+        const number = Math.max(
+            1,
+            parseInt(this.ideviceBody.querySelector('#punnettAINumber').value, 10) || 10
+        );
+        const theme = this.ideviceBody.querySelector('#punnettAITheme').value.trim();
+
+        const lines = [this.t('Act as a highly experienced teacher.')];
+        if (specialty) lines.push(`${this.t('Specialty')}: ${specialty}.`);
+        if (course) lines.push(`${this.t('Course')}: ${course}.`);
+        if (theme) lines.push(`${this.t('Topic')}: ${theme}.`);
+        lines.push(`${number} ${this.t('Activities')}.`);
+        lines.push(this.t('Generate Punnett square activities using this exact format, one activity per line:'));
+        lines.push(this.t('Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1'));
+        lines.push(this.t('Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2'));
+        lines.push(this.t('Do not include numbering, bullets, explanations or the # character inside any field.'));
+        this.ideviceBody.querySelector('#punnettAIPrompt').value = lines.join('\n');
+    },
+
+    async generateActivitiesWithAI() {
+        const container = $('#punnettAIContainer');
+        const message = $('#punnettAIMessage');
+        const prompt = this.ideviceBody.querySelector('#punnettAIPrompt').value.trim();
+        if (!prompt) {
+            eXe.app.alert(this.t('There is no query to send to the assistant.'));
+            return;
+        }
+
+        container.find('input, textarea, button, select').prop('disabled', true);
+        message.text(this.t('Generating activities. Please wait...')).show();
+        try {
+            const data = await eXeLearning.app.api.getGenerateQuestions(prompt);
+            const raw =
+                data && Array.isArray(data.questions)
+                    ? data.questions
+                    : typeof data?.questions === 'string'
+                      ? data.questions.split(/\r?\n/)
+                      : [];
+            const lines = raw
+                .map((line) => String(line || '').trim())
+                .filter(Boolean);
+            if (!lines.length) {
+                message.text(this.t('The activities could not be generated. Incorrect format')).show();
+            } else {
+                this.ideviceBody.querySelector('#punnettAIText').value = lines.join('\n');
+                this.importActivitiesFromLines(lines);
+                message.hide();
+            }
+        } catch (error) {
+            message.text(this.t('An error occurred while retrieving the activities. Please try again.')).show();
+        } finally {
+            container.find('input, textarea, button, select').prop('disabled', false);
+        }
     },
 
     exportGame() {

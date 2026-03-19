@@ -697,19 +697,6 @@ var $exeDevicesEdition = {
                             examples: [`${c_('Heart')}#${c_('A muscular organ that pumps blood through the body')}`],
                             allowRegex: /^([^#]+)#([^#]+)(#([^#]+))?(#([^#]+))?$/
                         },
-                        10: { // punnett square
-                            prompt: c_(`Generate Punnett square activities. Each line must describe one cross and be separated with '#'. Use 1 for monohybrid and 2 for dihybrid.`),
-                            format: [
-                                `${c_('Title')}#1#${c_('Parent1 genotype')}#${c_('Parent2 genotype')}#${c_('Gene1 letter')}#${c_('Gene1 dominant phenotype')}#${c_('Gene1 recessive phenotype')}`,
-                                `${c_('Title')}#2#${c_('Parent1 genotype')}#${c_('Parent2 genotype')}#${c_('Gene1 letter')}#${c_('Gene1 dominant phenotype')}#${c_('Gene1 recessive phenotype')}#${c_('Gene2 letter')}#${c_('Gene2 dominant phenotype')}#${c_('Gene2 recessive phenotype')}`
-                            ],
-                            explanation: `${c_('Do not include the # character inside any field. In monohybrid crosses use genotypes with 2 letters, for example Aa. In dihybrid crosses use 4 letters, for example AaBb.')}`,
-                            examples: [
-                                `${c_('Seed color cross')}#1#Aa#Aa#A#${c_('Yellow seeds')}#${c_('Green seeds')}`,
-                                `${c_('Pea traits cross')}#2#AaBb#AaBb#A#${c_('Yellow seeds')}#${c_('Green seeds')}#B#${c_('Smooth texture')}#${c_('Wrinkled texture')}`
-                            ],
-                            allowRegex: /^(?:[^#]+#1#[A-Za-z]{2}#[A-Za-z]{2}#[A-Za-z]#[^#]+#[^#]+|[^#]+#2#[A-Za-z]{4}#[A-Za-z]{4}#[A-Za-z]#[^#]+#[^#]+#[A-Za-z]#[^#]+#[^#]+)$/
-                        },
                     };
 
                     const game = gameFormats[gameId];
