@@ -30,6 +30,20 @@ import DOMTranslator from './locate/domTranslator.js';
 import UnsavedChangesHelper from './utils/unsavedChangesHelper.js';
 window.UnsavedChangesHelper = UnsavedChangesHelper;
 
+function ensureStaticProjectId(eXeLearning) {
+    if (eXeLearning.projectId) return eXeLearning.projectId;
+
+    try {
+        if (window.crypto?.randomUUID) {
+            eXeLearning.projectId = window.crypto.randomUUID();
+            return eXeLearning.projectId;
+        }
+    } catch (_) {}
+
+    eXeLearning.projectId = `local-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    return eXeLearning.projectId;
+}
+
 export default class App {
     constructor(eXeLearning) {
         this.eXeLearning = eXeLearning;
@@ -1580,17 +1594,13 @@ window.onload = function () {
     var eXeLearning = window.eXeLearning;
     eXeLearning.app = new App(eXeLearning);
 
-    // Static mode: wait for project selection (projectId will be set by welcome screen)
-    // Use RuntimeConfig for early detection (before app.capabilities is available)
+    // Static mode: ensure a local project exists from the start so browser-only
+    // sessions can be recovered even before the user explicitly opens/imports a file.
+    // Recovery prompts still depend on dirty state, so untouched sessions stay silent.
     const runtimeConfig = RuntimeConfig.fromEnvironment();
     if (runtimeConfig.isStaticMode() && !eXeLearning.projectId) {
-        console.log('[App] Static mode: waiting for project selection...');
-        // Expose a function to start the app after project is selected
-        window.__startExeApp = function () {
-            console.log('[App] Starting app with project:', eXeLearning.projectId);
-            eXeLearning.app.init();
-        };
-        return;
+        ensureStaticProjectId(eXeLearning);
+        console.log('[App] Static mode: created local project:', eXeLearning.projectId);
     }
 
     eXeLearning.app.init();

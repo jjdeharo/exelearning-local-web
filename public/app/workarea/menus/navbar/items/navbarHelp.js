@@ -194,7 +194,7 @@ export default class NavbarFile {
      *
      */
     reportBugEvent() {
-        let url = 'https://github.com/exelearning/exelearning/issues';
+        let url = 'https://github.com/jjdeharo/exelearning-local-web/issues';
         window.open(url, '_blank').focus();
     }
 

@@ -161,6 +161,7 @@ describe('YjsDocumentManager', () => {
       hostname: 'localhost',
       port: '3001',
     };
+    global.window.confirm = mock(() => true);
     global.window.addEventListener = mock(() => undefined);
     global.window.removeEventListener = mock(() => undefined);
 
@@ -607,14 +608,14 @@ describe('YjsDocumentManager', () => {
   });
 
   describe('_persistDirtyState', () => {
-    it('does not persist in static mode', async () => {
+    it('persists in static mode so a local draft can be recovered later', async () => {
       await manager.initialize();
       window.__EXE_STATIC_MODE__ = true;
       const setItemSpy = spyOn(localStorage, 'setItem');
 
       manager._persistDirtyState(true);
 
-      expect(setItemSpy).not.toHaveBeenCalled();
+      expect(setItemSpy).toHaveBeenCalledWith(manager._dirtyStateKey, 'true');
 
       delete window.__EXE_STATIC_MODE__;
     });
@@ -641,11 +642,12 @@ describe('YjsDocumentManager', () => {
   });
 
   describe('_getPersistedDirtyState', () => {
-    it('returns false in static mode', async () => {
+    it('returns the persisted state in static mode', async () => {
       await manager.initialize();
       window.__EXE_STATIC_MODE__ = true;
+      spyOn(localStorage, 'getItem').mockReturnValue('true');
 
-      expect(manager._getPersistedDirtyState()).toBe(false);
+      expect(manager._getPersistedDirtyState()).toBe(true);
 
       delete window.__EXE_STATIC_MODE__;
     });
@@ -2451,6 +2453,24 @@ describe('YjsDocumentManager', () => {
       manager._onLastTabClosedCallback = null;
       expect(() => manager._cleanupOnLastTabClose()).not.toThrow();
     });
+
+    it('stores a recoverable-draft flag instead of cleanup in static mode with unsaved changes', () => {
+      window.__EXE_STATIC_MODE__ = true;
+      manager.isDirty = true;
+
+      manager._cleanupOnLastTabClose();
+
+      expect(global.localStorage.setItem).toHaveBeenCalledWith(
+        'exe-recover-on-open-test-project-123',
+        'true',
+      );
+      expect(global.localStorage.setItem).not.toHaveBeenCalledWith(
+        'exe-needs-cleanup-test-project-123',
+        'true',
+      );
+
+      delete window.__EXE_STATIC_MODE__;
+    });
   });
 
   describe('initialize — needs-cleanup flag', () => {
@@ -2482,6 +2502,7 @@ describe('YjsDocumentManager', () => {
     afterEach(() => {
       delete global.indexedDB;
       global.localStorage.removeItem('exe-needs-cleanup-test-project-123');
+      global.localStorage.removeItem('exe-recover-on-open-test-project-123');
       global.localStorage.removeItem('exe-needs-external-cleanup-test-project-123');
       global.localStorage.removeItem('exelearning_dirty_state_test-project-123');
       global.sessionStorage.removeItem('exe-tab-session-test-project-123');
@@ -2580,6 +2601,40 @@ describe('YjsDocumentManager', () => {
 
       expect(global.sessionStorage.setItem).toHaveBeenCalledWith('exe-tab-session-test-project-123', 'true');
       expect(global.sessionStorage.getItem('exe-tab-session-test-project-123')).toBe('true');
+    });
+
+    it('asks to recover a local draft in static mode and preserves IndexedDB when accepted', async () => {
+      window.__EXE_STATIC_MODE__ = true;
+      global.localStorage.setItem('exe-recover-on-open-test-project-123', 'true');
+      global.localStorage.setItem('exelearning_dirty_state_test-project-123', 'true');
+      global.window.confirm.mockReturnValue(true);
+
+      await manager.initialize();
+
+      expect(global.window.confirm).toHaveBeenCalled();
+      expect(global.indexedDB.deleteDatabase).not.toHaveBeenCalled();
+      expect(global.localStorage.getItem('exelearning_dirty_state_test-project-123')).toBe('true');
+      expect(global.localStorage.getItem('exe-recover-on-open-test-project-123')).toBeNull();
+
+      delete window.__EXE_STATIC_MODE__;
+    });
+
+    it('discards the local draft in static mode when recovery is rejected', async () => {
+      window.__EXE_STATIC_MODE__ = true;
+      global.localStorage.setItem('exe-recover-on-open-test-project-123', 'true');
+      global.localStorage.setItem('exelearning_dirty_state_test-project-123', 'true');
+      global.window.confirm.mockReturnValue(false);
+
+      await manager.initialize();
+
+      expect(global.window.confirm).toHaveBeenCalled();
+      expect(global.indexedDB.deleteDatabase).toHaveBeenCalledWith(
+        'exelearning-project-test-project-123',
+      );
+      expect(global.localStorage.getItem('exelearning_dirty_state_test-project-123')).toBeNull();
+      expect(global.localStorage.getItem('exe-recover-on-open-test-project-123')).toBeNull();
+
+      delete window.__EXE_STATIC_MODE__;
     });
   });
 

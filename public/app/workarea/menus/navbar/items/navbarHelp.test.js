@@ -367,7 +367,7 @@ describe('NavbarHelp', () => {
     it('should open GitHub issues page in new tab', () => {
       navbarHelp.reportBugEvent();
 
-      expect(window.open).toHaveBeenCalledWith('https://github.com/exelearning/exelearning/issues', '_blank');
+      expect(window.open).toHaveBeenCalledWith('https://github.com/jjdeharo/exelearning-local-web/issues', '_blank');
     });
 
     it('should focus the new tab', () => {
@@ -442,7 +442,7 @@ describe('NavbarHelp', () => {
       // Click report bug button
       const reportBugHandler = mockButtons.reportBug.addEventListener.mock.calls[0][1];
       reportBugHandler();
-      expect(window.open).toHaveBeenCalledWith('https://github.com/exelearning/exelearning/issues', '_blank');
+      expect(window.open).toHaveBeenCalledWith('https://github.com/jjdeharo/exelearning-local-web/issues', '_blank');
     });
   });
 });

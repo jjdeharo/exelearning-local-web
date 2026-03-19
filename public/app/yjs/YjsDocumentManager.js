@@ -82,6 +82,8 @@ class YjsDocumentManager {
     this._suppressDirtyTracking = false;
     // LocalStorage key for persisting dirty state
     this._dirtyStateKey = `exelearning_dirty_state_${projectId}`;
+    // LocalStorage key that signals a recoverable local draft for static mode
+    this._recoverOnOpenKey = `exe-recover-on-open-${projectId}`;
 
     // Bind beforeunload handler
     this._beforeUnloadHandler = this._handleBeforeUnload.bind(this);
@@ -161,9 +163,21 @@ class YjsDocumentManager {
     // If a previous session set the needs-cleanup flag (last tab was closed), only clean up when
     // this is a brand new tab session. Reloads/back-forward in the same tab keep sessionStorage,
     // so they must preserve IndexedDB, dirty state, and Cache API data.
-    const needsCleanup = (() => {
+    let needsCleanup = (() => {
       try { return localStorage.getItem(`exe-needs-cleanup-${this.projectId}`); } catch (_) { return null; }
     })();
+    const needsRecoveryPrompt = (() => {
+      try { return localStorage.getItem(this._recoverOnOpenKey); } catch (_) { return null; }
+    })();
+    if (needsRecoveryPrompt && !hasTabSession) {
+      Logger.log(`[YjsDocumentManager] Found recoverable local draft for project ${this.projectId}`);
+      const shouldRecover = this._promptToRecoverLocalDraft();
+      if (!shouldRecover) {
+        try { localStorage.setItem(`exe-needs-cleanup-${this.projectId}`, 'true'); } catch (_) {}
+        needsCleanup = 'true';
+      }
+      try { localStorage.removeItem(this._recoverOnOpenKey); } catch (_) {}
+    }
     if (needsCleanup) {
       Logger.log(`[YjsDocumentManager] Found pending cleanup flag for project ${this.projectId}, hasTabSession=${hasTabSession}`);
 
@@ -1448,9 +1462,6 @@ class YjsDocumentManager {
    * @private
    */
   _persistDirtyState(isDirty) {
-    if (this._isStaticMode()) {
-      return;
-    }
     try {
       if (isDirty) {
         localStorage.setItem(this._dirtyStateKey, 'true');
@@ -1469,14 +1480,32 @@ class YjsDocumentManager {
    * @private
    */
   _getPersistedDirtyState() {
-    if (this._isStaticMode()) {
-      return false;
-    }
     try {
       return localStorage.getItem(this._dirtyStateKey) === 'true';
     } catch (e) {
       return false;
     }
+  }
+
+  /**
+   * Ask the user whether to recover the local draft preserved in browser storage.
+   * Defaults to recovery if the browser cannot show a prompt.
+   *
+   * @returns {boolean}
+   * @private
+   */
+  _promptToRecoverLocalDraft() {
+    const message = _(
+      'Unsaved local changes were found from your previous session. Do you want to recover them? Click Cancel to discard that local copy.',
+    );
+
+    try {
+      if (typeof window !== 'undefined' && typeof window.confirm === 'function') {
+        return window.confirm(message);
+      }
+    } catch (_) {}
+
+    return true;
   }
 
   /**
@@ -1788,6 +1817,11 @@ class YjsDocumentManager {
    */
   _cleanupOnLastTabClose() {
     Logger.log(`[YjsDocumentManager] Last tab closed for project ${this.projectId}, scheduling deferred cleanup`);
+
+    if (this._isStaticMode() && this.isDirty) {
+      try { localStorage.setItem(this._recoverOnOpenKey, 'true'); } catch (_) {}
+      return;
+    }
 
     // Set a flag so initialize() handles cleanup on next open.
     // The actual IDB deletion, dirty-state removal, AND external callback (Cache API cleanup)

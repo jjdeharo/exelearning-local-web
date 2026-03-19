@@ -2570,6 +2570,39 @@ describe('Module-level event handlers', () => {
     }
   });
 
+  it('window.onload creates a temporary projectId in static mode before init', () => {
+    const originalOnload = window.onload;
+    const originalApp = window.eXeLearning.app;
+    const originalProjectId = window.eXeLearning.projectId;
+    const originalCryptoDescriptor = Object.getOwnPropertyDescriptor(window, 'crypto');
+    const originalStaticMode = window.__EXE_STATIC_MODE__;
+    const originalInit = App.prototype.init;
+    const mockInit = vi.fn().mockResolvedValue(undefined);
+
+    window.__EXE_STATIC_MODE__ = true;
+    window.eXeLearning.projectId = null;
+    Object.defineProperty(window, 'crypto', {
+      value: { randomUUID: vi.fn(() => 'temp-project-uuid') },
+      configurable: true,
+    });
+    App.prototype.init = mockInit;
+
+    try {
+      originalOnload();
+
+      expect(window.eXeLearning.projectId).toBe('temp-project-uuid');
+      expect(mockInit).toHaveBeenCalled();
+    } finally {
+      App.prototype.init = originalInit;
+      window.eXeLearning.app = originalApp;
+      window.eXeLearning.projectId = originalProjectId;
+      if (originalCryptoDescriptor) {
+        Object.defineProperty(window, 'crypto', originalCryptoDescriptor);
+      }
+      window.__EXE_STATIC_MODE__ = originalStaticMode;
+    }
+  });
+
   it('beforeunload handler is installed via UnsavedChangesHelper', () => {
     // Mock UnsavedChangesHelper
     const setupSpy = vi.fn();
