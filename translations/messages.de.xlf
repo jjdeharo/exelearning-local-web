@@ -139,7 +139,7 @@
       </trans-unit>
       <trans-unit id="Kk_KT2R" resname="This is just a demo version. Not for real projects.">
         <source>This is just a demo version. Not for real projects.</source>
-        <target>~Dies ist nur eine Demo-Version. Nicht für echte Projekte.</target>
+        <target>~Dies ist eine inoffizielle Testversion. Eine korrekte Funktion wird nicht garantiert. Du kannst sie auf eigene Verantwortung verwenden.</target>
       </trans-unit>
       <trans-unit id="PH37mHg" resname="eXeLearning %s has expired! Please download the latest version.">
         <source>eXeLearning %s has expired! Please download the latest version.</source>
@@ -147,7 +147,7 @@
       </trans-unit>
       <trans-unit id="0z54hWm" resname="This is just a demo version. Not for real projects. Days before it expires: %s">
         <source>This is just a demo version. Not for real projects. Days before it expires: %s</source>
-        <target>~Dies ist nur eine Demo-Version. Nicht für echte Projekte. Tage bis zum Ablauf: %s</target>
+        <target>~Dies ist eine inoffizielle Testversion. Eine korrekte Funktion wird nicht garantiert. Du kannst sie auf eigene Verantwortung verwenden. Verbleibende Tage bis zum Ablauf: %s</target>
       </trans-unit>
       <trans-unit id="tiw1v87" resname="Accept">
         <source>Accept</source>
