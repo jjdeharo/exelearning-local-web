@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<idevice>
+    <name>hangman-random</name>
+    <title>Ahorcado</title>
+    <css-class>hangman-random</css-class>
+    <category>Games</category>
+    <icon>
+        <name>hangman-random-icon</name>
+        <url>hangman-random-icon.svg</url>
+        <type>img</type>
+    </icon>
+    <version>1.0</version>
+    <api-version>3.0</api-version>
+    <component-type>json</component-type>
+    <edition-js>
+        <filename>hangman-random.js</filename>
+    </edition-js>
+    <edition-css>
+        <filename>hangman-random.css</filename>
+    </edition-css>
+    <export-js>
+        <filename>hangman-random.js</filename>
+    </export-js>
+    <export-css>
+        <filename>hangman-random.css</filename>
+    </export-css>
+    <export-template-filename>hangman-random.html</export-template-filename>
+    <export-object>$hangmanrandom</export-object>
+    <description>Juego del ahorcado con lista de palabras configurable y seleccion aleatoria en cada partida.</description>
+    <downloadable>1</downloadable>
+    <default-visibility>0</default-visibility>
+</idevice>

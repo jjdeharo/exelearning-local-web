@@ -1,0 +1,74 @@
+/* Hangman Random iDevice (edition CSS) */
+
+#hangmanRandomForm {
+  max-width: 920px;
+}
+
+#hangmanRandomForm .idevice-description {
+  border-left: 4px solid #1d4ed8;
+  background: #eff6ff;
+  color: #0f172a;
+  margin-bottom: 18px;
+  padding: 12px 14px;
+}
+
+#hangmanRandomForm .exe-field {
+  margin: 0 0 16px;
+}
+
+#hangmanRandomForm label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+#hangmanRandomForm input[type="text"],
+#hangmanRandomForm textarea,
+#hangmanRandomForm input[type="range"] {
+  max-width: 720px;
+}
+
+#hangmanRandomForm textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+#hangmanRandomForm .exe-field-help {
+  color: #475569;
+  display: block;
+  font-size: 0.95em;
+  margin-top: 6px;
+}
+
+#hangmanRandomForm .range-row {
+  align-items: center;
+  display: flex;
+  gap: 12px;
+}
+
+#hangmanRandomForm .value-number {
+  background: #0f172a;
+  border-radius: 999px;
+  color: #fff;
+  display: inline-block;
+  font-weight: 700;
+  min-width: 2.5rem;
+  padding: 0.3rem 0.65rem;
+  text-align: center;
+}
+
+#hangmanRandomForm .word-preview {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  margin-top: 12px;
+  padding: 12px 14px;
+}
+
+#hangmanRandomForm .word-preview ul {
+  margin: 8px 0 0 18px;
+}
+
+#hangmanRandomForm .word-preview li + li {
+  margin-top: 4px;
+}

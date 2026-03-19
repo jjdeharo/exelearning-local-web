@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">Hangman Random icon</title>
+  <desc id="desc">Icono de un juego del ahorcado</desc>
+  <rect width="96" height="96" rx="18" fill="#f8fafc"/>
+  <path d="M18 78h46M28 78V20h34M61 20v10" fill="none" stroke="#0f172a" stroke-linecap="round" stroke-linejoin="round" stroke-width="6"/>
+  <circle cx="61" cy="39" r="8" fill="none" stroke="#ef4444" stroke-width="5"/>
+  <path d="M61 47v18M61 54l-10 8M61 54l10 8M61 65l-9 11M61 65l9 11" fill="none" stroke="#ef4444" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+  <path d="M15 22c7-9 19-13 32-11" fill="none" stroke="#22c55e" stroke-linecap="round" stroke-width="5"/>
+</svg>

@@ -1,0 +1,207 @@
+/* Hangman Random iDevice (export CSS) */
+
+.hangman-random-idevice {
+  --hangman-bg: #eff6ff;
+  --hangman-border: #bfdbfe;
+  --hangman-ink: #0f172a;
+  --hangman-accent: #2563eb;
+  --hangman-muted: #475569;
+  --hangman-success: #166534;
+  --hangman-danger: #b91c1c;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+  border: 1px solid var(--hangman-border);
+  border-radius: 18px;
+  color: var(--hangman-ink);
+  padding: 1.25rem;
+}
+
+.hangman-random-idevice * {
+  box-sizing: border-box;
+}
+
+.hangman-random-header h3 {
+  font-size: 1.35rem;
+  line-height: 1.2;
+  margin: 0 0 0.4rem;
+}
+
+.hangman-random-header p {
+  color: var(--hangman-muted);
+  margin: 0 0 1rem;
+}
+
+.hangman-random-board {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(220px, 260px) minmax(0, 1fr);
+}
+
+.hangman-random-figure,
+.hangman-random-panel {
+  background: #fff;
+  border: 1px solid #dbeafe;
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.hangman-random-svg {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  max-width: 180px;
+  width: 100%;
+}
+
+.hangman-part {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.hangman-part.visible {
+  opacity: 1;
+}
+
+.hangman-random-stats {
+  color: var(--hangman-muted);
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.95rem;
+  gap: 1rem;
+  margin-top: 0.8rem;
+}
+
+.hangman-random-word {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.hangman-random-letter {
+  align-items: center;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 12px;
+  display: inline-flex;
+  font-size: 1.35rem;
+  font-weight: 700;
+  height: 3rem;
+  justify-content: center;
+  min-width: 2.5rem;
+  padding: 0 0.35rem;
+  text-transform: uppercase;
+}
+
+.hangman-random-letter.separator {
+  background: transparent;
+  border-color: transparent;
+  min-width: 1rem;
+}
+
+.hangman-random-controls {
+  align-items: end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.hangman-random-controls label {
+  color: var(--hangman-muted);
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.hangman-random-controls input {
+  border: 1px solid #94a3b8;
+  border-radius: 10px;
+  font-size: 1rem;
+  min-width: 4rem;
+  padding: 0.7rem 0.8rem;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.hangman-random-controls button,
+.hangman-random-keyboard button {
+  background: var(--hangman-accent);
+  border: 0;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.hangman-random-controls button {
+  padding: 0.72rem 1rem;
+}
+
+.hangman-random-controls .secondary {
+  background: #334155;
+}
+
+.hangman-random-controls button:disabled,
+.hangman-random-keyboard button:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.hangman-random-status {
+  border-radius: 12px;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding: 0.8rem 0.9rem;
+}
+
+.hangman-random-status.playing {
+  background: #eef2ff;
+  color: #1e3a8a;
+}
+
+.hangman-random-status.win {
+  background: #dcfce7;
+  color: var(--hangman-success);
+}
+
+.hangman-random-status.lose {
+  background: #fee2e2;
+  color: var(--hangman-danger);
+}
+
+.hangman-random-keyboard {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(42px, 1fr));
+}
+
+.hangman-random-keyboard button {
+  min-height: 42px;
+  padding: 0.4rem;
+}
+
+.hangman-random-keyboard button.hit {
+  background: #15803d;
+}
+
+.hangman-random-keyboard button.miss {
+  background: #b91c1c;
+}
+
+.hangman-random-wrong {
+  color: var(--hangman-muted);
+  margin-top: 1rem;
+}
+
+@media (max-width: 760px) {
+  .hangman-random-board {
+    grid-template-columns: 1fr;
+  }
+
+  .hangman-random-letter {
+    font-size: 1.1rem;
+    height: 2.7rem;
+    min-width: 2.2rem;
+  }
+}
