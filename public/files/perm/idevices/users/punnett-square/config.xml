@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<idevice>
+    <name>punnett-square</name>
+    <title>Punnett square</title>
+    <css-class>punnett-square</css-class>
+    <category>Science</category>
+    <icon>
+        <name>punnett-square-icon</name>
+        <url>punnett-square-icon.svg</url>
+        <type>img</type>
+    </icon>
+    <version>1.0</version>
+    <api-version>3.0</api-version>
+    <component-type>json</component-type>
+    <edition-js>
+        <filename>punnett-square.js</filename>
+    </edition-js>
+    <edition-css>
+        <filename>punnett-square.css</filename>
+    </edition-css>
+    <export-js>
+        <filename>punnett-square.js</filename>
+    </export-js>
+    <export-css>
+        <filename>punnett-square.css</filename>
+    </export-css>
+    <export-template-filename>punnett-square.html</export-template-filename>
+    <export-object>$punnettsquare</export-object>
+    <description>Interactive Punnett square for monohybrid and dihybrid genetics practice.</description>
+    <downloadable>1</downloadable>
+    <default-visibility>0</default-visibility>
+</idevice>

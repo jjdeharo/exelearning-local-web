@@ -1,0 +1,158 @@
+.exe-punnett-square-template {
+    --punnett-border: #1c4f64;
+    --punnett-soft: #eef5f7;
+    --punnett-soft-2: #f8fbfc;
+    --punnett-ok: #e6f6ea;
+    --punnett-ok-border: #267a45;
+    --punnett-ko: #fdecec;
+    --punnett-ko-border: #b03636;
+    --punnett-accent: #336b87;
+}
+
+.exe-punnett-square {
+    border: 1px solid #d9e2e6;
+    border-radius: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(180deg, #ffffff, #f8fbfc);
+}
+
+.exe-punnett-square h3,
+.exe-punnett-square h4 {
+    margin-top: 0;
+}
+
+.exe-punnett-square .punnett-context {
+    margin-bottom: 1rem;
+}
+
+.exe-punnett-square .punnett-panel {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #d9e2e6;
+    border-radius: 0.75rem;
+    background: var(--punnett-soft-2);
+}
+
+.exe-punnett-square .punnett-grid-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.exe-punnett-square .punnett-grid-table th,
+.exe-punnett-square .punnett-grid-table td {
+    border: 1px solid #cbd7dc;
+    padding: 0.35rem;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.exe-punnett-square .punnett-grid-table th {
+    background: var(--punnett-soft);
+    font-weight: 700;
+}
+
+.exe-punnett-square .punnett-input,
+.exe-punnett-square .punnett-number-input,
+.exe-punnett-square .punnett-select {
+    width: 100%;
+    max-width: 100%;
+    padding: 0.45rem 0.55rem;
+    border: 1px solid #b8c7ce;
+    border-radius: 0.45rem;
+    background: #fff;
+}
+
+.exe-punnett-square .punnett-number-input {
+    max-width: 6rem;
+}
+
+.exe-punnett-square .punnett-gametes-grid,
+.exe-punnett-square .punnett-ratios-grid,
+.exe-punnett-square .punnett-traits-grid {
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.exe-punnett-square .punnett-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.exe-punnett-square .punnett-feedback {
+    margin-top: 1rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.65rem;
+    border: 1px solid #d9e2e6;
+    background: #fff;
+}
+
+.exe-punnett-square .punnett-feedback.is-success {
+    background: var(--punnett-ok);
+    border-color: var(--punnett-ok-border);
+}
+
+.exe-punnett-square .punnett-feedback.is-error {
+    background: var(--punnett-ko);
+    border-color: var(--punnett-ko-border);
+}
+
+.exe-punnett-square .punnett-help {
+    font-size: 0.925rem;
+    color: #425860;
+}
+
+.exe-punnett-square .punnett-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--punnett-soft);
+    color: #21485a;
+    font-size: 0.875rem;
+    margin-right: 0.35rem;
+    margin-bottom: 0.35rem;
+}
+
+.exe-punnett-square .punnett-check-ok {
+    border-color: var(--punnett-ok-border);
+    background: #fbfffc;
+}
+
+.exe-punnett-square .punnett-check-ko {
+    border-color: var(--punnett-ko-border);
+    background: #fffafa;
+}
+
+.exe-punnett-square .punnett-solution {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 0.65rem;
+    background: #fff;
+    border: 1px dashed #9fb4bd;
+}
+
+.exe-punnett-square .punnett-solution[hidden] {
+    display: none;
+}
+
+.exe-punnett-square .punnett-small {
+    font-size: 0.875rem;
+}
+
+.exe-punnett-square .Games-BottonContainer {
+    margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+    .exe-punnett-square .punnett-grid-table {
+        font-size: 0.875rem;
+    }
+
+    .exe-punnett-square .punnett-grid-table th,
+    .exe-punnett-square .punnett-grid-table td {
+        padding: 0.25rem;
+    }
+}

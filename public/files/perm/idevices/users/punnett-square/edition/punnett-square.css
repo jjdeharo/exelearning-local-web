@@ -1,0 +1,36 @@
+#punnettSquareIdeviceForm .punnett-grid-preview {
+    display: grid;
+    gap: 0.5rem;
+}
+
+#punnettSquareIdeviceForm .punnett-settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+}
+
+#punnettSquareIdeviceForm .punnett-traits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1rem;
+}
+
+#punnettSquareIdeviceForm .punnett-preview-box {
+    padding: 1rem;
+    border: 1px solid #cfd8dc;
+    border-radius: 0.5rem;
+    background: #f8fbfc;
+}
+
+#punnettSquareIdeviceForm .punnett-preview-box p:last-child {
+    margin-bottom: 0;
+}
+
+#punnettSquareIdeviceForm .punnett-inline-help {
+    font-size: 0.875rem;
+    color: #495057;
+}
+
+#punnettSquareIdeviceForm .punnett-hidden {
+    display: none;
+}
