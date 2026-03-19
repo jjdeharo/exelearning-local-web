@@ -1,3 +1,9 @@
+/*
+ * Punnett square iDevice (edition styles)
+ * Author: Juan José de Haro / Codex collaboration
+ * License: GNU Affero General Public License v3.0 (see repository LICENSE)
+ */
+
 #punnettSquareIdeviceForm .punnett-grid-preview {
     display: grid;
     gap: 0.5rem;
@@ -33,4 +39,25 @@
 
 #punnettSquareIdeviceForm .punnett-hidden {
     display: none;
+}
+
+#punnettSquareIdeviceForm .punnett-activities-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+#punnettSquareIdeviceForm .punnett-activity-pill {
+    border: 1px solid #cfd8dc;
+    border-radius: 999px;
+    background: #f8fbfc;
+    color: #21485a;
+    padding: 0.45rem 0.75rem;
+    cursor: pointer;
+}
+
+#punnettSquareIdeviceForm .punnett-activity-pill.is-active {
+    background: #21485a;
+    border-color: #21485a;
+    color: #fff;
 }

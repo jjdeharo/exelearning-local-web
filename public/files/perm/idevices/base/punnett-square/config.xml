@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <idevice>
     <name>punnett-square</name>
-    <title>Punnett square</title>
+    <title>Cuadro de Punnett</title>
     <css-class>punnett-square</css-class>
     <category>Science</category>
     <icon>
@@ -26,7 +26,7 @@
     </export-css>
     <export-template-filename>punnett-square.html</export-template-filename>
     <export-object>$punnettsquare</export-object>
-    <description>Interactive Punnett square for monohybrid and dihybrid genetics practice.</description>
+    <description>Cuadro de Punnett interactivo para practicar cruces monohíbridos y dihíbridos.</description>
     <downloadable>1</downloadable>
     <default-visibility>0</default-visibility>
 </idevice>

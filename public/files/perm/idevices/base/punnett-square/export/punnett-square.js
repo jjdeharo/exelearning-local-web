@@ -1,3 +1,12 @@
+/**
+ * Punnett square iDevice (export)
+ *
+ * Adapted for this repository as a custom iDevice for eXeLearning.
+ * Based on the eXeLearning iDevice architecture and UI patterns.
+ *
+ * Author: Juan José de Haro / Codex collaboration
+ * License: GNU Affero General Public License v3.0 (see repository LICENSE)
+ */
 /* eslint-disable no-undef */
 var $punnettsquare = {
     scormAPIwrapper: 'libs/SCORM_API_wrapper.js',
@@ -14,7 +23,14 @@ var $punnettsquare = {
             writeGametes: 'Write the gametes separated by commas.',
             genotypeRatio: 'Genotype ratio',
             phenotypeRatio: 'Phenotype ratio',
+            ratioHelp: 'Write the ratio as counts, not percentages. Example: 1, 2, 1.',
             solution: 'Solution',
+            next: 'Next',
+            previous: 'Previous',
+            progress: 'Activity %s of %s',
+            totalScore: 'Total score',
+            currentScore: 'Current score',
+            score: 'Score',
         },
         es: {
             punnettSquare: 'Cuadro de Punnett',
@@ -27,7 +43,14 @@ var $punnettsquare = {
             writeGametes: 'Escribe los gametos separados por comas.',
             genotypeRatio: 'Proporción genotípica',
             phenotypeRatio: 'Proporción fenotípica',
+            ratioHelp: 'Escribe la proporción como cantidades, no como porcentajes. Ejemplo: 1, 2, 1.',
             solution: 'Solución',
+            next: 'Siguiente',
+            previous: 'Anterior',
+            progress: 'Actividad %s de %s',
+            totalScore: 'Puntuación total',
+            currentScore: 'Puntuación de esta actividad',
+            score: 'Puntuación',
         },
         ca: {
             punnettSquare: 'Quadre de Punnett',
@@ -40,63 +63,48 @@ var $punnettsquare = {
             writeGametes: 'Escriu els gàmetes separats per comes.',
             genotypeRatio: 'Proporció genotípica',
             phenotypeRatio: 'Proporció fenotípica',
+            ratioHelp: 'Escriu la proporció com a quantitats, no com a percentatges. Exemple: 1, 2, 1.',
             solution: 'Solució',
+            next: 'Següent',
+            previous: 'Anterior',
+            progress: 'Activitat %s de %s',
+            totalScore: 'Puntuació total',
+            currentScore: 'Puntuació d\'esta activitat',
+            score: 'Puntuació',
         },
-        va: {
-            punnettSquare: 'Quadre de Punnett',
-            possibleGametes: 'Gàmetes possibles',
-            parent1Gametes: 'Gàmetes del progenitor 1',
-            parent2Gametes: 'Gàmetes del progenitor 2',
-            punnettSquareCell: 'Cel·la del quadre de Punnett',
-            parent1: 'Progenitor 1',
-            parent2: 'Progenitor 2',
-            writeGametes: 'Escriu els gàmetes separats per comes.',
-            genotypeRatio: 'Proporció genotípica',
-            phenotypeRatio: 'Proporció fenotípica',
-            solution: 'Solució',
-        },
+        va: {},
     },
 
     renderView(data, accessibility, template, ideviceId) {
         const ldata = this.updateConfig(data, ideviceId);
-        const structure = this.buildStructure(ldata);
-        const title = this.escapeHtml(ldata.title);
-        const instructions = ldata.instructions || '';
         const textAfter = ldata.textAfter || '';
         const scormButtonText = this.escapeHtml(ldata.textButtonScorm);
         const scormButtonDisplay =
             document.body.classList.contains('exe-scorm') && ldata.isScorm > 0
                 ? 'inline-block'
                 : 'none';
-
         const html = `
             <div class="game-evaluation-ids js-hidden" data-id="${ldata.id}" data-evaluationb="${ldata.evaluation}" data-evaluationid="${this.escapeHtmlAttribute(ldata.evaluationID)}"></div>
             <div id="punnett-square-${ldata.id}" class="exe-punnett-square" data-punnett-id="${ldata.id}">
-                <div class="punnett-context">
-                    <h3>${title}</h3>
-                    ${instructions ? `<div class="punnett-instructions">${instructions}</div>` : ''}
-                </div>
-                <div class="punnett-help">
-                    <span class="punnett-badge">${this.escapeHtml(ldata.parent1)} x ${this.escapeHtml(ldata.parent2)}</span>
-                    ${structure.parentTraitsHtml}
-                </div>
-                ${ldata.askGametes ? this.renderGametesPanel(ldata, structure) : ''}
-                ${ldata.askGrid ? this.renderGridPanel(ldata, structure) : ''}
-                ${ldata.askGenotypeRatio ? this.renderRatioPanel(ldata, structure, 'genotype') : ''}
-                ${ldata.askPhenotypeRatio ? this.renderRatioPanel(ldata, structure, 'phenotype') : ''}
-                <div class="punnett-actions">
-                    <button type="button" class="btn btn-primary punnett-check">${this.escapeHtml(ldata.msgs.msgCheck || 'Check')}</button>
-                    <button type="button" class="btn btn-secondary punnett-reset">${this.escapeHtml(ldata.msgs.msgReset || 'Restart')}</button>
-                    ${
-                        ldata.showSolutions
-                            ? `<button type="button" class="btn btn-light punnett-show-solution">${this.escapeHtml(c_('Show solutions'))}</button>`
-                            : ''
-                    }
+                <div class="punnett-game-container">
+                    <div class="punnett-scoreboard">
+                        <div class="punnett-score-number">
+                            <strong>${this.escapeHtml(this.t('score'))}:</strong>
+                            <span class="punnett-score-value">0%</span>
+                        </div>
+                    </div>
+                    <div class="punnett-slider-controls">
+                        <button type="button" class="punnett-slider-control punnett-prev" aria-label="${this.escapeHtmlAttribute(this.t('previous'))}" title="${this.escapeHtmlAttribute(this.t('previous'))}">
+                            <span aria-hidden="true">&#9664;</span>
+                        </button>
+                        <span class="punnett-progress-label"></span>
+                        <button type="button" class="punnett-slider-control punnett-next" aria-label="${this.escapeHtmlAttribute(this.t('next'))}" title="${this.escapeHtmlAttribute(this.t('next'))}">
+                            <span aria-hidden="true">&#9654;</span>
+                        </button>
+                    </div>
+                    <div class="punnett-stage"></div>
                 </div>
                 <div class="punnett-feedback" aria-live="polite"></div>
-                <div class="punnett-solution" hidden>
-                    ${this.renderSolution(structure)}
-                </div>
                 <div class="Games-BottonContainer">
                     <div class="Games-GetScore">
                         <input type="button" value="${scormButtonText}" class="feedbackbutton Games-SendScore punnett-send-score" style="display:${scormButtonDisplay}" />
@@ -111,23 +119,22 @@ var $punnettsquare = {
 
     renderBehaviour(data, accessibility, ideviceId) {
         const ldata = this.updateConfig(data, ideviceId);
-        const structure = this.buildStructure(ldata);
         const root = document.getElementById(`punnett-square-${ldata.id}`);
         if (!root) return false;
 
-        root.dataset.ideviceJsonData = JSON.stringify(ldata);
         root._punnettData = ldata;
-        root._punnettStructure = structure;
+        root._punnettState = {
+            order: this.buildOrder(ldata),
+            currentIndex: 0,
+            scores: [],
+        };
 
         if (!$('html').is('#exe-index')) {
             this.scormAPIwrapper = '../libs/SCORM_API_wrapper.js';
             this.scormFunctions = '../libs/SCOFunctions.js';
         }
 
-        if (
-            document.body.classList.contains('exe-scorm') &&
-            ldata.isScorm > 0
-        ) {
+        if (document.body.classList.contains('exe-scorm') && ldata.isScorm > 0) {
             if (typeof window.scorm !== 'undefined' && window.scorm.init()) {
                 this.initScormData(ldata);
             } else {
@@ -146,25 +153,16 @@ var $punnettsquare = {
             }, 300);
         }
 
-        root.querySelector('.punnett-check').addEventListener('click', () => {
-            this.checkActivity(root);
+        root.querySelector('.punnett-prev').addEventListener('click', () => {
+            this.goToActivity(root, root._punnettState.currentIndex - 1);
         });
-        root.querySelector('.punnett-reset').addEventListener('click', () => {
-            this.resetActivity(root);
+        root.querySelector('.punnett-next').addEventListener('click', () => {
+            this.goToActivity(root, root._punnettState.currentIndex + 1);
         });
-        const solutionButton = root.querySelector('.punnett-show-solution');
-        if (solutionButton) {
-            solutionButton.addEventListener('click', () => {
-                const solution = root.querySelector('.punnett-solution');
-                solution.hidden = !solution.hidden;
-            });
-        }
-        const scoreButton = root.querySelector('.punnett-send-score');
-        if (scoreButton) {
-            scoreButton.addEventListener('click', () => {
-                this.sendScore(root, false);
-            });
-        }
+        root.querySelector('.punnett-send-score').addEventListener('click', () => {
+            this.sendScore(root, false);
+        });
+        this.renderCurrentActivity(root);
         return true;
     },
 
@@ -177,27 +175,9 @@ var $punnettsquare = {
         data.id = ideviceId ?? data.ideviceId ?? data.id;
         data.isInExe = isInExe;
         data.msgs = data.msgs || {};
-        data.geneCount = data.geneCount === 2 ? 2 : 1;
-        data.parent1 = this.cleanGenotype(data.parent1);
-        data.parent2 = this.cleanGenotype(data.parent2);
-        data.traits = Array.isArray(data.traits) ? data.traits : [];
-        while (data.traits.length < 2) data.traits.push({});
-        data.traits = data.traits.map((trait, index) => ({
-            geneLetter: String(trait.geneLetter || (index === 0 ? 'A' : 'B'))
-                .replace(/[^A-Za-z]/g, '')
-                .toUpperCase()
-                .slice(0, 1),
-            dominantLabel:
-                trait.dominantLabel ||
-                (index === 0
-                    ? 'Dominant phenotype'
-                    : 'Dominant phenotype 2'),
-            recessiveLabel:
-                trait.recessiveLabel ||
-                (index === 0
-                    ? 'Recessive phenotype'
-                    : 'Recessive phenotype 2'),
-        }));
+        data.mode = data.mode === 'random' ? 'random' : 'sequence';
+        data.randomCount = Math.max(0, parseInt(data.randomCount, 10) || 0);
+        data.activities = this.normalizeActivities(data);
         data.evaluation = !!data.evaluation;
         data.evaluationID = data.evaluationID || '';
         data.isScorm = data.isScorm || 0;
@@ -208,8 +188,61 @@ var $punnettsquare = {
         data.weighted = data.weighted ?? 100;
         data.scorerp = data.scorerp ?? 0;
         data.scorep = data.scorep ?? 0;
-        data.title = data.title || this.t('punnettSquare');
         return data;
+    },
+
+    normalizeActivities(data) {
+        let activities = Array.isArray(data.activities) ? data.activities : [];
+        if (!activities.length) {
+            activities = [
+                {
+                    title: data.title,
+                    geneCount: data.geneCount,
+                    parent1: data.parent1,
+                    parent2: data.parent2,
+                    traits: data.traits,
+                    askGametes: data.askGametes,
+                    askGrid: data.askGrid,
+                    askGenotypeRatio: data.askGenotypeRatio,
+                    askPhenotypeRatio: data.askPhenotypeRatio,
+                    showSolutions: data.showSolutions,
+                },
+            ];
+        }
+        return activities.map((activity, index) => {
+            const normalized = JSON.parse(JSON.stringify(activity || {}));
+            normalized.title = String(normalized.title || '').trim() || this.t('punnettSquare') + ' ' + (index + 1);
+            normalized.geneCount = normalized.geneCount === 2 ? 2 : 1;
+            normalized.parent1 = this.cleanGenotype(normalized.parent1);
+            normalized.parent2 = this.cleanGenotype(normalized.parent2);
+            normalized.traits = Array.isArray(normalized.traits) ? normalized.traits : [];
+            while (normalized.traits.length < 2) normalized.traits.push({});
+            normalized.traits = normalized.traits.map((trait, traitIndex) => ({
+                geneLetter: String(trait.geneLetter || (traitIndex === 0 ? 'A' : 'B'))
+                    .replace(/[^A-Za-z]/g, '')
+                    .toUpperCase()
+                    .slice(0, 1),
+                dominantLabel: String(trait.dominantLabel || '').trim(),
+                recessiveLabel: String(trait.recessiveLabel || '').trim(),
+            }));
+            normalized.askGametes = !!normalized.askGametes;
+            normalized.askGrid = normalized.askGrid !== false;
+            normalized.askGenotypeRatio = normalized.askGenotypeRatio !== false;
+            normalized.askPhenotypeRatio = normalized.askPhenotypeRatio !== false;
+            normalized.showSolutions = normalized.showSolutions !== false;
+            return normalized;
+        });
+    },
+
+    buildOrder(data) {
+        const base = data.activities.map((_, index) => index);
+        if (data.mode !== 'random') return base;
+        const shuffled = base.slice().sort(() => Math.random() - 0.5);
+        const count =
+            data.randomCount > 0
+                ? Math.min(data.randomCount, shuffled.length)
+                : shuffled.length;
+        return shuffled.slice(0, count);
     },
 
     getCurrentLang() {
@@ -231,63 +264,115 @@ var $punnettsquare = {
         return catalog[key] || this.localStrings.en[key] || key;
     },
 
-    buildStructure(data) {
-        const genes = [];
-        for (let i = 0; i < data.geneCount; i++) {
-            genes.push(data.traits[i]);
+    tf(key, one, two) {
+        return this.t(key).replace('%s', one).replace('%s', two);
+    },
+
+    renderCurrentActivity(root) {
+        const data = root._punnettData;
+        const state = root._punnettState;
+        const activity = data.activities[state.order[state.currentIndex]];
+        const structure = this.buildStructure(activity);
+        root._punnettStructure = structure;
+        root._punnettActivity = activity;
+
+        const stage = root.querySelector('.punnett-stage');
+        stage.innerHTML = this.renderActivityView(data, activity, structure);
+        stage.querySelector('.punnett-check').addEventListener('click', () => {
+            this.checkActivity(root);
+        });
+        stage.querySelector('.punnett-reset').addEventListener('click', () => {
+            this.resetActivity(root);
+        });
+        const solutionButton = stage.querySelector('.punnett-show-solution');
+        if (solutionButton) {
+            solutionButton.addEventListener('click', () => {
+                const solution = stage.querySelector('.punnett-solution');
+                solution.hidden = !solution.hidden;
+            });
         }
-        const parent1Loci = this.getLoci(data.parent1, genes);
-        const parent2Loci = this.getLoci(data.parent2, genes);
+
+        root.querySelector('.punnett-progress-label').textContent = this.tf(
+            'progress',
+            state.currentIndex + 1,
+            state.order.length
+        );
+        root.querySelector('.punnett-prev').disabled = state.currentIndex === 0;
+        root.querySelector('.punnett-next').disabled =
+            state.currentIndex >= state.order.length - 1;
+        root.querySelector('.punnett-slider-controls').classList.toggle(
+            'is-hidden',
+            state.order.length < 2
+        );
+        this.updateFeedback(root, state.scores[state.currentIndex] || null);
+    },
+
+    renderActivityView(data, activity, structure) {
+        const instructions = data.instructions || '';
+        return `
+            <div class="punnett-context">
+                <h3>${this.escapeHtml(activity.title)}</h3>
+                ${instructions ? `<div class="punnett-instructions">${instructions}</div>` : ''}
+            </div>
+            <div class="punnett-help">
+                <span class="punnett-badge">${this.escapeHtml(activity.parent1)} x ${this.escapeHtml(activity.parent2)}</span>
+                ${structure.parentTraitsHtml}
+            </div>
+            ${activity.askGametes ? this.renderGametesPanel(data, structure) : ''}
+            ${activity.askGrid ? this.renderGridPanel(data, structure) : ''}
+            ${activity.askGenotypeRatio ? this.renderRatioPanel(data, structure, 'genotype') : ''}
+            ${activity.askPhenotypeRatio ? this.renderRatioPanel(data, structure, 'phenotype') : ''}
+            <div class="punnett-actions">
+                <button type="button" class="btn btn-primary punnett-check">${this.escapeHtml(data.msgs.msgCheck || 'Check')}</button>
+                <button type="button" class="btn btn-secondary punnett-reset">${this.escapeHtml(data.msgs.msgReset || 'Restart')}</button>
+                ${
+                    activity.showSolutions
+                        ? `<button type="button" class="btn btn-light punnett-show-solution">${this.escapeHtml(c_('Show solutions'))}</button>`
+                        : ''
+                }
+            </div>
+            <div class="punnett-solution" hidden>
+                ${this.renderSolution(structure)}
+            </div>
+        `;
+    },
+
+    buildStructure(activity) {
+        const genes = [];
+        for (let i = 0; i < activity.geneCount; i++) genes.push(activity.traits[i]);
+        const parent1Loci = this.getLoci(activity.parent1, genes);
+        const parent2Loci = this.getLoci(activity.parent2, genes);
         const parent1Gametes = this.getGametes(parent1Loci);
         const parent2Gametes = this.getGametes(parent2Loci);
         const grid = [];
         const genotypeCounts = {};
         const phenotypeCounts = {};
-
         parent2Gametes.forEach((rowGamete) => {
             const row = [];
             parent1Gametes.forEach((colGamete) => {
-                const genotype = this.combineGametes(
-                    rowGamete,
-                    colGamete,
-                    genes
-                );
+                const genotype = this.combineGametes(rowGamete, colGamete, genes);
                 const phenotypeKey = this.getPhenotypeKey(genotype, genes);
-                row.push({
-                    genotype,
-                    phenotypeKey,
-                });
+                row.push({ genotype, phenotypeKey });
                 genotypeCounts[genotype] = (genotypeCounts[genotype] || 0) + 1;
-                phenotypeCounts[phenotypeKey] =
-                    (phenotypeCounts[phenotypeKey] || 0) + 1;
+                phenotypeCounts[phenotypeKey] = (phenotypeCounts[phenotypeKey] || 0) + 1;
             });
             grid.push(row);
         });
-
-        const genotypeItems = Object.keys(genotypeCounts)
-            .sort()
-            .map((key) => ({
-                key,
-                label: key,
-                count: genotypeCounts[key],
-            }));
-        const phenotypeItems = Object.keys(phenotypeCounts)
-            .sort()
-            .map((key) => ({
-                key,
-                label: this.getPhenotypeLabel(key, genes),
-                count: phenotypeCounts[key],
-            }));
-
         return {
             genes,
-            parent1Loci,
-            parent2Loci,
             parent1Gametes,
             parent2Gametes,
             grid,
-            genotypeItems,
-            phenotypeItems,
+            genotypeItems: Object.keys(genotypeCounts)
+                .sort()
+                .map((key) => ({ key, label: key, count: genotypeCounts[key] })),
+            phenotypeItems: Object.keys(phenotypeCounts)
+                .sort()
+                .map((key) => ({
+                    key,
+                    label: this.getPhenotypeLabel(key, genes),
+                    count: phenotypeCounts[key],
+                })),
             parentTraitsHtml: genes
                 .map(
                     (gene) =>
@@ -362,8 +447,7 @@ var $punnettsquare = {
         for (let i = 0; i < genes.length; i++) {
             const pair = genotype.slice(i * 2, i * 2 + 2);
             const dominant = genes[i].geneLetter.toUpperCase();
-            const hasDominant = pair.includes(dominant);
-            parts.push(hasDominant ? 'D' : 'r');
+            parts.push(pair.includes(dominant) ? 'D' : 'r');
         }
         return parts.join('|');
     },
@@ -385,13 +469,13 @@ var $punnettsquare = {
                 <h4>${this.escapeHtml(this.t('possibleGametes'))}</h4>
                 <div class="punnett-gametes-grid">
                     <div>
-                        <label for="punnett-gametes-p1-${data.id}" class="form-label">${this.escapeHtml(this.t('parent1'))}</label>
-                        <input id="punnett-gametes-p1-${data.id}" class="punnett-input punnett-gametes-input" data-role="gametes" data-parent="1" placeholder="${this.escapeHtml(structure.parent1Gametes.join(', '))}" />
+                        <label class="form-label">${this.escapeHtml(this.t('parent1'))}</label>
+                        <input class="punnett-input punnett-gametes-input" data-parent="1" placeholder="${this.escapeHtml(structure.parent1Gametes.join(', '))}" />
                         <p class="punnett-small">${this.escapeHtml(this.t('writeGametes'))}</p>
                     </div>
                     <div>
-                        <label for="punnett-gametes-p2-${data.id}" class="form-label">${this.escapeHtml(this.t('parent2'))}</label>
-                        <input id="punnett-gametes-p2-${data.id}" class="punnett-input punnett-gametes-input" data-role="gametes" data-parent="2" placeholder="${this.escapeHtml(structure.parent2Gametes.join(', '))}" />
+                        <label class="form-label">${this.escapeHtml(this.t('parent2'))}</label>
+                        <input class="punnett-input punnett-gametes-input" data-parent="2" placeholder="${this.escapeHtml(structure.parent2Gametes.join(', '))}" />
                         <p class="punnett-small">${this.escapeHtml(c_('Example'))}: ${this.escapeHtml(structure.parent2Gametes.join(', '))}</p>
                     </div>
                 </div>
@@ -409,13 +493,7 @@ var $punnettsquare = {
                     .map(
                         (cell, colIndex) => `
                             <td>
-                                <input
-                                    class="punnett-input punnett-grid-input"
-                                    data-role="grid"
-                                    data-row="${rowIndex}"
-                                    data-col="${colIndex}"
-                                    aria-label="${this.escapeHtml(this.t('punnettSquareCell'))} ${rowIndex + 1}-${colIndex + 1}"
-                                />
+                                <input class="punnett-input punnett-grid-input" data-row="${rowIndex}" data-col="${colIndex}" aria-label="${this.escapeHtml(this.t('punnettSquareCell'))} ${rowIndex + 1}-${colIndex + 1}" />
                             </td>`
                     )
                     .join('');
@@ -424,17 +502,11 @@ var $punnettsquare = {
                 )}</th>${cells}</tr>`;
             })
             .join('');
-
         return `
             <div class="punnett-panel">
                 <h4>${this.escapeHtml(this.t('punnettSquare'))}</h4>
                 <table class="punnett-grid-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                            ${headerCells}
-                        </tr>
-                    </thead>
+                    <thead><tr><th></th>${headerCells}</tr></thead>
                     <tbody>${rows}</tbody>
                 </table>
             </div>
@@ -442,35 +514,22 @@ var $punnettsquare = {
     },
 
     renderRatioPanel(data, structure, type) {
-        const items =
-            type === 'genotype'
-                ? structure.genotypeItems
-                : structure.phenotypeItems;
-        const title =
-            type === 'genotype'
-                ? this.t('genotypeRatio')
-                : this.t('phenotypeRatio');
+        const items = type === 'genotype' ? structure.genotypeItems : structure.phenotypeItems;
+        const title = type === 'genotype' ? this.t('genotypeRatio') : this.t('phenotypeRatio');
         const inputs = items
             .map(
-                (item, index) => `
+                (item) => `
                     <div>
-                        <label class="form-label" for="punnett-${type}-${data.id}-${index}">${this.escapeHtml(item.label)}</label>
-                        <input
-                            id="punnett-${type}-${data.id}-${index}"
-                            type="number"
-                            min="0"
-                            class="punnett-number-input punnett-ratio-input"
-                            data-role="${type}"
-                            data-key="${this.escapeHtmlAttribute(item.key)}"
-                        />
+                        <label class="form-label">${this.escapeHtml(item.label)}</label>
+                        <input type="number" min="0" class="punnett-number-input punnett-ratio-input" data-role="${type}" data-key="${this.escapeHtmlAttribute(item.key)}" />
                     </div>
                 `
             )
             .join('');
-
         return `
             <div class="punnett-panel">
                 <h4>${this.escapeHtml(title)}</h4>
+                <p class="punnett-small punnett-ratio-help">${this.escapeHtml(this.t('ratioHelp'))}</p>
                 <div class="punnett-ratios-grid">${inputs}</div>
             </div>
         `;
@@ -484,62 +543,29 @@ var $punnettsquare = {
                         <th scope="row">${this.escapeHtml(
                             structure.parent2Gametes[rowIndex]
                         )}</th>
-                        ${row
-                            .map(
-                                (cell) =>
-                                    `<td>${this.escapeHtml(cell.genotype)}</td>`
-                            )
-                            .join('')}
+                        ${row.map((cell) => `<td>${this.escapeHtml(cell.genotype)}</td>`).join('')}
                     </tr>
                 `
             )
             .join('');
-        const genotypeList = structure.genotypeItems
-            .map(
-                (item) =>
-                    `<li><strong>${this.escapeHtml(item.label)}:</strong> ${item.count}</li>`
-            )
-            .join('');
-        const phenotypeList = structure.phenotypeItems
-            .map(
-                (item) =>
-                    `<li><strong>${this.escapeHtml(item.label)}:</strong> ${item.count}</li>`
-            )
-            .join('');
-
         return `
             <h4>${this.escapeHtml(this.t('solution'))}</h4>
-            <p><strong>${this.escapeHtml(this.t('parent1Gametes'))}:</strong> ${this.escapeHtml(
-                structure.parent1Gametes.join(', ')
-            )}</p>
-            <p><strong>${this.escapeHtml(this.t('parent2Gametes'))}:</strong> ${this.escapeHtml(
-                structure.parent2Gametes.join(', ')
-            )}</p>
+            <p><strong>${this.escapeHtml(this.t('parent1Gametes'))}:</strong> ${this.escapeHtml(structure.parent1Gametes.join(', '))}</p>
+            <p><strong>${this.escapeHtml(this.t('parent2Gametes'))}:</strong> ${this.escapeHtml(structure.parent2Gametes.join(', '))}</p>
             <table class="punnett-grid-table">
-                <thead>
-                    <tr>
-                        <th></th>
-                        ${structure.parent1Gametes
-                            .map((gamete) => `<th>${this.escapeHtml(gamete)}</th>`)
-                            .join('')}
-                    </tr>
-                </thead>
+                <thead><tr><th></th>${structure.parent1Gametes.map((gamete) => `<th>${this.escapeHtml(gamete)}</th>`).join('')}</tr></thead>
                 <tbody>${gridRows}</tbody>
             </table>
-            <h5>${this.escapeHtml(c_('Genotype ratio'))}</h5>
-            <ul>${genotypeList}</ul>
-            <h5>${this.escapeHtml(c_('Phenotype ratio'))}</h5>
-            <ul>${phenotypeList}</ul>
         `;
     },
 
     checkActivity(root) {
         const data = root._punnettData;
+        const state = root._punnettState;
         const structure = root._punnettStructure;
         let total = 0;
         let hits = 0;
         const feedbackLines = [];
-
         root.querySelectorAll('.punnett-check-ok, .punnett-check-ko').forEach((el) => {
             el.classList.remove('punnett-check-ok', 'punnett-check-ko');
         });
@@ -556,11 +582,7 @@ var $punnettsquare = {
             this.markInput(input, ok);
             if (ok) hits++;
         });
-        if (gameteInputs.length) {
-            feedbackLines.push(
-                `${this.escapeHtml(c_('Gametes'))}: ${hits}/${total}`
-            );
-        }
+        if (gameteInputs.length) feedbackLines.push(`${this.escapeHtml(c_('Gametes'))}: ${hits}/${total}`);
 
         const beforeGridHits = hits;
         const beforeGridTotal = total;
@@ -569,10 +591,7 @@ var $punnettsquare = {
             const row = parseInt(input.dataset.row, 10);
             const col = parseInt(input.dataset.col, 10);
             const expected = structure.grid[row][col].genotype;
-            const actual = this.normalizeGenotypeInput(
-                input.value,
-                structure.genes
-            );
+            const actual = this.normalizeGenotypeInput(input.value, structure.genes);
             const ok = actual === expected;
             this.markInput(input, ok);
             if (ok) hits++;
@@ -585,83 +604,85 @@ var $punnettsquare = {
             );
         }
 
-        const ratioSections = [
-            {
-                role: 'genotype',
-                items: structure.genotypeItems,
-                label: c_('Genotype ratio'),
-            },
-            {
-                role: 'phenotype',
-                items: structure.phenotypeItems,
-                label: c_('Phenotype ratio'),
-            },
-        ];
-
-        ratioSections.forEach((section) => {
-            const inputs = root.querySelectorAll(
-                `.punnett-ratio-input[data-role="${section.role}"]`
-            );
+        [
+            { role: 'genotype', items: structure.genotypeItems, label: this.t('genotypeRatio') },
+            { role: 'phenotype', items: structure.phenotypeItems, label: this.t('phenotypeRatio') },
+        ].forEach((section) => {
+            const inputs = root.querySelectorAll(`.punnett-ratio-input[data-role="${section.role}"]`);
             if (!inputs.length) return;
             const beforeHits = hits;
             const beforeTotal = total;
             inputs.forEach((input) => {
                 total++;
-                const item = section.items.find(
-                    (candidate) => candidate.key === input.dataset.key
-                );
+                const item = section.items.find((candidate) => candidate.key === input.dataset.key);
                 const actual = parseInt(input.value, 10);
                 const ok = Number.isFinite(actual) && item && actual === item.count;
                 this.markInput(input, ok);
                 if (ok) hits++;
             });
-            feedbackLines.push(
-                `${this.escapeHtml(section.label)}: ${hits - beforeHits}/${
-                    total - beforeTotal
-                }`
-            );
+            feedbackLines.push(`${this.escapeHtml(section.label)}: ${hits - beforeHits}/${total - beforeTotal}`);
         });
 
         const score = total === 0 ? 0 : Math.round((hits / total) * 100);
-        data.hits = hits;
-        data.errors = total - hits;
-        data.scorep = score;
-        data.scorerp = score;
-        root.dataset.score = String(score);
+        state.scores[state.currentIndex] = { score, feedbackLines };
+        data.scorep = this.getTotalScore(root);
+        data.scorerp = data.scorep;
+        this.updateFeedback(root, state.scores[state.currentIndex]);
+        if (data.isScorm > 0) this.sendScore(root, true);
+    },
 
+    updateFeedback(root, currentScore) {
+        const data = root._punnettData;
+        const totalScore = this.getTotalScore(root);
         const feedback = root.querySelector('.punnett-feedback');
-        const passed = score >= 60;
+        if (!currentScore) {
+            feedback.classList.remove('is-success', 'is-error');
+            feedback.innerHTML = `<p><strong>${this.escapeHtml(this.t('totalScore'))}:</strong> ${totalScore}%</p>`;
+            root.querySelector('.punnett-score-value').textContent = `${totalScore}%`;
+            return;
+        }
+        const passed = currentScore.score >= 60;
         feedback.classList.toggle('is-success', passed);
         feedback.classList.toggle('is-error', !passed);
+        root.querySelector('.punnett-score-value').textContent = `${totalScore}%`;
         feedback.innerHTML = `
-            <p><strong>${this.escapeHtml(data.msgs.msgYouScore || 'Your score')}:</strong> ${score}%</p>
-            <p>${feedbackLines.join('<br>')}</p>
+            <p><strong>${this.escapeHtml(this.t('currentScore'))}:</strong> ${currentScore.score}%</p>
+            <p><strong>${this.escapeHtml(this.t('totalScore'))}:</strong> ${totalScore}%</p>
+            <p>${currentScore.feedbackLines.join('<br>')}</p>
         `;
+    },
 
-        if (data.isScorm > 0) {
-            this.sendScore(root, true);
-        }
+    getTotalScore(root) {
+        const scores = root._punnettState.scores.filter((item) => item && Number.isFinite(item.score));
+        if (!scores.length) return 0;
+        return Math.round(scores.reduce((sum, item) => sum + item.score, 0) / scores.length);
+    },
+
+    goToActivity(root, index) {
+        const state = root._punnettState;
+        if (index < 0 || index >= state.order.length) return;
+        state.currentIndex = index;
+        this.renderCurrentActivity(root);
     },
 
     sendScore(root, auto) {
         const data = root._punnettData;
         if (!data) return;
-        if (typeof data.scorep === 'undefined') data.scorep = 0;
-        if (typeof data.scorerp === 'undefined') data.scorerp = data.scorep;
+        data.scorep = this.getTotalScore(root);
+        data.scorerp = data.scorep;
         $exeDevices.iDevice.gamification.scorm.sendScoreNew(auto, data);
     },
 
     resetActivity(root) {
-        root.querySelectorAll('input').forEach((input) => {
+        root.querySelectorAll('.punnett-stage input').forEach((input) => {
             if (input.type === 'button') return;
             input.value = '';
             input.classList.remove('punnett-check-ok', 'punnett-check-ko');
         });
-        const feedback = root.querySelector('.punnett-feedback');
-        feedback.classList.remove('is-success', 'is-error');
-        feedback.innerHTML = '';
         const solution = root.querySelector('.punnett-solution');
         if (solution) solution.hidden = true;
+        root._punnettState.scores[root._punnettState.currentIndex] = null;
+        this.updateFeedback(root, null);
     },
 
     markInput(input, ok) {
@@ -724,18 +745,13 @@ var $punnettsquare = {
     initSCORM(ldata) {
         let parsedData = typeof ldata === 'string' ? JSON.parse(ldata) : ldata;
         this.mScorm = window.scorm;
-        if (this.mScorm.init()) {
-            this.initScormData(parsedData);
-        }
+        if (this.mScorm.init()) this.initScormData(parsedData);
     },
 
     initScormData(ldata) {
         this.mScorm = window.scorm;
-        this.userName = $exeDevices.iDevice.gamification.scorm.getUserName(
-            this.mScorm
-        );
-        this.previousScore =
-            $exeDevices.iDevice.gamification.scorm.getPreviousScore(this.mScorm);
+        this.userName = $exeDevices.iDevice.gamification.scorm.getUserName(this.mScorm);
+        this.previousScore = $exeDevices.iDevice.gamification.scorm.getPreviousScore(this.mScorm);
         this.mScorm.SetScoreMax(100);
         this.mScorm.SetScoreMin(0);
         this.initialScore = this.previousScore;

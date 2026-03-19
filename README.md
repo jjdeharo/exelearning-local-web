@@ -31,6 +31,12 @@ Currently, the development of the code is carried out in a coordinated manner be
 
 This version is built with modern technologies (Bun, Elysia, Kysely) and provides an accessible and up-to-date user interface for creating interactive educational content.
 
+### Local Customizations
+
+This repository is a working fork of eXeLearning and may include local customizations, experiments, and additional iDevices that are not part of the upstream project. These changes should be clearly identified in commit history and in the corresponding source files when they introduce new code or significant adaptations.
+
+For attribution, fork status, and licensing notes applicable to the repository as a whole, see [NOTICE.md](./NOTICE.md).
+
 ### Key Features
 
 * Creation and edition of interactive educational content

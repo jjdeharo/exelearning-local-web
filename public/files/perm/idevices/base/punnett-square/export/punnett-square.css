@@ -1,3 +1,9 @@
+/*
+ * Punnett square iDevice (export styles)
+ * Author: Juan José de Haro / Codex collaboration
+ * License: GNU Affero General Public License v3.0 (see repository LICENSE)
+ */
+
 .exe-punnett-square-template {
     --punnett-border: #1c4f64;
     --punnett-soft: #eef5f7;
@@ -23,6 +29,25 @@
 
 .exe-punnett-square .punnett-context {
     margin-bottom: 1rem;
+}
+
+.exe-punnett-square .punnett-game-container {
+    position: relative;
+    width: 100%;
+}
+
+.exe-punnett-square .punnett-scoreboard {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin: 0.4em auto;
+    width: 100%;
+}
+
+.exe-punnett-square .punnett-score-number {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .exe-punnett-square .punnett-panel {
@@ -65,6 +90,20 @@
 
 .exe-punnett-square .punnett-number-input {
     max-width: 6rem;
+    appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+.exe-punnett-square .punnett-number-input::-webkit-outer-spin-button,
+.exe-punnett-square .punnett-number-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.exe-punnett-square .punnett-ratio-help {
+    margin-top: -0.25rem;
+    margin-bottom: 0.75rem;
+    color: #425860;
 }
 
 .exe-punnett-square .punnett-gametes-grid,
@@ -80,6 +119,42 @@
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 1rem;
+}
+
+.exe-punnett-square .punnett-slider-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    width: 100%;
+    margin: 0 auto 0.5rem;
+}
+
+.exe-punnett-square .punnett-progress-label {
+    font-weight: 600;
+    color: #21485a;
+}
+
+.exe-punnett-square .punnett-slider-controls.is-hidden {
+    display: none;
+}
+
+.exe-punnett-square .punnett-slider-control {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 1px solid #cbd7dc;
+    border-radius: 50%;
+    background: #fff;
+    color: #21485a;
+}
+
+.exe-punnett-square .punnett-slider-control:disabled {
+    opacity: 0.45;
+    cursor: default;
 }
 
 .exe-punnett-square .punnett-feedback {
@@ -147,6 +222,11 @@
 }
 
 @media (max-width: 640px) {
+    .exe-punnett-square .punnett-slider-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
     .exe-punnett-square .punnett-grid-table {
         font-size: 0.875rem;
     }
