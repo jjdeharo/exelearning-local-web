@@ -57,6 +57,19 @@ var $exeDevice = {
             'Please write the instructions.': 'Please write the instructions.',
             'Please write an activity title.': 'Please write an activity title.',
             'At least one activity is required.': 'At least one activity is required.',
+            'No valid activities were found in the imported content.':
+                'No valid activities were found in the imported content.',
+            'The imported activities have been added successfully.':
+                'The imported activities have been added successfully.',
+            'The activity set has been exported successfully.':
+                'The activity set has been exported successfully.',
+            'Please select a valid file (.json or .txt).':
+                'Please select a valid file (.json or .txt).',
+            'The file does not contain a valid Punnett square activity set.':
+                'The file does not contain a valid Punnett square activity set.',
+            'Export activities': 'Export activities',
+            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
+                'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'Parent 1 genotype does not match the selected number of genes.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -124,6 +137,19 @@ var $exeDevice = {
                 'Escribe un título para la actividad.',
             'At least one activity is required.':
                 'Hace falta al menos una actividad.',
+            'No valid activities were found in the imported content.':
+                'No se ha encontrado ninguna actividad válida en el contenido importado.',
+            'The imported activities have been added successfully.':
+                'Las actividades importadas se han añadido correctamente.',
+            'The activity set has been exported successfully.':
+                'La batería de actividades se ha exportado correctamente.',
+            'Please select a valid file (.json or .txt).':
+                'Selecciona un archivo válido (.json o .txt).',
+            'The file does not contain a valid Punnett square activity set.':
+                'El archivo no contiene una batería válida de actividades de cuadro de Punnett.',
+            'Export activities': 'Exportar actividades',
+            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
+                'Puedes exportar e importar la batería completa de actividades en formato JSON, o importar archivos de texto compatibles generados con prompts de IA.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'El genotipo del progenitor 1 no coincide con el número de genes seleccionado.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -190,6 +216,19 @@ var $exeDevice = {
             'Please write an activity title.': "Escriu un títol per a l'activitat.",
             'At least one activity is required.':
                 'Cal almenys una activitat.',
+            'No valid activities were found in the imported content.':
+                'No s\'ha trobat cap activitat vàlida en el contingut importat.',
+            'The imported activities have been added successfully.':
+                'Les activitats importades s\'han afegit correctament.',
+            'The activity set has been exported successfully.':
+                'La bateria d\'activitats s\'ha exportat correctament.',
+            'Please select a valid file (.json or .txt).':
+                'Selecciona un fitxer vàlid (.json o .txt).',
+            'The file does not contain a valid Punnett square activity set.':
+                'El fitxer no conté una bateria vàlida d\'activitats de quadre de Punnett.',
+            'Export activities': 'Exporta activitats',
+            'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.':
+                'Pots exportar i importar la bateria completa d\'activitats en format JSON, o importar fitxers de text compatibles generats amb prompts d\'IA.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'El genotip del progenitor 1 no coincideix amb el nombre de gens seleccionat.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -604,10 +643,13 @@ var $exeDevice = {
                 </div>
                 ${$exeDevicesEdition.iDevice.gamification.common.getLanguageTab(this.ci18n)}
                 ${$exeDevicesEdition.iDevice.gamification.scorm.getTab(true, true, true)}
+                ${$exeDevicesEdition.iDevice.gamification.share.getTab(true, 10, true)}
+                ${$exeDevicesEdition.iDevice.gamification.share.getTabIA(10)}
             </div>
         `;
 
         this.ideviceBody.innerHTML = html;
+        $exeDevicesEdition.iDevice.tabs.init('punnettSquareIdeviceForm');
         $exeDevicesEdition.iDevice.gamification.scorm.init();
     },
 
@@ -653,6 +695,11 @@ var $exeDevice = {
             .querySelector('#punnettMode')
             .addEventListener('change', () => this.toggleRandomCount());
         this.toggleRandomCount();
+        $exeDevicesEdition.iDevice.gamification.share.addEvents(
+            10,
+            this.importActivitiesFromLines.bind(this)
+        );
+        this.addImportExportEvents();
     },
 
     toggleRandomCount() {
@@ -802,6 +849,190 @@ var $exeDevice = {
             this.currentActivityIndex = this.workingData.activities.length - 1;
         }
         this.loadActivityIntoForm(this.currentActivityIndex);
+    },
+
+    parseImportedActivity(line, index) {
+        const parts = String(line || '')
+            .split('#')
+            .map((part) => String(part || '').trim());
+        if (parts.length !== 7 && parts.length !== 10) return null;
+
+        const geneCount = parseInt(parts[1], 10) === 2 ? 2 : 1;
+        if ((geneCount === 1 && parts.length !== 7) || (geneCount === 2 && parts.length !== 10)) {
+            return null;
+        }
+
+        return this.normalizeActivity(
+            {
+                title: parts[0],
+                geneCount,
+                parent1: this.sanitizeGenotype(parts[2]),
+                parent2: this.sanitizeGenotype(parts[3]),
+                traits: [
+                    {
+                        geneLetter: parts[4],
+                        dominantLabel: parts[5],
+                        recessiveLabel: parts[6],
+                    },
+                    {
+                        geneLetter: geneCount === 2 ? parts[7] : 'B',
+                        dominantLabel: geneCount === 2 ? parts[8] : '',
+                        recessiveLabel: geneCount === 2 ? parts[9] : '',
+                    },
+                ],
+                askGametes: false,
+                askGrid: true,
+                askGenotypeRatio: true,
+                askPhenotypeRatio: true,
+                showSolutions: true,
+            },
+            index
+        );
+    },
+
+    importActivitiesFromLines(lines) {
+        const imported = [];
+        const sourceLines = Array.isArray(lines) ? lines : [];
+        for (let i = 0; i < sourceLines.length; i++) {
+            const activity = this.parseImportedActivity(sourceLines[i], this.workingData.activities.length + imported.length);
+            if (activity && this.validateActivity(activity)) {
+                imported.push(activity);
+            }
+        }
+
+        if (!imported.length) {
+            eXe.app.alert(this.t('No valid activities were found in the imported content.'));
+            return;
+        }
+
+        this.storeCurrentActivity();
+        this.workingData.activities = this.workingData.activities.concat(imported);
+        this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        this.loadActivityIntoForm(this.currentActivityIndex);
+        eXe.app.alert(this.t('The imported activities have been added successfully.'));
+    },
+
+    addImportExportEvents() {
+        if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+            $('#eXeGameExportImport').hide();
+            return;
+        }
+
+        $('#eXeGameExportImport .exe-field-instructions')
+            .eq(0)
+            .text(`${_('Supported formats')}: json, txt`);
+        $('#eXeGameExportImport').show();
+        $('#eXeGameImportGame').attr('accept', '.json, .txt');
+        $('#eXeGameExportQuestions').val(this.t('Export activities'));
+        $('#eXeGameExportImport .exe-block-info')
+            .eq(1)
+            .text(
+                this.t(
+                    'You can export and import the full activity set in JSON format, or import compatible text files generated with AI prompts.'
+                )
+            );
+
+        $('#eXeGameImportGame')
+            .off('change.punnett')
+            .on('change.punnett', (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    eXe.app.alert(this.t('Please select a valid file (.json or .txt).'));
+                    return;
+                }
+
+                const isJson =
+                    /\.json$/i.test(file.name) ||
+                    (file.type && file.type.match('application/json'));
+                const isText =
+                    /\.txt$/i.test(file.name) ||
+                    !file.type ||
+                    file.type.match('text/plain');
+
+                if (!isJson && !isText) {
+                    eXe.app.alert(this.t('Please select a valid file (.json or .txt).'));
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = (readerEvent) => {
+                    this.importGame(readerEvent.target.result, isJson ? 'application/json' : 'text/plain');
+                };
+                reader.readAsText(file);
+            });
+
+        $('#eXeGameExportQuestions')
+            .off('click.punnett')
+            .on('click.punnett', () => {
+                this.exportGame();
+            });
+    },
+
+    exportGame() {
+        this.storeCurrentActivity();
+        const payload = {
+            type: 'punnett-square',
+            version: 1,
+            mode: this.workingData.mode,
+            randomCount: this.workingData.randomCount,
+            activities: this.workingData.activities,
+        };
+        $exeDevicesEdition.iDevice.gamification.share.exportGame(
+            payload,
+            'punnettSquareIdeviceForm',
+            'punnett-square'
+        );
+    },
+
+    importGame(content, fileType) {
+        if (fileType && fileType.match('application/json')) {
+            this.importJsonGame(content);
+            return;
+        }
+        const lines = String(content || '')
+            .split(/\r?\n/)
+            .map((line) => line.trim())
+            .filter(Boolean);
+        this.importActivitiesFromLines(lines);
+    },
+
+    importJsonGame(content) {
+        let parsed;
+        try {
+            parsed = JSON.parse(content);
+        } catch (error) {
+            eXe.app.alert(this.t('The file does not contain a valid Punnett square activity set.'));
+            return;
+        }
+
+        if (!parsed || parsed.type !== 'punnett-square' || !Array.isArray(parsed.activities)) {
+            eXe.app.alert(this.t('The file does not contain a valid Punnett square activity set.'));
+            return;
+        }
+
+        const imported = [];
+        for (let i = 0; i < parsed.activities.length; i++) {
+            const activity = this.normalizeActivity(parsed.activities[i], this.workingData.activities.length + imported.length);
+            if (activity && this.validateActivity(activity)) {
+                imported.push(activity);
+            }
+        }
+
+        if (!imported.length) {
+            eXe.app.alert(this.t('No valid activities were found in the imported content.'));
+            return;
+        }
+
+        this.storeCurrentActivity();
+        this.workingData.mode = parsed.mode === 'random' ? 'random' : this.workingData.mode;
+        this.workingData.randomCount = Math.max(0, parseInt(parsed.randomCount, 10) || 0);
+        this.ideviceBody.querySelector('#punnettMode').value = this.workingData.mode;
+        this.ideviceBody.querySelector('#punnettRandomCount').value = this.workingData.randomCount;
+        this.toggleRandomCount();
+        this.workingData.activities = this.workingData.activities.concat(imported);
+        this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        this.loadActivityIntoForm(this.currentActivityIndex);
+        eXe.app.alert(this.t('The imported activities have been added successfully.'));
     },
 
     sanitizeGenotype(raw) {
