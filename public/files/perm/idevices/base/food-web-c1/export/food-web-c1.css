@@ -9,6 +9,10 @@
     gap: 1rem;
 }
 
+body.fwx-graph-open {
+    overflow: hidden;
+}
+
 .food-web-c1-content .fwx-head,
 .food-web-c1-content .fwx-context,
 .food-web-c1-content .fwx-legend,
@@ -47,11 +51,51 @@
     gap: 1rem;
 }
 
-.food-web-c1-content .fwx-level,
+.food-web-c1-content .fwx-graph-shell {
+    min-width: 0;
+}
+
+.food-web-c1-content .fwx-graph-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 0.8rem;
+}
+
+.food-web-c1-content .fwx-graph-stage {
+    position: relative;
+    border: 1px solid var(--fwx-border);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at top left, rgba(58, 125, 68, 0.06), transparent 28%),
+        linear-gradient(180deg, #fcfdfb 0%, #f6faf3 100%);
+    padding: 1rem;
+    overflow: hidden;
+    min-height: clamp(32rem, 62vh, 44rem);
+    cursor: grab;
+    touch-action: none;
+}
+
+.food-web-c1-content .fwx-graph-stage.is-panning {
+    cursor: grabbing;
+}
+
+.food-web-c1-content .fwx-graph-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    transition: transform 0.12s ease-out;
+}
+
 .food-web-c1-content .fwx-detail-panel,
 .food-web-c1-content .fwx-relations-panel,
 .food-web-c1-content .fwx-question,
-.food-web-c1-content .fwx-scenario-card {
+.food-web-c1-content .fwx-scenario-card,
+.food-web-c1-content .fwx-results {
     border: 1px solid var(--fwx-border);
     border-radius: 14px;
     background: white;
@@ -61,12 +105,23 @@
 .food-web-c1-content .fwx-levels {
     display: grid;
     gap: 0.85rem;
+    position: relative;
+    z-index: 1;
 }
 
-.food-web-c1-content .fwx-level-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.65rem;
+.food-web-c1-content .fwx-graph-canvas {
+    position: relative;
+    min-height: clamp(30rem, 58vh, 42rem);
+    z-index: 1;
+    transition: transform 0.12s ease-out;
+}
+
+.food-web-c1-content .fwx-edge-halo {
+    stroke: rgba(252, 253, 251, 0.96);
+    stroke-width: 9;
+    fill: none;
+    opacity: 0.95;
+    stroke-linecap: round;
 }
 
 .food-web-c1-content .fwx-species-button {
@@ -78,17 +133,57 @@
     flex-direction: column;
     gap: 0.2rem;
     min-width: 11rem;
+    max-width: 14rem;
     text-align: left;
+    position: absolute;
+    z-index: 2;
+    cursor: grab;
+    touch-action: none;
+    box-shadow: 0 10px 18px rgba(36, 49, 38, 0.08);
+    transition:
+        box-shadow 0.2s ease,
+        transform 0.2s ease,
+        border-color 0.2s ease;
 }
 
 .food-web-c1-content .fwx-species-button.is-active {
     box-shadow: 0 0 0 2px var(--species-color, #2f7d32);
 }
 
-.food-web-c1-content .fwx-species-group,
-.food-web-c1-content .fwx-subtitle,
-.food-web-c1-content .fwx-detail-role {
-    color: var(--fwx-muted);
+.food-web-c1-content .fwx-species-button.is-dragging {
+    cursor: grabbing;
+    box-shadow: 0 10px 24px rgba(36, 49, 38, 0.18);
+}
+
+.food-web-c1-content .fwx-edge-path {
+    stroke: var(--fwx-edge-color, #6f8675);
+    stroke-width: 4.75;
+    fill: none;
+    opacity: 1;
+    stroke-linecap: round;
+    transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+}
+
+.food-web-c1-content .fwx-edge-path-competition {
+    stroke-dasharray: 2.5 11;
+    stroke-linecap: round;
+}
+
+.food-web-c1-content .fwx-edge.is-active .fwx-edge-path {
+    stroke: var(--fwx-accent);
+    stroke-width: 6;
+    opacity: 1;
+}
+
+.food-web-c1-content .fwx-edge-label {
+    fill: #45544a;
+    font-size: 12px;
+    font-weight: 600;
+    text-anchor: middle;
+    paint-order: stroke;
+    stroke: #fcfdfb;
+    stroke-width: 5px;
+    stroke-linejoin: round;
 }
 
 .food-web-c1-content .fwx-side {
@@ -98,9 +193,19 @@
 
 .food-web-c1-content .fwx-option {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     gap: 0.55rem;
     margin-bottom: 0.45rem;
+    line-height: 1.4;
+}
+
+.food-web-c1-content .fwx-option input {
+    flex: 0 0 auto;
+    margin: 0;
+}
+
+.food-web-c1-content .fwx-option span {
+    flex: 1 1 auto;
 }
 
 .food-web-c1-content .fwx-open-answer {
@@ -123,8 +228,64 @@
     background: #f7e7dc;
 }
 
+.food-web-c1-content .fwx-results {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.85rem 1rem;
+}
+
+.food-web-c1-content .fwx-scoreboard {
+    margin: 0;
+}
+
+.food-web-c1-content.is-graph-expanded .fwx-graph-shell {
+    position: fixed;
+    top: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(96vw, 1500px);
+    height: min(92vh, 980px);
+    z-index: 9999;
+    padding: 1rem;
+    border-radius: 22px;
+    background: #fbfdf8;
+    box-shadow: 0 28px 70px rgba(21, 34, 24, 0.28);
+}
+
+.food-web-c1-content.is-graph-expanded .fwx-graph-stage,
+.food-web-c1-content.is-standalone-graph .fwx-graph-stage {
+    min-height: calc(100% - 3rem);
+}
+
+.food-web-c1-content.is-standalone-graph {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.food-web-c1-content.is-standalone-graph .fwx-layout {
+    grid-template-columns: 1fr;
+}
+
 @media (max-width: 900px) {
     .food-web-c1-content .fwx-layout {
         grid-template-columns: 1fr;
+    }
+
+    .food-web-c1-content .fwx-graph-stage {
+        min-height: 30rem;
+    }
+
+    .food-web-c1-content .fwx-graph-canvas {
+        min-height: 28rem;
+    }
+
+    .food-web-c1-content.is-graph-expanded .fwx-graph-shell {
+        top: 2vh;
+        width: 98vw;
+        height: 96vh;
+        padding: 0.85rem;
     }
 }

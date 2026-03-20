@@ -20,6 +20,21 @@ describe('food-web-c1 edition', () => {
     beforeEach(() => {
         global.$exeDevice = undefined;
         eXe.app.clearHistory();
+        global.$exeDevicesEdition.iDevice.tabs = {
+            init: vi.fn(),
+        };
+        global.$exeDevicesEdition.iDevice.gamification = {
+            scorm: {
+                getTab: vi.fn(() => '<div class="exe-form-tab" title="SCORM"></div>'),
+                init: vi.fn(),
+                getValues: vi.fn(() => ({
+                    isScorm: 0,
+                    textButtonScorm: '',
+                    repeatActivity: true,
+                    weighted: 100,
+                })),
+            },
+        };
         const filePath = join(__dirname, 'food-web-c1.js');
         $exeDevice = loadIdevice(readFileSync(filePath, 'utf-8'));
     });
@@ -55,10 +70,12 @@ QUESTION: multiple-choice | ¿Qué pasa si disminuye la encina? | Disminuye el c
         $exeDevice.init(mockElement, previousData);
         const collected = $exeDevice.collectFormData();
 
+        expect(mockElement.querySelectorAll('.exe-form-tab').length).toBe(8);
         expect(mockElement.querySelector('#fwc1-title').value).toBe(previousData.title);
         expect(collected.title).toBe(previousData.title);
         expect(collected.species[0].id).toBe(previousData.species[0].id);
         expect(collected.questions[0].prompt).toBe(previousData.questions[0].prompt);
+        expect(collected.weighted).toBe(100);
         expect($exeDevice.validateData(collected)).toBe('');
     });
 });

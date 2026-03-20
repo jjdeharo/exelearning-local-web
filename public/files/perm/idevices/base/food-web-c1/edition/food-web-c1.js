@@ -91,6 +91,10 @@ var $exeDevice = {
             'Copy prompt': 'Copiar prompt',
             'Send to AI': 'Enviar a IA',
             'Import result': 'Importar resultado',
+            'AI assistant': 'Asistente de IA',
+            'Please select an AI assistant.': 'Selecciona un asistente de IA.',
+            'There is no query to send to the assistant.':
+                'No hay ninguna consulta para enviar al asistente.',
             'Prompt to generate': 'Prompt para generar',
             'Generated result': 'Resultado generado',
             'Export JSON': 'Exportar JSON',
@@ -117,6 +121,10 @@ var $exeDevice = {
                 'El JSON se ha copiado al portapapeles.',
             'Unable to copy to the clipboard.':
                 'No se ha podido copiar al portapapeles.',
+            'The report identifier must have at least 5 characters.':
+                'El identificador del informe debe tener al menos 5 caracteres.',
+            'Use the same identifier in all the activities that belong to the same progress report.':
+                'Usa el mismo identificador en todas las actividades que pertenezcan al mismo informe de progreso.',
             'Open your preferred assistant and paste the prompt.':
                 'Abre tu asistente preferido y pega el prompt.',
             'Producer': 'Productor',
@@ -152,8 +160,288 @@ var $exeDevice = {
                 'Un efecto esperado por línea.',
             'One trait per comma.': 'Un rasgo por comas.',
         },
-        en: {},
-        ca: {},
+        en: {
+            'Food web': 'Food web',
+            'Interactive ecology activity with species, relations and scenarios.':
+                'Interactive ecology activity with species, relations and scenarios.',
+            'General settings': 'General settings',
+            General: 'General',
+            Title: 'Title',
+            Subtitle: 'Subtitle',
+            Instructions: 'Instructions',
+            'Ecosystem name': 'Ecosystem name',
+            Biome: 'Biome',
+            Level: 'Educational level',
+            Course: 'Course',
+            Locale: 'Language',
+            Notes: 'Notes',
+            'Display options': 'Display options',
+            'Show legend': 'Show legend',
+            'Show species cards': 'Show species cards',
+            'Show arrows': 'Show arrows',
+            'Show relation labels': 'Show relation labels',
+            'Randomize questions': 'Randomize questions',
+            'Allow reveal answers': 'Allow reveal answers',
+            Layout: 'Layout',
+            'By trophic levels': 'By trophic levels',
+            Network: 'Network',
+            Evaluation: 'Evaluation',
+            'Enable evaluation': 'Enable evaluation',
+            'Evaluation ID': 'Evaluation ID',
+            Species: 'Species',
+            Relations: 'Relations',
+            Questions: 'Questions',
+            Scenarios: 'Scenarios',
+            'Artificial Intelligence': 'AI',
+            'AI Assistant': 'AI Assistant',
+            'Import/Export': 'Import/Export',
+            'Add species': 'Add species',
+            'Add relation': 'Add relation',
+            'Add question': 'Add question',
+            'Add scenario': 'Add scenario',
+            Duplicate: 'Duplicate',
+            Delete: 'Delete',
+            Name: 'Name',
+            Role: 'Role',
+            Group: 'Group',
+            Description: 'Description',
+            Image: 'Image',
+            Traits: 'Traits',
+            Importance: 'Importance',
+            Source: 'Source',
+            Target: 'Target',
+            Type: 'Type',
+            Strength: 'Strength',
+            Note: 'Note',
+            Prompt: 'Prompt',
+            Options: 'Options',
+            'Correct answers': 'Correct answers',
+            Explanation: 'Explanation',
+            'Question type': 'Question type',
+            'Scenario title': 'Scenario title',
+            'Change type': 'Change type',
+            'Target species': 'Target species',
+            'Expected effects': 'Expected effects',
+            Ecosystem: 'Ecosystem',
+            'Approx. species': 'Approx. species',
+            'Include decomposer': 'Include decomposer',
+            'Include invasive species': 'Include invasive species',
+            'Include questions': 'Include questions',
+            Difficulty: 'Difficulty',
+            'Generate prompt': 'Generate prompt',
+            'Copy prompt': 'Copy prompt',
+            'Send to AI': 'Send to AI',
+            'Import result': 'Import result',
+            'AI assistant': 'AI assistant',
+            'Please select an AI assistant.': 'Please select an AI assistant.',
+            'There is no query to send to the assistant.':
+                'There is no query to send to the assistant.',
+            'Prompt to generate': 'Prompt to generate',
+            'Generated result': 'Generated result',
+            'Export JSON': 'Export JSON',
+            'Import JSON': 'Import JSON',
+            'Paste simplified text or JSON': 'Paste simplified text or JSON',
+            'Import pasted text': 'Import pasted text',
+            'At least one producer is required.':
+                'At least one producer is required.',
+            'At least three species are required.':
+                'At least three species are required.',
+            'At least two relations are required.':
+                'At least two relations are required.',
+            'Please write a title.': 'Please write a title.',
+            'There are broken references in the relations.':
+                'There are broken references in the relations.',
+            'The questions are not valid.': 'The questions are not valid.',
+            'The imported content is not valid for this iDevice.':
+                'The imported content is not valid for this iDevice.',
+            'The content has been imported successfully.':
+                'The content has been imported successfully.',
+            'The prompt has been copied to the clipboard.':
+                'The prompt has been copied to the clipboard.',
+            'The JSON has been copied to the clipboard.':
+                'The JSON has been copied to the clipboard.',
+            'Unable to copy to the clipboard.':
+                'Unable to copy to the clipboard.',
+            'The report identifier must have at least 5 characters.':
+                'The report identifier must have at least 5 characters.',
+            'Use the same identifier in all the activities that belong to the same progress report.':
+                'Use the same identifier in all the activities that belong to the same progress report.',
+            'Open your preferred assistant and paste the prompt.':
+                'Open your preferred assistant and paste the prompt.',
+            Producer: 'Producer',
+            'Primary consumer': 'Primary consumer',
+            'Secondary consumer': 'Secondary consumer',
+            'Tertiary consumer': 'Tertiary consumer',
+            Omnivore: 'Omnivore',
+            Decomposer: 'Decomposer',
+            Eats: 'Eats',
+            Decomposes: 'Decomposes',
+            Competes: 'Competes with',
+            'Parasite of': 'Parasite of',
+            Low: 'Low',
+            Medium: 'Medium',
+            High: 'High',
+            'Multiple choice': 'Multiple choice',
+            'Multi select': 'Multi select',
+            'True/false': 'True/false',
+            'Match role': 'Match role',
+            'Predict effect': 'Predict effect',
+            'Species disappearance': 'Species disappearance',
+            'Population increase': 'Population increase',
+            'Invasive arrival': 'Invasive arrival',
+            Pollution: 'Pollution',
+            Drought: 'Drought',
+            'Producer loss': 'Producer loss',
+            Basic: 'Basic',
+            Intermediate: 'Intermediate',
+            Advanced: 'Advanced',
+            'One option per line. Mark the correct ones with * at the end or write their indexes separated by commas.':
+                'One option per line. Mark the correct ones with * at the end or write their indexes separated by commas.',
+            'One expected effect per line.':
+                'One expected effect per line.',
+            'One trait per comma.': 'One trait per comma.',
+        },
+        ca: {
+            'Food web': 'Xarxa tròfica',
+            'Interactive ecology activity with species, relations and scenarios.':
+                "Activitat interactiva d'ecologia amb espècies, relacions i escenaris.",
+            'General settings': 'Configuració general',
+            General: 'General',
+            Title: 'Títol',
+            Subtitle: 'Subtítol',
+            Instructions: 'Instruccions',
+            'Ecosystem name': "Nom de l'ecosistema",
+            Biome: 'Bioma',
+            Level: 'Nivell educatiu',
+            Course: 'Curs',
+            Locale: 'Idioma',
+            Notes: 'Observacions',
+            'Display options': 'Opcions de visualització',
+            'Show legend': 'Mostra la llegenda',
+            'Show species cards': "Mostra les targetes d'espècies",
+            'Show arrows': 'Mostra les fletxes',
+            'Show relation labels': 'Mostra les etiquetes de relació',
+            'Randomize questions': 'Barreja les preguntes',
+            'Allow reveal answers': 'Permet mostrar les respostes',
+            Layout: 'Distribució',
+            'By trophic levels': 'Per nivells tròfics',
+            Network: 'Xarxa',
+            Evaluation: 'Avaluació',
+            'Enable evaluation': "Activa l'avaluació",
+            'Evaluation ID': "ID d'avaluació",
+            Species: 'Espècies',
+            Relations: 'Relacions',
+            Questions: 'Preguntes',
+            Scenarios: 'Escenaris',
+            'Artificial Intelligence': 'IA',
+            'AI Assistant': "Assistent d'IA",
+            'Import/Export': 'Importa/Exporta',
+            'Add species': 'Afig espècie',
+            'Add relation': 'Afig relació',
+            'Add question': 'Afig pregunta',
+            'Add scenario': 'Afig escenari',
+            Duplicate: 'Duplica',
+            Delete: 'Elimina',
+            Name: 'Nom',
+            Role: 'Rol',
+            Group: 'Grup',
+            Description: 'Descripció',
+            Image: 'Imatge',
+            Traits: 'Rasgos',
+            Importance: 'Importància',
+            Source: 'Origen',
+            Target: 'Destí',
+            Type: 'Tipus',
+            Strength: 'Intensitat',
+            Note: 'Nota',
+            Prompt: 'Enunciat',
+            Options: 'Opcions',
+            'Correct answers': 'Respostes correctes',
+            Explanation: 'Explicació',
+            'Question type': 'Tipus de pregunta',
+            'Scenario title': "Títol de l'escenari",
+            'Change type': 'Tipus de canvi',
+            'Target species': 'Espècie objectiu',
+            'Expected effects': 'Efectes esperats',
+            Ecosystem: 'Ecosistema',
+            'Approx. species': "Nre. d'espècies",
+            'Include decomposer': 'Inclou descomponedor',
+            'Include invasive species': 'Inclou espècie invasora',
+            'Include questions': 'Inclou preguntes',
+            Difficulty: 'Dificultat',
+            'Generate prompt': 'Genera prompt',
+            'Copy prompt': 'Copia prompt',
+            'Send to AI': 'Envia a la IA',
+            'Import result': 'Importa resultat',
+            'AI assistant': "Assistent d'IA",
+            'Please select an AI assistant.': "Selecciona un assistent d'IA.",
+            'There is no query to send to the assistant.':
+                "No hi ha cap consulta per enviar a l'assistent.",
+            'Prompt to generate': 'Prompt per generar',
+            'Generated result': 'Resultat generat',
+            'Export JSON': 'Exporta JSON',
+            'Import JSON': 'Importa JSON',
+            'Paste simplified text or JSON': 'Enganxa text simplificat o JSON',
+            'Import pasted text': 'Importa text enganxat',
+            'At least one producer is required.':
+                'Cal almenys un productor.',
+            'At least three species are required.':
+                'Calen almenys tres espècies.',
+            'At least two relations are required.':
+                'Calen almenys dues relacions.',
+            'Please write a title.': 'Escriu un títol.',
+            'There are broken references in the relations.':
+                'Hi ha referències trencades en les relacions.',
+            'The questions are not valid.': 'Les preguntes no són vàlides.',
+            'The imported content is not valid for this iDevice.':
+                "El contingut importat no és vàlid per a aquest iDevice.",
+            'The content has been imported successfully.':
+                "El contingut s'ha importat correctament.",
+            'The prompt has been copied to the clipboard.':
+                "El prompt s'ha copiat al porta-retalls.",
+            'The JSON has been copied to the clipboard.':
+                "El JSON s'ha copiat al porta-retalls.",
+            'Unable to copy to the clipboard.':
+                "No s'ha pogut copiar al porta-retalls.",
+            'The report identifier must have at least 5 characters.':
+                "L'identificador de l'informe ha de tindre almenys 5 caràcters.",
+            'Use the same identifier in all the activities that belong to the same progress report.':
+                "Usa el mateix identificador en totes les activitats que pertanyen al mateix informe de progrés.",
+            'Open your preferred assistant and paste the prompt.':
+                'Obri el teu assistent preferit i enganxa el prompt.',
+            Producer: 'Productor',
+            'Primary consumer': 'Consumidor primari',
+            'Secondary consumer': 'Consumidor secundari',
+            'Tertiary consumer': 'Consumidor terciari',
+            Omnivore: 'Omnívor',
+            Decomposer: 'Descomponedor',
+            Eats: "S'alimenta de",
+            Decomposes: 'Descompon',
+            Competes: 'Competeix amb',
+            'Parasite of': 'Paràsit de',
+            Low: 'Baixa',
+            Medium: 'Mitjana',
+            High: 'Alta',
+            'Multiple choice': 'Opció múltiple',
+            'Multi select': 'Selecció múltiple',
+            'True/false': 'Vertader/fals',
+            'Match role': 'Relaciona rol',
+            'Predict effect': 'Prediu efecte',
+            'Species disappearance': "Desaparició d'espècie",
+            'Population increase': 'Augment de població',
+            'Invasive arrival': "Arribada d'invasora",
+            Pollution: 'Contaminació',
+            Drought: 'Sequera',
+            'Producer loss': 'Pèrdua de productor',
+            Basic: 'Bàsica',
+            Intermediate: 'Intermèdia',
+            Advanced: 'Avançada',
+            'One option per line. Mark the correct ones with * at the end or write their indexes separated by commas.':
+                "Una opció per línia. Marca les correctes amb * al final o escriu els seus índexs separats per comes.",
+            'One expected effect per line.':
+                'Un efecte esperat per línia.',
+            'One trait per comma.': 'Un tret per comes.',
+        },
     },
 
     init: function (element, previousData) {
@@ -290,6 +578,12 @@ var $exeDevice = {
             ],
             evaluation: false,
             evaluationID: '',
+            isScorm: 0,
+            textButtonScorm: '',
+            repeatActivity: true,
+            weighted: 100,
+            scorep: 0,
+            scorerp: 0,
         };
     },
 
@@ -391,59 +685,67 @@ var $exeDevice = {
             })),
             evaluation: !!data.evaluation,
             evaluationID: data.evaluationID || '',
+            isScorm: Number.isFinite(parseInt(data.isScorm, 10))
+                ? parseInt(data.isScorm, 10)
+                : defaults.isScorm,
+            textButtonScorm: data.textButtonScorm || defaults.textButtonScorm,
+            repeatActivity:
+                typeof data.repeatActivity === 'boolean'
+                    ? data.repeatActivity
+                    : defaults.repeatActivity,
+            weighted:
+                Number.isFinite(parseInt(data.weighted, 10))
+                    ? parseInt(data.weighted, 10)
+                    : defaults.weighted,
+            scorep: defaults.scorep,
+            scorerp: defaults.scorerp,
         };
     },
 
     createForm: function () {
         const data = this.normalizeData(this.idevicePreviousData);
-        let html = `<div class="food-web-c1-editor">`;
+        let html = `<div id="foodWebC1IdeviceForm" class="food-web-c1-editor">`;
         html += `<section class="fwc1-header"><h2>${this.t('Food web')}</h2><p>${this.t(
             'Interactive ecology activity with species, relations and scenarios.'
         )}</p></section>`;
-        html += this.getTabsNavigation();
-        html += `<div class="fwc1-tab-panels">`;
-        html += this.wrapTabPanel('general', this.getGeneralSection(data), true);
-        html += this.wrapTabPanel('species', this.getSpeciesSection(data), false);
-        html += this.wrapTabPanel('relations', this.getRelationsSection(data), false);
-        html += this.wrapTabPanel('questions', this.getQuestionsSection(data), false);
-        html += this.wrapTabPanel('scenarios', this.getScenariosSection(data), false);
-        html += this.wrapTabPanel('ai', this.getAiSection(data), false);
-        html += this.wrapTabPanel('import', this.getImportExportSection(), false);
-        html += `</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(this.t('General'))}">${this.getGeneralSection(
+            data
+        )}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(this.t('Species'))}">${this.getSpeciesSection(
+            data
+        )}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(
+            this.t('Relations')
+        )}">${this.getRelationsSection(data)}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(
+            this.t('Questions')
+        )}">${this.getQuestionsSection(data)}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(
+            this.t('Scenarios')
+        )}">${this.getScenariosSection(data)}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(
+            this.t('Artificial Intelligence')
+        )}">${this.getAiSection(data)}</div>`;
+        html += `<div class="exe-form-tab" title="${this.escapeAttribute(
+            this.t('Import/Export')
+        )}">${this.getImportExportSection()}</div>`;
+        if ($exeDevicesEdition?.iDevice?.gamification?.scorm?.getTab) {
+            html += $exeDevicesEdition.iDevice.gamification.scorm.getTab(
+                true,
+                true,
+                true
+            );
+        }
         html += `</div>`;
         this.ideviceBody.innerHTML = html;
         this.syncPresetValues();
+        if ($exeDevicesEdition?.iDevice?.tabs?.init) {
+            $exeDevicesEdition.iDevice.tabs.init('foodWebC1IdeviceForm');
+        }
+        if ($exeDevicesEdition?.iDevice?.gamification?.scorm?.init) {
+            $exeDevicesEdition.iDevice.gamification.scorm.init();
+        }
         this.setBehaviour();
-    },
-
-    getTabsNavigation: function () {
-        const tabs = [
-            { id: 'general', label: this.t('General') },
-            { id: 'species', label: this.t('Species') },
-            { id: 'relations', label: this.t('Relations') },
-            { id: 'questions', label: this.t('Questions') },
-            { id: 'scenarios', label: this.t('Scenarios') },
-            { id: 'ai', label: this.t('AI Assistant') },
-            { id: 'import', label: this.t('Import/Export') },
-        ];
-        return `<nav class="fwc1-tabs" aria-label="Food web sections">
-            ${tabs
-                .map(
-                    (tab, index) => `<button
-                        type="button"
-                        class="fwc1-tab ${index === 0 ? 'is-active' : ''}"
-                        data-tab="${tab.id}"
-                        aria-selected="${index === 0 ? 'true' : 'false'}"
-                    >${this.escapeHtml(tab.label)}</button>`
-                )
-                .join('')}
-        </nav>`;
-    },
-
-    wrapTabPanel: function (id, content, isActive) {
-        return `<section class="fwc1-tab-panel ${isActive ? 'is-active' : ''}" data-panel="${id}">
-            ${content}
-        </section>`;
     },
 
     getGeneralSection: function (data) {
@@ -451,30 +753,31 @@ var $exeDevice = {
         return `<section class="fwc1-section">
             <h3>${this.t('General settings')}</h3>
             <div class="fwc1-grid fwc1-repeatable-grid">
-                ${this.inputField('fwc1-title', this.t('Title'), data.title)}
-                ${this.inputField('fwc1-subtitle', this.t('Subtitle'), data.subtitle)}
-                ${this.textareaField('fwc1-instructions', this.t('Instructions'), data.instructions, 4)}
-                ${this.inputField('fwc1-ecosystem-name', this.t('Ecosystem name'), data.ecosystemContext.name)}
-                ${this.inputField('fwc1-biome', this.t('Biome'), data.ecosystemContext.biome)}
-                ${this.inputField('fwc1-level', this.t('Level'), data.ecosystemContext.level)}
-                ${this.inputField('fwc1-course', this.t('Course'), data.ecosystemContext.course)}
+                ${this.inputField('fwc1-title', this.t('Title'), data.title, 'text', '', 'fwc1-field-wide')}
+                ${this.inputField('fwc1-subtitle', this.t('Subtitle'), data.subtitle, 'text', '', 'fwc1-field-wide')}
+                ${this.textareaField('fwc1-instructions', this.t('Instructions'), data.instructions, 4, '', 'fwc1-field-full')}
+                ${this.inputField('fwc1-ecosystem-name', this.t('Ecosystem name'), data.ecosystemContext.name, 'text', '', 'fwc1-field-wide')}
+                ${this.inputField('fwc1-biome', this.t('Biome'), data.ecosystemContext.biome, 'text', '', 'fwc1-field-medium')}
+                ${this.inputField('fwc1-level', this.t('Level'), data.ecosystemContext.level, 'text', '', 'fwc1-field-medium')}
+                ${this.inputField('fwc1-course', this.t('Course'), data.ecosystemContext.course, 'text', '', 'fwc1-field-medium')}
                 ${this.selectField(
                     'fwc1-locale',
                     this.t('Locale'),
                     this.locales.map((value) => ({ value: value, label: value })),
-                    data.ecosystemContext.locale
+                    data.ecosystemContext.locale,
+                    'fwc1-field-short'
                 )}
-                ${this.textareaField('fwc1-notes', this.t('Notes'), data.ecosystemContext.notes, 3)}
+                ${this.textareaField('fwc1-notes', this.t('Notes'), data.ecosystemContext.notes, 3, '', 'fwc1-field-full')}
             </div>
             <div class="fwc1-subsection">
                 <h4>${this.t('Display options')}</h4>
                 <div class="fwc1-grid fwc1-grid-tight">
-                    ${this.checkboxField('fwc1-show-legend', this.t('Show legend'), options.showLegend)}
-                    ${this.checkboxField('fwc1-show-species-cards', this.t('Show species cards'), options.showSpeciesCards)}
-                    ${this.checkboxField('fwc1-show-arrows', this.t('Show arrows'), options.showArrows)}
-                    ${this.checkboxField('fwc1-show-relation-labels', this.t('Show relation labels'), options.showRelationLabels)}
-                    ${this.checkboxField('fwc1-randomize-questions', this.t('Randomize questions'), options.randomizeQuestions)}
-                    ${this.checkboxField('fwc1-allow-reveal', this.t('Allow reveal answers'), options.allowRevealAnswers)}
+                    ${this.checkboxField('fwc1-show-legend', this.t('Show legend'), options.showLegend, 'fwc1-field-medium')}
+                    ${this.checkboxField('fwc1-show-species-cards', this.t('Show species cards'), options.showSpeciesCards, 'fwc1-field-medium')}
+                    ${this.checkboxField('fwc1-show-arrows', this.t('Show arrows'), options.showArrows, 'fwc1-field-medium')}
+                    ${this.checkboxField('fwc1-show-relation-labels', this.t('Show relation labels'), options.showRelationLabels, 'fwc1-field-medium')}
+                    ${this.checkboxField('fwc1-randomize-questions', this.t('Randomize questions'), options.randomizeQuestions, 'fwc1-field-medium')}
+                    ${this.checkboxField('fwc1-allow-reveal', this.t('Allow reveal answers'), options.allowRevealAnswers, 'fwc1-field-medium')}
                     ${this.selectField(
                         'fwc1-layout',
                         this.t('Layout'),
@@ -482,18 +785,45 @@ var $exeDevice = {
                             { value: 'levels', label: this.t('By trophic levels') },
                             { value: 'network', label: this.t('Network') },
                         ],
-                        options.layout
+                        options.layout,
+                        'fwc1-field-medium'
                     )}
                 </div>
             </div>
-            <div class="fwc1-subsection">
-                <h4>${this.t('Evaluation')}</h4>
-                <div class="fwc1-grid fwc1-grid-tight">
-                    ${this.checkboxField('fwc1-evaluation', this.t('Enable evaluation'), data.evaluation)}
-                    ${this.inputField('fwc1-evaluation-id', this.t('Evaluation ID'), data.evaluationID)}
+            ${this.getAssessmentSection(data)}
+        </section>`;
+    },
+
+    getAssessmentSection: function (data) {
+        const evaluationID =
+            data.evaluationID || window.eXeLearning?.app?.project?.odeId || '';
+        return `<fieldset class="exe-fieldset fwc1-assessment">
+            <legend><a href="#">${_('Assessment')}</a></legend>
+            <div class="fwc1-assessment-row">
+                <div class="toggle-item mb-0">
+                    <span class="toggle-control">
+                        <input type="checkbox" id="fwc1-evaluation" class="toggle-input" ${
+                            data.evaluation ? 'checked="checked"' : ''
+                        } />
+                        <span class="toggle-visual"></span>
+                    </span>
+                    <label class="toggle-label mb-0" for="fwc1-evaluation">${_(
+                        'Progress report'
+                    )}.</label>
+                </div>
+                <div class="fwc1-assessment-id">
+                    <label for="fwc1-evaluation-id" class="mb-0">${_(
+                        'Identifier'
+                    )}:</label>
+                    <input type="text" id="fwc1-evaluation-id" class="form-control" value="${this.escapeAttribute(
+                        evaluationID
+                    )}" ${data.evaluation ? '' : 'disabled="disabled"'} />
                 </div>
             </div>
-        </section>`;
+            <p class="fwc1-inline-help">${this.t(
+                'Use the same identifier in all the activities that belong to the same progress report.'
+            )}</p>
+        </fieldset>`;
     },
 
     getSpeciesSection: function (data) {
@@ -547,7 +877,7 @@ var $exeDevice = {
     getAiSection: function (data) {
         return `<section class="fwc1-section">
             <h3>${this.t('Artificial Intelligence')}</h3>
-            <div class="fwc1-grid fwc1-repeatable-grid">
+            <div class="fwc1-grid fwc1-ai-controls">
                 ${this.inputField('fwc1-ai-ecosystem', this.t('Ecosystem'), data.ecosystemContext.name)}
                 ${this.inputField('fwc1-ai-level', this.t('Level'), data.ecosystemContext.level)}
                 ${this.inputField('fwc1-ai-course', this.t('Course'), data.ecosystemContext.course)}
@@ -572,14 +902,29 @@ var $exeDevice = {
                     'intermediate'
                 )}
             </div>
-            <div class="fwc1-button-row">
+            <div class="fwc1-ai-toolbar">
+                <label class="fwc1-field fwc1-ai-select-field">
+                    <span>${this.t('AI assistant')}</span>
+                    <select id="fwc1-ai-assistant">
+                        <option value="https://chatgpt.com/?q=">ChatGPT</option>
+                        <option value="https://claude.ai/new?q=">Claude</option>
+                        <option value="https://www.perplexity.ai/search?q=">Perplexity</option>
+                        <option value="https://chat.mistral.ai/chat/?q=">Le Chat</option>
+                        <option value="https://grok.com/?q=">Grok</option>
+                        <option value="https://chat.qwen.ai/?text=">Qwen</option>
+                    </select>
+                </label>
+            </div>
+            <div class="fwc1-button-row fwc1-ai-actions">
                 <button type="button" class="btn btn-secondary" id="fwc1-generate-prompt">${this.t('Generate prompt')}</button>
                 <button type="button" class="btn btn-secondary" id="fwc1-copy-prompt">${this.t('Copy prompt')}</button>
                 <button type="button" class="btn btn-secondary" id="fwc1-send-ai">${this.t('Send to AI')}</button>
                 <button type="button" class="btn btn-secondary" id="fwc1-import-result">${this.t('Import result')}</button>
             </div>
-            ${this.textareaField('fwc1-ai-prompt', this.t('Prompt to generate'), '', 8)}
-            ${this.textareaField('fwc1-ai-result', this.t('Generated result'), '', 8)}
+            <div class="fwc1-ai-panels">
+                ${this.textareaField('fwc1-ai-prompt', this.t('Prompt to generate'), '', 14)}
+                ${this.textareaField('fwc1-ai-result', this.t('Generated result'), '', 14)}
+            </div>
         </section>`;
     },
 
@@ -607,14 +952,14 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
             <div class="fwc1-grid fwc1-repeatable-grid">
-                ${this.inputField('species-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
-                ${this.inputField('species-name', this.t('Name'), item.name)}
-                ${this.selectField('species-role', this.t('Role'), this.getRoleOptions(), item.role)}
-                ${this.inputField('species-group', this.t('Group'), item.group)}
-                ${this.inputField('species-image', this.t('Image'), item.image)}
-                ${this.inputField('species-importance', this.t('Importance'), item.importance)}
-                ${this.textareaField('species-description', this.t('Description'), item.description, 3)}
-                ${this.inputField('species-traits', this.t('Traits'), item.traits.join(', '), 'text', this.t('One trait per comma.'))}
+                ${this.inputField('species-id', 'ID', item.id, 'text', '', 'fwc1-field-short fwc1-inline-field', true)}
+                ${this.inputField('species-name', this.t('Name'), item.name, 'text', '', 'fwc1-field-wide')}
+                ${this.selectField('species-role', this.t('Role'), this.getRoleOptions(), item.role, 'fwc1-field-medium')}
+                ${this.inputField('species-group', this.t('Group'), item.group, 'text', '', 'fwc1-field-medium')}
+                ${this.inputField('species-image', this.t('Image'), item.image, 'text', '', 'fwc1-field-wide')}
+                ${this.inputField('species-importance', this.t('Importance'), item.importance, 'text', '', 'fwc1-field-wide')}
+                ${this.textareaField('species-description', this.t('Description'), item.description, 3, '', 'fwc1-field-full')}
+                ${this.inputField('species-traits', this.t('Traits'), item.traits.join(', '), 'text', this.t('One trait per comma.'), 'fwc1-field-full')}
             </div>
         </article>`;
     },
@@ -628,12 +973,12 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
             <div class="fwc1-grid fwc1-repeatable-grid">
-                ${this.inputField('relation-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
-                ${this.selectField('relation-from', this.t('Source'), this.getSpeciesSelectOptions(species), item.from)}
-                ${this.selectField('relation-to', this.t('Target'), this.getSpeciesSelectOptions(species), item.to)}
-                ${this.selectField('relation-type', this.t('Type'), this.getRelationTypeOptions(), item.type)}
-                ${this.selectField('relation-strength', this.t('Strength'), this.getStrengthOptions(), item.strength)}
-                ${this.textareaField('relation-note', this.t('Note'), item.note, 3)}
+                ${this.inputField('relation-id', 'ID', item.id, 'text', '', 'fwc1-field-short fwc1-inline-field', true)}
+                ${this.selectField('relation-from', this.t('Source'), this.getSpeciesSelectOptions(species), item.from, 'fwc1-field-medium')}
+                ${this.selectField('relation-to', this.t('Target'), this.getSpeciesSelectOptions(species), item.to, 'fwc1-field-medium')}
+                ${this.selectField('relation-type', this.t('Type'), this.getRelationTypeOptions(), item.type, 'fwc1-field-medium')}
+                ${this.selectField('relation-strength', this.t('Strength'), this.getStrengthOptions(), item.strength, 'fwc1-field-short')}
+                ${this.textareaField('relation-note', this.t('Note'), item.note, 3, '', 'fwc1-field-full')}
             </div>
         </article>`;
     },
@@ -647,18 +992,19 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
             <div class="fwc1-grid">
-                ${this.inputField('question-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
-                ${this.selectField('question-type', this.t('Question type'), this.getQuestionTypeOptions(), item.type)}
-                ${this.textareaField('question-prompt', this.t('Prompt'), item.prompt, 3)}
+                ${this.inputField('question-id', 'ID', item.id, 'text', '', 'fwc1-field-short fwc1-inline-field', true)}
+                ${this.selectField('question-type', this.t('Question type'), this.getQuestionTypeOptions(), item.type, 'fwc1-field-medium')}
+                ${this.textareaField('question-prompt', this.t('Prompt'), item.prompt, 3, '', 'fwc1-field-full')}
                 ${this.textareaField(
                     'question-options',
                     this.t('Options'),
                     item.options.join('\n'),
                     5,
-                    this.t('One option per line. Mark the correct ones with * at the end or write their indexes separated by commas.')
+                    this.t('One option per line. Mark the correct ones with * at the end or write their indexes separated by commas.'),
+                    'fwc1-field-full'
                 )}
-                ${this.inputField('question-correct', this.t('Correct answers'), item.correctAnswers.join(', '))}
-                ${this.textareaField('question-explanation', this.t('Explanation'), item.explanation, 3)}
+                ${this.inputField('question-correct', this.t('Correct answers'), item.correctAnswers.join(', '), 'text', '', 'fwc1-field-medium')}
+                ${this.textareaField('question-explanation', this.t('Explanation'), item.explanation, 3, '', 'fwc1-field-full')}
             </div>
         </article>`;
     },
@@ -672,12 +1018,12 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
             <div class="fwc1-grid">
-                ${this.inputField('scenario-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
-                ${this.inputField('scenario-title', this.t('Scenario title'), item.title)}
-                ${this.selectField('scenario-change-type', this.t('Change type'), this.getScenarioTypeOptions(), item.changeType)}
-                ${this.selectField('scenario-target-species', this.t('Target species'), this.getSpeciesSelectOptions(species), item.targetSpeciesId)}
-                ${this.textareaField('scenario-prompt', this.t('Prompt'), item.prompt, 3)}
-                ${this.textareaField('scenario-effects', this.t('Expected effects'), item.expectedEffects.join('\n'), 4, this.t('One expected effect per line.'))}
+                ${this.inputField('scenario-id', 'ID', item.id, 'text', '', 'fwc1-field-short fwc1-inline-field', true)}
+                ${this.inputField('scenario-title', this.t('Scenario title'), item.title, 'text', '', 'fwc1-field-wide')}
+                ${this.selectField('scenario-change-type', this.t('Change type'), this.getScenarioTypeOptions(), item.changeType, 'fwc1-field-medium')}
+                ${this.selectField('scenario-target-species', this.t('Target species'), this.getSpeciesSelectOptions(species), item.targetSpeciesId, 'fwc1-field-medium')}
+                ${this.textareaField('scenario-prompt', this.t('Prompt'), item.prompt, 3, '', 'fwc1-field-full')}
+                ${this.textareaField('scenario-effects', this.t('Expected effects'), item.expectedEffects.join('\n'), 4, this.t('One expected effect per line.'), 'fwc1-field-full')}
             </div>
         </article>`;
     },
@@ -692,8 +1038,8 @@ var $exeDevice = {
         </label>`;
     },
 
-    textareaField: function (field, label, value, rows, help) {
-        return `<label class="fwc1-field fwc1-field-full">
+    textareaField: function (field, label, value, rows, help, extraClass) {
+        return `<label class="fwc1-field fwc1-field-full ${extraClass || ''}">
             <span>${label}</span>
             <textarea id="${field}" data-field="${field}" rows="${rows || 4}">${this.escapeHtml(
                 value || ''
@@ -702,8 +1048,8 @@ var $exeDevice = {
         </label>`;
     },
 
-    selectField: function (field, label, options, selected) {
-        return `<label class="fwc1-field">
+    selectField: function (field, label, options, selected, extraClass) {
+        return `<label class="fwc1-field ${extraClass || ''}">
             <span>${label}</span>
             <select id="${field}" data-field="${field}" data-selected="${this.escapeAttribute(
                 selected || ''
@@ -720,8 +1066,8 @@ var $exeDevice = {
         </label>`;
     },
 
-    checkboxField: function (field, label, checked) {
-        return `<label class="fwc1-field fwc1-checkbox">
+    checkboxField: function (field, label, checked, extraClass) {
+        return `<label class="fwc1-field fwc1-checkbox ${extraClass || ''}">
             <input id="${field}" type="checkbox" data-field="${field}" ${
                 checked ? 'checked="checked"' : ''
             } />
@@ -731,18 +1077,14 @@ var $exeDevice = {
 
     setBehaviour: function () {
         const root = this.ideviceBody;
-        root.querySelectorAll('.fwc1-tab').forEach((tab) => {
-            tab.addEventListener('click', () => {
-                const target = tab.dataset.tab;
-                root.querySelectorAll('.fwc1-tab').forEach((item) => {
-                    item.classList.toggle('is-active', item === tab);
-                    item.setAttribute('aria-selected', item === tab ? 'true' : 'false');
-                });
-                root.querySelectorAll('.fwc1-tab-panel').forEach((panel) => {
-                    panel.classList.toggle('is-active', panel.dataset.panel === target);
-                });
+        this.applyDefaultAiPreference();
+        const evaluation = root.querySelector('#fwc1-evaluation');
+        const evaluationID = root.querySelector('#fwc1-evaluation-id');
+        if (evaluation && evaluationID) {
+            evaluation.addEventListener('change', (event) => {
+                evaluationID.disabled = !event.target.checked;
             });
-        });
+        }
         root.querySelectorAll('.fwc1-add-row').forEach((button) => {
             button.addEventListener('click', () => this.addRow(button.dataset.target));
         });
@@ -773,10 +1115,19 @@ var $exeDevice = {
         });
         root.querySelector('#fwc1-send-ai').addEventListener('click', () => {
             const prompt = root.querySelector('#fwc1-ai-prompt').value || this.buildAiPrompt();
+            const assistant = root.querySelector('#fwc1-ai-assistant');
+            const baseUrl = assistant ? assistant.value : '';
+            if (!prompt.trim()) {
+                eXe.app.alert(this.t('There is no query to send to the assistant.'));
+                return;
+            }
+            if (!baseUrl) {
+                eXe.app.alert(this.t('Please select an AI assistant.'));
+                return;
+            }
             root.querySelector('#fwc1-ai-prompt').value = prompt;
-            this.copyText(prompt, this.t('Open your preferred assistant and paste the prompt.'));
             if (typeof window !== 'undefined' && window.open) {
-                window.open('https://chat.openai.com/', '_blank', 'noopener');
+                window.open(`${baseUrl}${encodeURIComponent(prompt)}`, '_blank', 'noopener');
             }
         });
         root.querySelector('#fwc1-import-result').addEventListener('click', () => {
@@ -870,6 +1221,8 @@ var $exeDevice = {
     },
 
     collectFormData: function () {
+        const scorm =
+            $exeDevicesEdition?.iDevice?.gamification?.scorm?.getValues?.() || {};
         return this.normalizeData({
             title: this.valueById('fwc1-title'),
             subtitle: this.valueById('fwc1-subtitle'),
@@ -896,7 +1249,14 @@ var $exeDevice = {
             questions: this.collectQuestions(),
             scenarios: this.collectScenarios(),
             evaluation: this.checkedById('fwc1-evaluation'),
-            evaluationID: this.valueById('fwc1-evaluation-id'),
+            evaluationID: this.valueById('fwc1-evaluation-id').trim(),
+            isScorm: scorm.isScorm || 0,
+            textButtonScorm: scorm.textButtonScorm || '',
+            repeatActivity:
+                typeof scorm.repeatActivity === 'boolean'
+                    ? scorm.repeatActivity
+                    : true,
+            weighted: scorm.weighted || 100,
         });
     },
 
@@ -978,6 +1338,9 @@ var $exeDevice = {
         if (!normalized.species.some((item) => item.role === 'producer'))
             return this.t('At least one producer is required.');
         if (normalized.relations.length < 2) return this.t('At least two relations are required.');
+        if (normalized.evaluation && normalized.evaluationID.trim().length < 5) {
+            return this.t('The report identifier must have at least 5 characters.');
+        }
         const ids = normalized.species.map((item) => item.id);
         const uniqueIds = new Set(ids);
         if (uniqueIds.size !== ids.length) return 'Species IDs must be unique.';
@@ -1027,8 +1390,74 @@ var $exeDevice = {
         const includeDecomposer = this.checkedById('fwc1-ai-include-decomposer');
         const includeInvasive = this.checkedById('fwc1-ai-include-invasive');
         const includeQuestions = this.checkedById('fwc1-ai-include-questions');
+        const schema = `{
+  "title": "string",
+  "subtitle": "string",
+  "instructions": "<p>HTML breve</p>",
+  "ecosystemContext": {
+    "name": "${ecosystem}",
+    "biome": "string",
+    "level": "${level}",
+    "course": "${course}",
+    "locale": "${locale}",
+    "notes": "string"
+  },
+  "displayOptions": {
+    "showLegend": true,
+    "showSpeciesCards": true,
+    "showArrows": true,
+    "showRelationLabels": false,
+    "randomizeQuestions": false,
+    "allowRevealAnswers": true,
+    "layout": "levels"
+  },
+  "species": [
+    {
+      "id": "sp-id",
+      "name": "string",
+      "role": "producer | primary-consumer | secondary-consumer | tertiary-consumer | omnivore | decomposer",
+      "group": "string",
+      "description": "string",
+      "image": "",
+      "traits": ["string"],
+      "importance": "string"
+    }
+  ],
+  "relations": [
+    {
+      "id": "rel-1",
+      "from": "sp-consumidor",
+      "to": "sp-recurso",
+      "type": "eats | decomposes | competes | parasite-of",
+      "strength": "low | medium | high",
+      "note": "string"
+    }
+  ],
+  "questions": [
+    {
+      "id": "q-1",
+      "type": "multiple-choice | multi-select | true-false | match-role | predict-effect",
+      "prompt": "string",
+      "options": ["opcion 1", "opcion 2"],
+      "correctAnswers": [0],
+      "explanation": "string"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "sc-1",
+      "title": "string",
+      "changeType": "species-disappearance | population-increase | invasive-arrival | pollution | drought | producer-loss",
+      "targetSpeciesId": "sp-id",
+      "prompt": "string",
+      "expectedEffects": ["string"]
+    }
+  ],
+  "evaluation": false,
+  "evaluationID": ""
+}`;
         return `Actúa como docente experto en ecología escolar.
-Genera una red trófica para eXeLearning en JSON válido para el iDevice food-web-c1.
+Genera una red trófica para eXeLearning en JSON válido.
 
 Requisitos:
 - ecosistema: ${ecosystem}
@@ -1042,8 +1471,16 @@ Requisitos:
 - ${includeInvasive ? 'incluye una especie invasora' : 'no incluyas especies invasoras salvo que sean didácticamente necesarias'}
 - ${includeQuestions ? 'añade 3-5 preguntas de práctica' : 'no añadas preguntas'}
 - define relaciones tróficas coherentes
-- usa los campos: title, subtitle, instructions, ecosystemContext, displayOptions, species, relations, questions, scenarios, evaluation, evaluationID
-- devuelve solo JSON`;
+- usa exactamente esta estructura JSON:
+
+${schema}
+
+Reglas adicionales:
+- no añadas campos fuera del esquema
+- usa ids estables y únicos
+- en relations.from va el consumidor y en relations.to el recurso o presa
+- si una pregunta es true-false, usa options ["Verdadero", "Falso"] y correctAnswers con el índice correcto
+- devuelve solo JSON válido, sin markdown, sin comentarios y sin texto antes o después del JSON`;
     },
 
     importText: function (text) {
@@ -1203,6 +1640,16 @@ Requisitos:
                 field.value = field.dataset.selected;
             }
         });
+    },
+
+    applyDefaultAiPreference: function () {
+        const assistant = this.ideviceBody.querySelector('#fwc1-ai-assistant');
+        const defaultAI =
+            window.eXeLearning?.app?.user?.preferences?.preferences?.defaultAI?.value;
+        if (!assistant || !defaultAI) return;
+        if ([...assistant.options].some((option) => option.value === defaultAI)) {
+            assistant.value = defaultAI;
+        }
     },
 
     getRoleOptions: function () {
