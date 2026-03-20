@@ -205,19 +205,31 @@ var $foodwebc1 = {
         'parasite-of': 'parasite of',
     },
 
-    getLocale: function () {
+    getLocale: function (context) {
+        const explicit =
+            typeof context === 'string'
+                ? context
+                : context?.locale ||
+                  context?.ecosystemContext?.locale ||
+                  context?._fwxData?.locale ||
+                  context?._fwxData?.ecosystemContext?.locale ||
+                  context?.dataset?.foodWebLocale ||
+                  '';
         const lang =
-            (document.documentElement &&
-                document.documentElement.lang &&
-                document.documentElement.lang.toLowerCase()) ||
-            'es';
+            String(
+                explicit ||
+                    (document.documentElement &&
+                        document.documentElement.lang &&
+                        document.documentElement.lang.toLowerCase()) ||
+                    'es'
+            ).toLowerCase();
         if (lang.indexOf('ca') === 0 || lang.indexOf('va') === 0) return 'ca';
         if (lang.indexOf('en') === 0) return 'en';
         return 'es';
     },
 
-    t: function (key) {
-        const locale = this.getLocale();
+    t: function (key, context) {
+        const locale = this.getLocale(context);
         return this.i18n[locale]?.[key] || this.i18n.es[key] || key;
     },
 
@@ -237,6 +249,10 @@ var $foodwebc1 = {
             subtitle: data.subtitle || '',
             instructions: data.instructions || '',
             ecosystemContext: data.ecosystemContext || {},
+            locale:
+                data.locale ||
+                data.ecosystemContext?.locale ||
+                '',
             displayOptions: {
                 showLegend: data.displayOptions?.showLegend !== false,
                 showSpeciesCards: data.displayOptions?.showSpeciesCards !== false,
@@ -329,6 +345,8 @@ var $foodwebc1 = {
         )}"></div>
         <section class="${this.ideviceClass}" id="${this.escapeAttribute(sectionId)}" data-food-web-id="${this.escapeAttribute(
             id
+        )}" data-food-web-locale="${this.escapeAttribute(
+            data.locale || ''
         )}">
             <header class="fwx-head">
                 <div>
@@ -364,7 +382,7 @@ var $foodwebc1 = {
             }
             ${
                 data.displayOptions.showLegend
-                    ? `<section class="fwx-legend">${this.getLegendHtml()}</section>`
+                    ? `<section class="fwx-legend">${this.getLegendHtml(data)}</section>`
                     : ''
             }
             <section class="fwx-layout fwx-layout-${this.escapeAttribute(
@@ -373,17 +391,17 @@ var $foodwebc1 = {
                 <div class="fwx-graph-shell">
                     <div class="fwx-graph-toolbar">
                         <button type="button" class="btn btn-secondary fwx-reset-layout">${this.escapeHtml(
-                            this.t('Reset layout')
+                            this.t('Reset layout', data)
                         )}</button>
                         ${
                             data.relations.some((relation) => relation.type === 'competes')
                                 ? `<button type="button" class="btn btn-secondary fwx-toggle-competition" aria-pressed="false">${this.escapeHtml(
-                                      this.t('Show competition')
+                                      this.t('Show competition', data)
                                   )}</button>`
                                 : ''
                         }
                         <button type="button" class="btn btn-secondary fwx-expand-graph" aria-pressed="false">${this.escapeHtml(
-                            this.t('Expand graph')
+                            this.t('Expand graph', data)
                         )}</button>
                     </div>
                     <div class="fwx-graph-stage" data-graph-stage="true">
@@ -400,7 +418,7 @@ var $foodwebc1 = {
                     </div>
                 </div>
                 <aside class="fwx-side">
-                    ${this.getDetailPanel(detail)}
+                    ${this.getDetailPanel(detail, data)}
                     ${this.getRelationsPanel(data, detail)}
                 </aside>
             </section>
@@ -408,7 +426,7 @@ var $foodwebc1 = {
             ${this.getScenariosHtml(data, id)}
             <section class="fwx-results">
                 <p class="fwx-scoreboard">
-                    <strong>${this.escapeHtml(this.t('Score'))}:</strong>
+                    <strong>${this.escapeHtml(this.t('Score', data))}:</strong>
                     <span class="fwx-score-value">0%</span>
                 </p>
                 <div class="Games-BottonContainer">
@@ -592,7 +610,8 @@ var $foodwebc1 = {
         const button = root.querySelector('.fwx-expand-graph');
         if (button) {
             button.textContent = this.t(
-                nextState ? 'Exit expanded view' : 'Expand graph'
+                nextState ? 'Exit expanded view' : 'Expand graph',
+                data
             );
             button.setAttribute('aria-pressed', nextState ? 'true' : 'false');
         }
@@ -616,7 +635,8 @@ var $foodwebc1 = {
         const button = root.querySelector('.fwx-toggle-competition');
         if (button) {
             button.textContent = this.t(
-                nextState ? 'Hide competition' : 'Show competition'
+                nextState ? 'Hide competition' : 'Show competition',
+                data
             );
             button.setAttribute('aria-pressed', nextState ? 'true' : 'false');
         }
@@ -834,12 +854,12 @@ var $foodwebc1 = {
         return grouped;
     },
 
-    getLegendHtml: function () {
+    getLegendHtml: function (data) {
         return this.roleOrder
             .map(
                 (role) =>
                     `<span class="fwx-legend-item"><i style="background:${this.rolePalette[role]}"></i>${this.escapeHtml(
-                        this.t(this.roleLabels[role])
+                        this.t(this.roleLabels[role], data)
                     )}</span>`
             )
             .join('');
@@ -894,20 +914,20 @@ var $foodwebc1 = {
         </div>`;
     },
 
-    getDetailPanel: function (species) {
+    getDetailPanel: function (species, data) {
         if (!species) return '<div class="fwx-detail-panel"></div>';
         return `<div class="fwx-detail-panel" data-detail-panel="true">
             <h3>${this.escapeHtml(species.name)}</h3>
-            <p class="fwx-detail-role">${this.escapeHtml(this.t(this.roleLabels[species.role] || species.role))}</p>
+            <p class="fwx-detail-role">${this.escapeHtml(this.t(this.roleLabels[species.role] || species.role, data))}</p>
             ${species.description ? `<p>${this.escapeHtml(species.description)}</p>` : ''}
             ${
                 species.traits && species.traits.length
-                    ? `<p><strong>${this.t('Traits')}:</strong> ${this.escapeHtml(species.traits.join(', '))}</p>`
+                    ? `<p><strong>${this.t('Traits', data)}:</strong> ${this.escapeHtml(species.traits.join(', '))}</p>`
                     : ''
             }
             ${
                 species.importance
-                    ? `<p><strong>${this.t('Importance')}:</strong> ${this.escapeHtml(species.importance)}</p>`
+                    ? `<p><strong>${this.t('Importance', data)}:</strong> ${this.escapeHtml(species.importance)}</p>`
                     : ''
             }
         </div>`;
@@ -921,14 +941,14 @@ var $foodwebc1 = {
               )
             : data.relations;
         return `<div class="fwx-relations-panel" data-relations-panel="true">
-            <h3>${this.t('Relations')}</h3>
+            <h3>${this.t('Relations', data)}</h3>
             <ul>
                 ${
                     filtered.length
                         ? filtered
                               .map((relation) => `<li>${this.formatRelation(data, relation)}</li>`)
                               .join('')
-                        : `<li>${this.t('No direct relations available.')}</li>`
+                        : `<li>${this.t('No direct relations available.', data)}</li>`
                 }
             </ul>
         </div>`;
@@ -940,19 +960,19 @@ var $foodwebc1 = {
             ? [...data.questions].sort(() => Math.random() - 0.5)
             : data.questions;
         return `<section class="fwx-questions">
-            <h3>${this.t('Practice')}</h3>
+            <h3>${this.t('Practice', data)}</h3>
             ${questions
                 .map(
                     (question, index) => `<article class="fwx-question" data-question-id="${this.escapeAttribute(
                         question.id
                     )}">
                         <p class="fwx-question-prompt">${this.escapeHtml(question.prompt)}</p>
-                        ${this.getQuestionInputs(question, `${id}-${index}`)}
+                        ${this.getQuestionInputs(question, `${id}-${index}`, data)}
                         <div class="fwx-question-actions">
-                            <button type="button" class="btn btn-primary fwx-check-question">${this.t('Check')}</button>
+                            <button type="button" class="btn btn-primary fwx-check-question">${this.t('Check', data)}</button>
                             ${
                                 data.displayOptions.allowRevealAnswers
-                                    ? `<button type="button" class="btn btn-secondary fwx-reveal-question">${this.t('Show answer')}</button>`
+                                    ? `<button type="button" class="btn btn-secondary fwx-reveal-question">${this.t('Show answer', data)}</button>`
                                     : ''
                             }
                         </div>
@@ -963,9 +983,9 @@ var $foodwebc1 = {
         </section>`;
     },
 
-    getQuestionInputs: function (question, key) {
+    getQuestionInputs: function (question, key, data) {
         if (question.type === 'true-false') {
-            return [this.t('True'), this.t('False')]
+            return [this.t('True', data), this.t('False', data)]
                 .map(
                     (label, index) => `<label class="fwx-option">
                         <input type="radio" name="question-${this.escapeAttribute(key)}" value="${index}" />
@@ -975,7 +995,7 @@ var $foodwebc1 = {
                 .join('');
         }
         if (question.type === 'predict-effect') {
-            return `<textarea class="fwx-open-answer" rows="3" placeholder="${this.escapeAttribute(this.t('Write your prediction.'))}"></textarea>`;
+            return `<textarea class="fwx-open-answer" rows="3" placeholder="${this.escapeAttribute(this.t('Write your prediction.', data))}"></textarea>`;
         }
         return question.options
             .map((option, index) => {
@@ -993,7 +1013,7 @@ var $foodwebc1 = {
     getScenariosHtml: function (data) {
         if (!data.scenarios.length) return '';
         return `<section class="fwx-scenarios">
-            <h3>${this.t('Ecological scenarios')}</h3>
+            <h3>${this.t('Ecological scenarios', data)}</h3>
             <div class="fwx-scenario-tabs">
                 ${data.scenarios
                     .map(
@@ -1026,7 +1046,7 @@ var $foodwebc1 = {
     updateDetailPanel: function (root, species) {
         const panel = root.querySelector('[data-detail-panel="true"]');
         if (!panel) return;
-        panel.innerHTML = this.getDetailPanel(species).replace(/^<div[^>]*>|<\/div>$/g, '');
+        panel.innerHTML = this.getDetailPanel(species, root._fwxData).replace(/^<div[^>]*>|<\/div>$/g, '');
     },
 
     updateRelationsPanel: function (root, data, species) {
@@ -1520,7 +1540,7 @@ var $foodwebc1 = {
     formatRelation: function (data, relation) {
         const from = data.species.find((item) => item.id === relation.from);
         const to = data.species.find((item) => item.id === relation.to);
-        const label = this.t(this.relationLabels[relation.type] || relation.type);
+        const label = this.t(this.relationLabels[relation.type] || relation.type, data);
         return `${this.escapeHtml(from?.name || relation.from)} ${this.escapeHtml(
             label
         )} ${this.escapeHtml(to?.name || relation.to)}${
@@ -1530,7 +1550,7 @@ var $foodwebc1 = {
 
     checkQuestion: function (root, questionNode, question) {
         if (question.type === 'predict-effect') {
-            this.showQuestionFeedback(questionNode, question, true, this.t('Open response recorded.'));
+            this.showQuestionFeedback(questionNode, question, true, this.t('Open response recorded.', root), root);
             return;
         }
         const selected = Array.from(
@@ -1542,7 +1562,9 @@ var $foodwebc1 = {
         this.showQuestionFeedback(
             questionNode,
             question,
-            isCorrect
+            isCorrect,
+            '',
+            root
         );
         if (this.isScoreableQuestion(question)) {
             root._fwxScoreState.answers[question.id] = isCorrect;
@@ -1556,14 +1578,14 @@ var $foodwebc1 = {
         }
     },
 
-    showQuestionFeedback: function (questionNode, question, isCorrect, customText) {
+    showQuestionFeedback: function (questionNode, question, isCorrect, customText, root) {
         const feedback = questionNode.querySelector('.fwx-question-feedback');
         if (!feedback) return;
         const baseText =
             customText ||
             (isCorrect
-                ? this.t('Correct.')
-                : this.t('Review the food web and try again.'));
+                ? this.t('Correct.', root)
+                : this.t('Review the food web and try again.', root));
         feedback.className = `fwx-question-feedback ${isCorrect ? 'is-correct' : 'is-incorrect'}`;
         feedback.innerHTML = `<p>${this.escapeHtml(baseText)}</p>${
             question.explanation ? `<p>${this.escapeHtml(question.explanation)}</p>` : ''

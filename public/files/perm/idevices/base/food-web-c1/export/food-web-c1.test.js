@@ -91,6 +91,27 @@ describe('food-web-c1 export', () => {
         expect(html).toContain('fwx-toggle-competition');
     });
 
+    it('uses the idevice locale instead of the page lang when rendering labels', () => {
+        document.documentElement.lang = 'en';
+        const data = {
+            title: 'Red trófica',
+            ecosystemContext: { locale: 'es' },
+            displayOptions: { showLegend: true, allowRevealAnswers: true, layout: 'levels' },
+            species: [
+                { id: 'oak', name: 'Encina', role: 'producer', group: 'planta' },
+                { id: 'rabbit', name: 'Conejo', role: 'primary-consumer', group: 'mamífero' },
+            ],
+            relations: [{ from: 'rabbit', to: 'oak', type: 'eats' }],
+            questions: [],
+            scenarios: [],
+        };
+
+        const html = $foodwebc1.renderView(data, 0, '<div>{content}</div>', 'fw-test');
+
+        expect(html).toContain('Restablecer distribución');
+        expect(html).toContain('Productor');
+    });
+
     it('initializes from ideviceId embedded in JSON data when renderBehaviour receives no third argument', () => {
         const data = {
             ideviceId: 'idevice-food-web-test',
