@@ -336,10 +336,10 @@ var $exeDevice = {
             'Artificial Intelligence': 'IA',
             'AI Assistant': "Assistent d'IA",
             'Import/Export': 'Importa/Exporta',
-            'Add species': 'Afig espècie',
-            'Add relation': 'Afig relació',
-            'Add question': 'Afig pregunta',
-            'Add scenario': 'Afig escenari',
+            'Add species': 'Afegeix espècie',
+            'Add relation': 'Afegeix relació',
+            'Add question': 'Afegeix pregunta',
+            'Add scenario': 'Afegeix escenari',
             Duplicate: 'Duplica',
             Delete: 'Elimina',
             Name: 'Nom',
@@ -347,7 +347,7 @@ var $exeDevice = {
             Group: 'Grup',
             Description: 'Descripció',
             Image: 'Imatge',
-            Traits: 'Rasgos',
+            Traits: 'Trets',
             Importance: 'Importància',
             Source: 'Origen',
             Target: 'Destí',
@@ -364,7 +364,7 @@ var $exeDevice = {
             'Target species': 'Espècie objectiu',
             'Expected effects': 'Efectes esperats',
             Ecosystem: 'Ecosistema',
-            'Approx. species': "Nre. d'espècies",
+            'Approx. species': "Nombre d'espècies",
             'Include decomposer': 'Inclou descomponedor',
             'Include invasive species': 'Inclou espècie invasora',
             'Include questions': 'Inclou preguntes',
@@ -404,11 +404,11 @@ var $exeDevice = {
             'Unable to copy to the clipboard.':
                 "No s'ha pogut copiar al porta-retalls.",
             'The report identifier must have at least 5 characters.':
-                "L'identificador de l'informe ha de tindre almenys 5 caràcters.",
+                "L'identificador de l'informe ha de tenir almenys 5 caràcters.",
             'Use the same identifier in all the activities that belong to the same progress report.':
-                "Usa el mateix identificador en totes les activitats que pertanyen al mateix informe de progrés.",
+                "Fes servir el mateix identificador en totes les activitats que pertanyen al mateix informe de progrés.",
             'Open your preferred assistant and paste the prompt.':
-                'Obri el teu assistent preferit i enganxa el prompt.',
+                'Obre el teu assistent preferit i enganxa el prompt.',
             Producer: 'Productor',
             'Primary consumer': 'Consumidor primari',
             'Secondary consumer': 'Consumidor secundari',
@@ -462,43 +462,457 @@ var $exeDevice = {
     },
 
     getLocale: function () {
-        const explicit =
-            this.ideviceBody?.querySelector?.('#fwc1-locale')?.value ||
-            this.idevicePreviousData?.ecosystemContext?.locale ||
-            this.idevicePreviousData?.locale ||
-            '';
-        const htmlLang =
-            String(
-                explicit ||
-                    (document.documentElement &&
-                        document.documentElement.lang &&
-                        document.documentElement.lang.toLowerCase()) ||
-                    ''
-            ).toLowerCase();
-        if (htmlLang.indexOf('ca') === 0) return 'ca';
-        if (htmlLang.indexOf('en') === 0) return 'en';
+        const candidates = [];
+        try {
+            candidates.push(document.body ? document.body.getAttribute('lang') : '');
+            candidates.push(
+                top.document && top.document.body
+                    ? top.document.body.getAttribute('lang')
+                    : ''
+            );
+        } catch (e) {}
+        try {
+            candidates.push(
+                window.eXeLearning &&
+                    window.eXeLearning.config &&
+                    window.eXeLearning.config.locale
+                    ? window.eXeLearning.config.locale
+                    : ''
+            );
+            candidates.push(
+                top.eXeLearning &&
+                    top.eXeLearning.config &&
+                    top.eXeLearning.config.locale
+                    ? top.eXeLearning.config.locale
+                    : ''
+            );
+        } catch (e) {}
+        try {
+            candidates.push(
+                document.documentElement
+                    ? document.documentElement.getAttribute('lang')
+                    : ''
+            );
+            candidates.push(
+                top.document && top.document.documentElement
+                    ? top.document.documentElement.getAttribute('lang')
+                    : ''
+            );
+        } catch (e) {}
+        candidates.push(navigator.language || '');
+        for (let i = 0; i < candidates.length; i++) {
+            const locale = String(candidates[i] || '')
+                .trim()
+                .replace('_', '-')
+                .toLowerCase();
+            if (locale.indexOf('ca') === 0 || locale.indexOf('va') === 0) return 'ca';
+            if (locale.indexOf('en') === 0) return 'en';
+            if (locale.indexOf('es') === 0) return 'es';
+        }
         return 'es';
+    },
+
+    getExternalTranslation: function (key, locale) {
+        const translators = [];
+        try {
+            if (typeof c_ === 'function') translators.push(c_);
+        } catch (e) {}
+        try {
+            if (typeof _ === 'function') translators.push(_);
+        } catch (e) {}
+        for (let i = 0; i < translators.length; i++) {
+            try {
+                const translated = translators[i](key);
+                if (typeof translated !== 'string' || !translated.trim()) continue;
+                if (translated !== key) return translated;
+                if (locale === 'en') return translated;
+            } catch (e) {}
+        }
+        return '';
     },
 
     t: function (key) {
         const locale = this.getLocale();
+        const external = this.getExternalTranslation(key, locale);
+        if (external) return external;
         const current = this.i18n[locale] || {};
         return current[key] || this.i18n.es[key] || key;
     },
 
-    getDefaultData: function () {
+    getDefaultExampleData: function (locale) {
+        const examples = {
+            es: {
+                title: 'Red trófica del bosque mediterráneo',
+                subtitle: 'Cadena trófica básica en un ecosistema mediterráneo',
+                instructions:
+                    '<p>Explora las especies, observa las relaciones y responde a las preguntas.</p>',
+                ecosystemContext: {
+                    name: 'Bosque mediterráneo',
+                    biome: 'bosque y matorral mediterráneo',
+                    level: 'ESO',
+                    course: '2.º ESO',
+                    notes: '',
+                },
+                species: [
+                    {
+                        id: 'sp-encina',
+                        name: 'Encina',
+                        role: 'producer',
+                        group: 'planta',
+                        description:
+                            'Árbol característico del bosque mediterráneo que produce hojas y bellotas.',
+                        image: '',
+                        traits: ['autótrofa', 'perenne'],
+                        importance: 'productor principal',
+                    },
+                    {
+                        id: 'sp-conejo',
+                        name: 'Conejo europeo',
+                        role: 'primary-consumer',
+                        group: 'mamífero',
+                        description:
+                            'Herbívoro frecuente que se alimenta de brotes, hierbas y hojas tiernas.',
+                        image: '',
+                        traits: ['herbívoro', 'presa habitual'],
+                        importance: 'consumidor primario clave',
+                    },
+                    {
+                        id: 'sp-culebra',
+                        name: 'Culebra bastarda',
+                        role: 'secondary-consumer',
+                        group: 'reptil',
+                        description:
+                            'Reptil depredador que puede capturar pequeños mamíferos y otros vertebrados.',
+                        image: '',
+                        traits: ['carnívora', 'depredadora'],
+                        importance: 'consumidor secundario',
+                    },
+                    {
+                        id: 'sp-aguila',
+                        name: 'Águila culebrera',
+                        role: 'tertiary-consumer',
+                        group: 'ave',
+                        description:
+                            'Ave rapaz que captura serpientes, reptiles y otros pequeños vertebrados.',
+                        image: '',
+                        traits: ['rapaz', 'depredadora'],
+                        importance: 'superdepredador',
+                    },
+                ],
+                relations: [
+                    {
+                        id: 'rel-1',
+                        from: 'sp-conejo',
+                        to: 'sp-encina',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'Consume brotes tiernos, hojas jóvenes y plántulas de encina.',
+                    },
+                    {
+                        id: 'rel-2',
+                        from: 'sp-culebra',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'Puede depredar sobre gazapos o conejos jóvenes en zonas abiertas.',
+                    },
+                    {
+                        id: 'rel-3',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'eats',
+                        strength: 'high',
+                        note:
+                            'La culebra bastarda forma parte de su dieta en ecosistemas mediterráneos.',
+                    },
+                ],
+                questions: [
+                    {
+                        id: 'q-1',
+                        type: 'multiple-choice',
+                        prompt:
+                            '¿Qué ocurriría si disminuye mucho la población de encinas?',
+                        options: [
+                            'Aumentaría el alimento disponible para el conejo europeo',
+                            'Disminuiría parte del alimento disponible para el conejo europeo',
+                            'La culebra bastarda tendría más alimento directo',
+                        ],
+                        correctAnswers: [1],
+                        explanation:
+                            'La encina es un productor y sostiene al conejo europeo, que depende de sus recursos vegetales.',
+                    },
+                ],
+                scenarios: [
+                    {
+                        id: 'sc-1',
+                        title: 'Sequía prolongada',
+                        changeType: 'drought',
+                        targetSpeciesId: 'sp-encina',
+                        prompt:
+                            'Predice una consecuencia probable en la red si una sequía reduce la producción de hojas y brotes.',
+                        expectedEffects: [
+                            'Disminuye el alimento disponible para el conejo europeo',
+                            'Puede afectar indirectamente a los depredadores superiores',
+                        ],
+                    },
+                ],
+            },
+            en: {
+                title: 'Mediterranean forest food web',
+                subtitle: 'Basic food chain in a Mediterranean ecosystem',
+                instructions:
+                    '<p>Explore the species, observe the relationships, and answer the questions.</p>',
+                ecosystemContext: {
+                    name: 'Mediterranean forest',
+                    biome: 'Mediterranean woodland and scrub',
+                    level: 'Secondary education',
+                    course: 'Year 8',
+                    notes: '',
+                },
+                species: [
+                    {
+                        id: 'sp-encina',
+                        name: 'Holm oak',
+                        role: 'producer',
+                        group: 'plant',
+                        description:
+                            'A characteristic Mediterranean tree that produces leaves and acorns.',
+                        image: '',
+                        traits: ['autotroph', 'evergreen'],
+                        importance: 'main producer',
+                    },
+                    {
+                        id: 'sp-conejo',
+                        name: 'European rabbit',
+                        role: 'primary-consumer',
+                        group: 'mammal',
+                        description:
+                            'A common herbivore that feeds on shoots, grasses, and tender leaves.',
+                        image: '',
+                        traits: ['herbivore', 'common prey'],
+                        importance: 'key primary consumer',
+                    },
+                    {
+                        id: 'sp-culebra',
+                        name: 'Montpellier snake',
+                        role: 'secondary-consumer',
+                        group: 'reptile',
+                        description:
+                            'A predatory reptile that can capture small mammals and other vertebrates.',
+                        image: '',
+                        traits: ['carnivorous', 'predator'],
+                        importance: 'secondary consumer',
+                    },
+                    {
+                        id: 'sp-aguila',
+                        name: 'Short-toed snake eagle',
+                        role: 'tertiary-consumer',
+                        group: 'bird',
+                        description:
+                            'A bird of prey that hunts snakes, reptiles, and other small vertebrates.',
+                        image: '',
+                        traits: ['raptor', 'predator'],
+                        importance: 'top predator',
+                    },
+                ],
+                relations: [
+                    {
+                        id: 'rel-1',
+                        from: 'sp-conejo',
+                        to: 'sp-encina',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'It feeds on tender shoots, young leaves, and holm oak seedlings.',
+                    },
+                    {
+                        id: 'rel-2',
+                        from: 'sp-culebra',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'It may prey on rabbit kits or young rabbits in open areas.',
+                    },
+                    {
+                        id: 'rel-3',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'eats',
+                        strength: 'high',
+                        note:
+                            'The Montpellier snake is part of its diet in Mediterranean ecosystems.',
+                    },
+                ],
+                questions: [
+                    {
+                        id: 'q-1',
+                        type: 'multiple-choice',
+                        prompt:
+                            'What would happen if the holm oak population decreased sharply?',
+                        options: [
+                            'Food availability for the European rabbit would increase',
+                            'Part of the food available to the European rabbit would decrease',
+                            'The Montpellier snake would have more direct food',
+                        ],
+                        correctAnswers: [1],
+                        explanation:
+                            'The holm oak is a producer and supports the European rabbit, which depends on its plant resources.',
+                    },
+                ],
+                scenarios: [
+                    {
+                        id: 'sc-1',
+                        title: 'Prolonged drought',
+                        changeType: 'drought',
+                        targetSpeciesId: 'sp-encina',
+                        prompt:
+                            'Predict one likely consequence in the web if a drought reduces the production of leaves and shoots.',
+                        expectedEffects: [
+                            'Food availability for the European rabbit decreases',
+                            'Top predators may be indirectly affected',
+                        ],
+                    },
+                ],
+            },
+            ca: {
+                title: 'Xarxa tròfica del bosc mediterrani',
+                subtitle: 'Cadena tròfica bàsica en un ecosistema mediterrani',
+                instructions:
+                    '<p>Explora les espècies, observa les relacions i respon les preguntes.</p>',
+                ecosystemContext: {
+                    name: 'Bosc mediterrani',
+                    biome: 'bosc i matollar mediterrani',
+                    level: 'ESO',
+                    course: '2n d’ESO',
+                    notes: '',
+                },
+                species: [
+                    {
+                        id: 'sp-encina',
+                        name: 'Alzina',
+                        role: 'producer',
+                        group: 'planta',
+                        description:
+                            'Arbre característic del bosc mediterrani que produeix fulles i glans.',
+                        image: '',
+                        traits: ['autòtrofa', 'perenne'],
+                        importance: 'productor principal',
+                    },
+                    {
+                        id: 'sp-conejo',
+                        name: 'Conill europeu',
+                        role: 'primary-consumer',
+                        group: 'mamífer',
+                        description:
+                            'Herbívor freqüent que s’alimenta de brots, herbes i fulles tendres.',
+                        image: '',
+                        traits: ['herbívor', 'presa habitual'],
+                        importance: 'consumidor primari clau',
+                    },
+                    {
+                        id: 'sp-culebra',
+                        name: 'Serp verda-i-groga',
+                        role: 'secondary-consumer',
+                        group: 'rèptil',
+                        description:
+                            'Rèptil depredador que pot capturar petits mamífers i altres vertebrats.',
+                        image: '',
+                        traits: ['carnívora', 'depredadora'],
+                        importance: 'consumidor secundari',
+                    },
+                    {
+                        id: 'sp-aguila',
+                        name: 'Àguila marcenca',
+                        role: 'tertiary-consumer',
+                        group: 'au',
+                        description:
+                            'Au rapaç que captura serps, rèptils i altres petits vertebrats.',
+                        image: '',
+                        traits: ['rapinyaire', 'depredadora'],
+                        importance: 'superdepredador',
+                    },
+                ],
+                relations: [
+                    {
+                        id: 'rel-1',
+                        from: 'sp-conejo',
+                        to: 'sp-encina',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'S’alimenta de brots tendres, fulles joves i plançons d’alzina.',
+                    },
+                    {
+                        id: 'rel-2',
+                        from: 'sp-culebra',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'Pot depredar sobre conills joves en zones obertes.',
+                    },
+                    {
+                        id: 'rel-3',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'eats',
+                        strength: 'high',
+                        note:
+                            'La serp verda-i-groga forma part de la seva dieta en ecosistemes mediterranis.',
+                    },
+                ],
+                questions: [
+                    {
+                        id: 'q-1',
+                        type: 'multiple-choice',
+                        prompt:
+                            'Què passaria si la població d’alzines disminuís molt?',
+                        options: [
+                            'Augmentaria l’aliment disponible per al conill europeu',
+                            'Disminuiria part de l’aliment disponible per al conill europeu',
+                            'La serp verda-i-groga tindria més aliment directe',
+                        ],
+                        correctAnswers: [1],
+                        explanation:
+                            'L’alzina és un productor i sosté el conill europeu, que depèn dels seus recursos vegetals.',
+                    },
+                ],
+                scenarios: [
+                    {
+                        id: 'sc-1',
+                        title: 'Sequera prolongada',
+                        changeType: 'drought',
+                        targetSpeciesId: 'sp-encina',
+                        prompt:
+                            'Prediu una conseqüència probable en la xarxa si una sequera redueix la producció de fulles i brots.',
+                        expectedEffects: [
+                            'Disminueix l’aliment disponible per al conill europeu',
+                            'Pot afectar indirectament els depredadors superiors',
+                        ],
+                    },
+                ],
+            },
+        };
+        return examples[locale] || examples.es;
+    },
+
+    getDefaultData: function (localeOverride) {
+        const locale = localeOverride || this.getLocale();
+        const example = this.getDefaultExampleData(locale);
         return {
-            title: 'Red trófica del bosque mediterráneo',
-            subtitle: 'Interacciones básicas en un ecosistema mediterráneo',
-            instructions:
-                '<p>Explora las especies, observa las relaciones y responde a las preguntas.</p>',
+            title: example.title,
+            subtitle: example.subtitle,
+            instructions: example.instructions,
             ecosystemContext: {
-                name: 'Bosque mediterráneo',
-                biome: 'bosque y matorral mediterráneo',
-                level: 'ESO',
-                course: '2.º ESO',
-                locale: 'es',
-                notes: '',
+                name: example.ecosystemContext.name,
+                biome: example.ecosystemContext.biome,
+                level: example.ecosystemContext.level,
+                course: example.ecosystemContext.course,
+                locale: locale,
+                notes: example.ecosystemContext.notes,
             },
             displayOptions: {
                 showLegend: true,
@@ -509,140 +923,10 @@ var $exeDevice = {
                 allowRevealAnswers: true,
                 layout: 'levels',
             },
-            species: [
-                {
-                    id: 'sp-encina',
-                    name: 'Encina',
-                    role: 'producer',
-                    group: 'planta',
-                    description:
-                        'Árbol característico del bosque mediterráneo. Produce hojas, brotes y bellotas.',
-                    image: '',
-                    traits: ['autótrofa', 'perenne'],
-                    importance: 'productor principal',
-                },
-                {
-                    id: 'sp-romero',
-                    name: 'Romero',
-                    role: 'producer',
-                    group: 'planta',
-                    description:
-                        'Arbusto aromático frecuente en el matorral mediterráneo.',
-                    image: '',
-                    traits: ['autótrofa', 'aromática'],
-                    importance: 'productor secundario',
-                },
-                {
-                    id: 'sp-conejo',
-                    name: 'Conejo europeo',
-                    role: 'primary-consumer',
-                    group: 'mamífero',
-                    description:
-                        'Herbívoro común que consume brotes, hojas y tallos tiernos.',
-                    image: '',
-                    traits: ['herbívoro', 'presa frecuente'],
-                    importance: 'consumidor primario clave',
-                },
-                {
-                    id: 'sp-lagartija',
-                    name: 'Lagartija ibérica',
-                    role: 'secondary-consumer',
-                    group: 'reptil',
-                    description:
-                        'Pequeño depredador de insectos y otros invertebrados.',
-                    image: '',
-                    traits: ['insectívora', 'presa'],
-                    importance: 'consumidor secundario',
-                },
-                {
-                    id: 'sp-aguila',
-                    name: 'Águila culebrera',
-                    role: 'tertiary-consumer',
-                    group: 'ave',
-                    description:
-                        'Ave rapaz que se alimenta de reptiles y pequeños vertebrados.',
-                    image: '',
-                    traits: ['depredadora', 'rapaz'],
-                    importance: 'superdepredador',
-                },
-            ],
-            relations: [
-                {
-                    id: 'rel-1',
-                    from: 'sp-conejo',
-                    to: 'sp-encina',
-                    type: 'eats',
-                    strength: 'medium',
-                    note:
-                        'Consume brotes tiernos, plántulas y partes vegetativas de la encina.',
-                },
-                {
-                    id: 'rel-2',
-                    from: 'sp-conejo',
-                    to: 'sp-romero',
-                    type: 'eats',
-                    strength: 'low',
-                    note:
-                        'Puede ramonear brotes tiernos y plantas jóvenes del matorral.',
-                },
-                {
-                    id: 'rel-3',
-                    from: 'sp-lagartija',
-                    to: 'sp-conejo',
-                    type: 'competes',
-                    strength: 'low',
-                    note:
-                        'Compiten de forma indirecta por algunos recursos del sotobosque y refugios.',
-                },
-                {
-                    id: 'rel-4',
-                    from: 'sp-aguila',
-                    to: 'sp-lagartija',
-                    type: 'eats',
-                    strength: 'medium',
-                    note:
-                        'Puede capturar lagartijas cuando están expuestas al sol.',
-                },
-                {
-                    id: 'rel-5',
-                    from: 'sp-aguila',
-                    to: 'sp-conejo',
-                    type: 'eats',
-                    strength: 'high',
-                    note:
-                        'También captura pequeños mamíferos como el conejo europeo.',
-                },
-            ],
-            questions: [
-                {
-                    id: 'q-1',
-                    type: 'multiple-choice',
-                    prompt:
-                        '¿Qué ocurriría si disminuye mucho la población de encinas?',
-                    options: [
-                        'Aumentaría la disponibilidad de alimento para el conejo',
-                        'Disminuiría parte del alimento disponible para el conejo europeo',
-                        'No afectaría a ningún otro organismo',
-                    ],
-                    correctAnswers: [1],
-                    explanation:
-                        'La encina es uno de los productores principales y sostiene a varios consumidores.',
-                },
-            ],
-            scenarios: [
-                {
-                    id: 'sc-1',
-                    title: 'Sequía prolongada',
-                    changeType: 'drought',
-                    targetSpeciesId: 'sp-encina',
-                    prompt:
-                        'Predice una consecuencia probable en la red si disminuye la producción vegetal por falta de agua.',
-                    expectedEffects: [
-                        'Disminución del alimento disponible para el conejo europeo',
-                        'Cambios en las poblaciones de depredadores',
-                    ],
-                },
-            ],
+            species: example.species,
+            relations: example.relations,
+            questions: example.questions,
+            scenarios: example.scenarios,
             evaluation: false,
             evaluationID: '',
             isScorm: 0,
@@ -655,9 +939,9 @@ var $exeDevice = {
     },
 
     normalizeData: function (rawData) {
-        const defaults = this.getDefaultData();
         const data = rawData || {};
         const context = data.ecosystemContext || {};
+        const defaults = this.getDefaultData(context.locale || data.locale);
         const display = data.displayOptions || {};
         const species = Array.isArray(data.species) ? data.species : defaults.species;
         const relations = Array.isArray(data.relations)

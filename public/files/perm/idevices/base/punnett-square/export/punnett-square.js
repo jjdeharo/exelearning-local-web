@@ -69,7 +69,7 @@ var $punnettsquare = {
             previous: 'Anterior',
             progress: 'Activitat %s de %s',
             totalScore: 'Puntuació total',
-            currentScore: 'Puntuació d\'esta activitat',
+            currentScore: 'Puntuació d\'aquesta activitat',
             score: 'Puntuació',
         },
         va: {},
@@ -258,8 +258,29 @@ var $punnettsquare = {
         return 'en';
     },
 
+    getExternalTranslation(key, lang) {
+        const translators = [];
+        try {
+            if (typeof c_ === 'function') translators.push(c_);
+        } catch (e) {}
+        try {
+            if (typeof _ === 'function') translators.push(_);
+        } catch (e) {}
+        for (let i = 0; i < translators.length; i++) {
+            try {
+                const translated = translators[i](key);
+                if (typeof translated !== 'string' || !translated.trim()) continue;
+                if (translated !== key) return translated;
+                if (lang === 'en') return translated;
+            } catch (e) {}
+        }
+        return '';
+    },
+
     t(key) {
         const lang = this.getCurrentLang();
+        const external = this.getExternalTranslation(key, lang);
+        if (external) return external;
         const catalog = this.localStrings[lang] || this.localStrings.en;
         return catalog[key] || this.localStrings.en[key] || key;
     },

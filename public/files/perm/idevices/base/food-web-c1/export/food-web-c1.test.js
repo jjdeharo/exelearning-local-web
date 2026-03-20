@@ -112,6 +112,38 @@ describe('food-web-c1 export', () => {
         expect(html).toContain('Productor');
     });
 
+    it('prefers a global eXe translation when available during export', () => {
+        document.documentElement.lang = 'ca';
+        const originalC = global.c_;
+        try {
+            global.c_ = vi.fn((key) =>
+                key === 'Reset layout' ? 'Redistribució oficial' : key
+            );
+            window.c_ = global.c_;
+
+            const data = {
+                title: 'Xarxa tròfica',
+                ecosystemContext: { locale: 'ca' },
+                displayOptions: { showLegend: true, allowRevealAnswers: true, layout: 'levels' },
+                species: [
+                    { id: 'oak', name: 'Alzina', role: 'producer', group: 'planta' },
+                    { id: 'rabbit', name: 'Conill', role: 'primary-consumer', group: 'mamífer' },
+                ],
+                relations: [{ from: 'rabbit', to: 'oak', type: 'eats' }],
+                questions: [],
+                scenarios: [],
+            };
+
+            const html = $foodwebc1.renderView(data, 0, '<div>{content}</div>', 'fw-test');
+
+            expect(html).toContain('Redistribució oficial');
+            expect(html).toContain('Productor');
+        } finally {
+            global.c_ = originalC;
+            window.c_ = originalC;
+        }
+    });
+
     it('initializes from ideviceId embedded in JSON data when renderBehaviour receives no third argument', () => {
         const data = {
             ideviceId: 'idevice-food-web-test',

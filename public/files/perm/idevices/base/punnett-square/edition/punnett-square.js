@@ -267,9 +267,9 @@ var $exeDevice = {
             Random: 'Aleatori',
             'Random activities': 'Activitats aleatòries',
             'Set to 0 to use all activities.':
-                'Posa 0 per a usar totes les activitats.',
+                'Posa 0 per fer servir totes les activitats.',
             Activities: 'Activitats',
-            'Add activity': 'Afig activitat',
+            'Add activity': 'Afegeix activitat',
             Duplicate: 'Duplica',
             Delete: 'Elimina',
             'Activity %s': 'Activitat %s',
@@ -281,7 +281,7 @@ var $exeDevice = {
             'Parent 1 genotype': 'Genotip del progenitor 1',
             'Parent 2 genotype': 'Genotip del progenitor 2',
             'Examples: AA, Aa, aa, AaBb': 'Exemples: AA, Aa, aa, AaBb',
-            Traits: 'Rasgos',
+            Traits: 'Trets',
             'Gene 1 letter': 'Lletra del gen 1',
             'Gene 2 letter': 'Lletra del gen 2',
             'Gene 1 dominant phenotype': 'Fenotip dominant del gen 1',
@@ -299,7 +299,7 @@ var $exeDevice = {
             'Ask for phenotype ratio': 'Demana la proporció fenotípica',
             'Allow showing the solution': 'Permet mostrar la solució',
             'Use the same identifier in all the activities that belong to the same progress report.':
-                'Usa el mateix identificador en totes les activitats que pertanyen al mateix informe de progrés.',
+                'Fes servir el mateix identificador en totes les activitats que pertanyen al mateix informe de progrés.',
             'Please write the instructions.': 'Escriu les instruccions.',
             'Please write an activity title.': "Escriu un títol per a l'activitat.",
             'At least one activity is required.':
@@ -332,23 +332,23 @@ var $exeDevice = {
             Specialty: 'Especialitat',
             Course: 'Curs',
             Create: 'Crea',
-            'Prompt to generate activities': 'Prompt per a generar activitats',
-            'Generated or pasted activities': 'Activitats generades o apegrades',
+            'Prompt to generate activities': 'Prompt per generar activitats',
+            'Generated or pasted activities': 'Activitats generades o enganxades',
             'Act as a highly experienced teacher.':
                 'Actua com un docent amb molta experiència.',
             'Generate Punnett square activities using this exact format, one activity per line:':
-                'Genera activitats de quadre de Punnett usant exactament este format, una activitat per línia:',
+                'Genera activitats de quadre de Punnett fent servir exactament aquest format, una activitat per línia:',
             'Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1':
                 'Format monohíbrid: Títol#1#Progenitor1#Progenitor2#LletraGen1#FenotipDominant1#FenotipRecessiu1',
             'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2':
                 'Format dihíbrid: Títol#2#Progenitor1#Progenitor2#LletraGen1#FenotipDominant1#FenotipRecessiu1#LletraGen2#FenotipDominant2#FenotipRecessiu2',
             'Do not include numbering, bullets, explanations or the # character inside any field.':
-                'No inclogues numeració, vinyetes, explicacions ni el caràcter # dins de cap camp.',
+                'No incloguis numeració, vinyetes, explicacions ni el caràcter # dins de cap camp.',
             'Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.':
-                'Escriu Progenitor1 i Progenitor2 per separat. No escrigues encreuaments com Aa x aa dins d\'un sol camp.',
-            'There is no prompt to copy.': 'No hi ha cap prompt per a copiar.',
+                'Escriu Progenitor1 i Progenitor2 per separat. No escriguis encreuaments com Aa x aa dins d\'un sol camp.',
+            'There is no prompt to copy.': 'No hi ha cap prompt per copiar.',
             'There is no query to send to the assistant.':
-                'No hi ha cap consulta per a enviar a l\'assistent.',
+                'No hi ha cap consulta per enviar a l\'assistent.',
             'Please select an AI assistant.':
                 'Selecciona un assistent d\'IA.',
             'Please enter at least one activity.':
@@ -360,7 +360,7 @@ var $exeDevice = {
             'The activities could not be generated. Incorrect format':
                 'No s\'han pogut generar les activitats. Format incorrecte.',
             'An error occurred while retrieving the activities. Please try again.':
-                'S\'ha produït un error en obtindre les activitats. Torna-ho a provar.',
+                'S\'ha produït un error en obtenir les activitats. Torna-ho a provar.',
             'Parent 1 genotype does not match the selected number of genes.':
                 'El genotip del progenitor 1 no coincideix amb el nombre de gens seleccionat.',
             'Parent 2 genotype does not match the selected number of genes.':
@@ -373,7 +373,7 @@ var $exeDevice = {
             'Select at least one student task.':
                 "Selecciona almenys una tasca per a l'alumnat.",
             'The report identifier must have at least 5 characters.':
-                "L'identificador de l'informe ha de tindre almenys 5 caràcters.",
+                "L'identificador de l'informe ha de tenir almenys 5 caràcters.",
             'Random activities cannot exceed the number of available activities.':
                 'Les activitats aleatòries no poden superar el nombre d\'activitats disponibles.',
             'Monohybrid cross': 'Encreuament monohíbrid',
@@ -459,8 +459,29 @@ var $exeDevice = {
         return 'en';
     },
 
+    getExternalTranslation(key, locale) {
+        const translators = [];
+        try {
+            if (typeof c_ === 'function') translators.push(c_);
+        } catch (e) {}
+        try {
+            if (typeof _ === 'function') translators.push(_);
+        } catch (e) {}
+        for (let i = 0; i < translators.length; i++) {
+            try {
+                const translated = translators[i](key);
+                if (typeof translated !== 'string' || !translated.trim()) continue;
+                if (translated !== key) return translated;
+                if (locale === 'en') return translated;
+            } catch (e) {}
+        }
+        return '';
+    },
+
     t(str) {
         const locale = this.getLocale();
+        const external = this.getExternalTranslation(str, locale);
+        if (external) return external;
         const shortLocale = locale.split('-')[0];
         const map =
             this.i18n[locale] ||

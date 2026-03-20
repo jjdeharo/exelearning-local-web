@@ -18,7 +18,7 @@ var $foodwebc1 = {
             decomposes: 'descompone',
             'competes with': 'compite con',
             'parasite of': 'parasita a',
-            Traits: 'Rasgos',
+            Traits: 'Trets',
             Importance: 'Importancia',
             Relations: 'Relaciones',
             'No direct relations available.': 'No hay relaciones directas.',
@@ -86,7 +86,7 @@ var $foodwebc1 = {
             decomposes: 'descompon',
             'competes with': 'competeix amb',
             'parasite of': 'parasita',
-            Traits: 'Rasgos',
+            Traits: 'Trets',
             Importance: 'Importància',
             Relations: 'Relacions',
             'No direct relations available.': 'No hi ha relacions directes.',
@@ -95,7 +95,7 @@ var $foodwebc1 = {
             'Show answer': 'Mostra la resposta',
             True: 'Vertader',
             False: 'Fals',
-            'Write your prediction.': 'Escriu la teua predicció.',
+            'Write your prediction.': 'Escriu la teva predicció.',
             'Ecological scenarios': 'Escenaris ecològics',
             'Open response recorded.': 'Resposta oberta registrada.',
             'Correct.': 'Correcte.',
@@ -103,7 +103,7 @@ var $foodwebc1 = {
                 'Revisa la xarxa tròfica i torna-ho a intentar.',
             'Reset layout': 'Restableix la disposició',
             'Expand graph': 'Amplia el graf',
-            'Exit expanded view': "Ix de la vista ampliada",
+            'Exit expanded view': 'Surt de la vista ampliada',
             'Show competition': 'Mostrar competència',
             'Hide competition': 'Ocultar competència',
             Score: 'Puntuació',
@@ -154,24 +154,24 @@ var $foodwebc1 = {
         },
         ca: {
             msgScoreScorm:
-                'La puntuació no es pot guardar perquè esta pàgina no forma part d’un paquet SCORM.',
-            msgYouScore: 'La teua puntuació',
+                'La puntuació no es pot guardar perquè aquesta pàgina no forma part d’un paquet SCORM.',
+            msgYouScore: 'La teva puntuació',
             msgScore: 'Puntuació',
             msgWeight: 'Pes',
             msgYouLastScore: "L'última puntuació guardada és",
             msgOnlySaveScore: 'Només pots guardar la puntuació una vegada.',
             msgOnlySaveAuto:
-                'La teua puntuació es guardarà després de cada pregunta. Només pots jugar una vegada.',
+                'La teva puntuació es desarà després de cada pregunta. Només pots jugar una vegada.',
             msgSaveAuto:
-                'La teua puntuació es guardarà automàticament després de cada pregunta.',
-            msgSeveralScore: 'Pots guardar la puntuació tantes vegades com vulgues',
-            msgPlaySeveralTimes: 'Pots fer esta activitat tantes vegades com vulgues',
-            msgActityComply: 'Ja has fet esta activitat.',
+                'La teva puntuació es desarà automàticament després de cada pregunta.',
+            msgSeveralScore: 'Pots desar la puntuació tantes vegades com vulguis',
+            msgPlaySeveralTimes: 'Pots fer aquesta activitat tantes vegades com vulguis',
+            msgActityComply: 'Ja has fet aquesta activitat.',
             msgUncompletedActivity: 'Activitat incompleta',
             msgSuccessfulActivity: 'Activitat: Superada. Puntuació: %s',
             msgUnsuccessfulActivity: 'Activitat: No superada. Puntuació: %s',
-            msgTypeGame: 'Red tròfica',
-            msgSaveScore: 'Guardar puntuació',
+            msgTypeGame: 'Xarxa tròfica',
+            msgSaveScore: 'Desa la puntuació',
         },
     },
     roleOrder: [
@@ -228,8 +228,30 @@ var $foodwebc1 = {
         return 'es';
     },
 
+    getExternalTranslation: function (key, context) {
+        const locale = this.getLocale(context);
+        const translators = [];
+        try {
+            if (typeof c_ === 'function') translators.push(c_);
+        } catch (e) {}
+        try {
+            if (typeof _ === 'function') translators.push(_);
+        } catch (e) {}
+        for (let i = 0; i < translators.length; i++) {
+            try {
+                const translated = translators[i](key);
+                if (typeof translated !== 'string' || !translated.trim()) continue;
+                if (translated !== key) return translated;
+                if (locale === 'en') return translated;
+            } catch (e) {}
+        }
+        return '';
+    },
+
     t: function (key, context) {
         const locale = this.getLocale(context);
+        const external = this.getExternalTranslation(key, context);
+        if (external) return external;
         return this.i18n[locale]?.[key] || this.i18n.es[key] || key;
     },
 
