@@ -542,6 +542,29 @@ var $exeDevice = {
         };
     },
 
+    isPlaceholderActivity(activity) {
+        if (!activity) return false;
+        const normalized = this.normalizeActivity(activity, 0);
+        const defaults = this.createDefaultActivity(0);
+        return (
+            normalized.title === defaults.title &&
+            normalized.geneCount === defaults.geneCount &&
+            normalized.parent1 === defaults.parent1 &&
+            normalized.parent2 === defaults.parent2 &&
+            normalized.traits[0].geneLetter === defaults.traits[0].geneLetter &&
+            normalized.traits[1].geneLetter === defaults.traits[1].geneLetter &&
+            !normalized.traits[0].dominantLabel &&
+            !normalized.traits[0].recessiveLabel &&
+            !normalized.traits[1].dominantLabel &&
+            !normalized.traits[1].recessiveLabel &&
+            normalized.askGametes === defaults.askGametes &&
+            normalized.askGrid === defaults.askGrid &&
+            normalized.askGenotypeRatio === defaults.askGenotypeRatio &&
+            normalized.askPhenotypeRatio === defaults.askPhenotypeRatio &&
+            normalized.showSolutions === defaults.showSolutions
+        );
+    },
+
     normalizeActivity(activity, index) {
         const merged = JSON.parse(
             JSON.stringify({
@@ -1133,9 +1156,18 @@ var $exeDevice = {
             return;
         }
 
-        this.storeCurrentActivity();
-        this.workingData.activities = this.workingData.activities.concat(imported);
-        this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        const shouldReplacePlaceholder =
+            this.workingData.activities.length === 1 &&
+            this.isPlaceholderActivity(this.workingData.activities[0]);
+
+        if (!shouldReplacePlaceholder) {
+            this.storeCurrentActivity();
+            this.workingData.activities = this.workingData.activities.concat(imported);
+            this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        } else {
+            this.workingData.activities = imported;
+            this.currentActivityIndex = 0;
+        }
         this.loadActivityIntoForm(this.currentActivityIndex);
         eXe.app.alert(this.t('The imported activities have been added successfully.'));
     },
@@ -1367,14 +1399,25 @@ var $exeDevice = {
             return;
         }
 
-        this.storeCurrentActivity();
+        const shouldReplacePlaceholder =
+            this.workingData.activities.length === 1 &&
+            this.isPlaceholderActivity(this.workingData.activities[0]);
+
+        if (!shouldReplacePlaceholder) {
+            this.storeCurrentActivity();
+        }
         this.workingData.mode = parsed.mode === 'random' ? 'random' : this.workingData.mode;
         this.workingData.randomCount = Math.max(0, parseInt(parsed.randomCount, 10) || 0);
         this.ideviceBody.querySelector('#punnettMode').value = this.workingData.mode;
         this.ideviceBody.querySelector('#punnettRandomCount').value = this.workingData.randomCount;
         this.toggleRandomCount();
-        this.workingData.activities = this.workingData.activities.concat(imported);
-        this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        if (!shouldReplacePlaceholder) {
+            this.workingData.activities = this.workingData.activities.concat(imported);
+            this.currentActivityIndex = this.workingData.activities.length - imported.length;
+        } else {
+            this.workingData.activities = imported;
+            this.currentActivityIndex = 0;
+        }
         this.loadActivityIntoForm(this.currentActivityIndex);
         eXe.app.alert(this.t('The imported activities have been added successfully.'));
     },
