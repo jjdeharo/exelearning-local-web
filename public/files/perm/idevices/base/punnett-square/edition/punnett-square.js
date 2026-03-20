@@ -97,6 +97,8 @@ var $exeDevice = {
                 'Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2',
             'Do not include numbering, bullets, explanations or the # character inside any field.':
                 'Do not include numbering, bullets, explanations or the # character inside any field.',
+            'Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.':
+                'Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.',
             'There is no prompt to copy.': 'There is no prompt to copy.',
             'There is no query to send to the assistant.':
                 'There is no query to send to the assistant.',
@@ -219,6 +221,8 @@ var $exeDevice = {
                 'Formato dihíbrido: Título#2#Progenitor1#Progenitor2#LetraGen1#FenotipoDominante1#FenotipoRecesivo1#LetraGen2#FenotipoDominante2#FenotipoRecesivo2',
             'Do not include numbering, bullets, explanations or the # character inside any field.':
                 'No incluyas numeración, viñetas, explicaciones ni el carácter # dentro de ningún campo.',
+            'Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.':
+                'Escribe Progenitor1 y Progenitor2 por separado. No escribas cruces como Aa x aa dentro de un solo campo.',
             'There is no prompt to copy.': 'No hay ningún prompt para copiar.',
             'There is no query to send to the assistant.':
                 'No hay ninguna consulta para enviar al asistente.',
@@ -340,6 +344,8 @@ var $exeDevice = {
                 'Format dihíbrid: Títol#2#Progenitor1#Progenitor2#LletraGen1#FenotipDominant1#FenotipRecessiu1#LletraGen2#FenotipDominant2#FenotipRecessiu2',
             'Do not include numbering, bullets, explanations or the # character inside any field.':
                 'No inclogues numeració, vinyetes, explicacions ni el caràcter # dins de cap camp.',
+            'Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.':
+                'Escriu Progenitor1 i Progenitor2 per separat. No escrigues encreuaments com Aa x aa dins d\'un sol camp.',
             'There is no prompt to copy.': 'No hi ha cap prompt per a copiar.',
             'There is no query to send to the assistant.':
                 'No hi ha cap consulta per a enviar a l\'assistent.',
@@ -485,34 +491,34 @@ var $exeDevice = {
 
     refreshTranslations() {
         this.ci18n = {
-            msgCheck: c_('Check'),
-            msgReset: c_('Restart'),
-            msgSaveScore: c_('Save score'),
-            msgScoreScorm: c_(
+            msgCheck: _('Check'),
+            msgReset: _('Restart'),
+            msgSaveScore: _('Save score'),
+            msgScoreScorm: _(
                 "The score can't be saved because this page is not part of a SCORM package."
             ),
-            msgYouScore: c_('Your score'),
-            msgScore: c_('Score'),
-            msgWeight: c_('Weight'),
-            msgYouLastScore: c_('The last score saved is'),
-            msgOnlySaveScore: c_('You can only save the score once!'),
-            msgOnlySave: c_('You can only save once'),
-            msgOnlySaveAuto: c_(
+            msgYouScore: _('Your score'),
+            msgScore: _('Score'),
+            msgWeight: _('Weight'),
+            msgYouLastScore: _('The last score saved is'),
+            msgOnlySaveScore: _('You can only save the score once!'),
+            msgOnlySave: _('You can only save once'),
+            msgOnlySaveAuto: _(
                 'Your score will be saved after each question. You can only play once.'
             ),
-            msgSaveAuto: c_(
+            msgSaveAuto: _(
                 'Your score will be automatically saved after each question.'
             ),
-            msgSeveralScore: c_(
+            msgSeveralScore: _(
                 'You can save the score as many times as you want'
             ),
-            msgPlaySeveralTimes: c_(
+            msgPlaySeveralTimes: _(
                 'You can do this activity as many times as you want'
             ),
-            msgActityComply: c_('You have already done this activity.'),
-            msgUncompletedActivity: c_('Incomplete activity'),
-            msgSuccessfulActivity: c_('Activity: Passed. Score: %s'),
-            msgUnsuccessfulActivity: c_('Activity: Not passed. Score: %s'),
+            msgActityComply: _('You have already done this activity.'),
+            msgUncompletedActivity: _('Incomplete activity'),
+            msgSuccessfulActivity: _('Activity: Passed. Score: %s'),
+            msgUnsuccessfulActivity: _('Activity: Not passed. Score: %s'),
             msgTypeGame: this.t('Punnett square'),
         };
     },
@@ -790,7 +796,7 @@ var $exeDevice = {
                                 <input id="punnettAISpecialty" type="text" value="${_('Biology')}" style="width: 150px;" />
                             </label>
                             <label for="punnettAICourse">${this.t('Course')}:
-                                <input id="punnettAICourse" type="text" value="${_('3rd ESO')}" style="width: 130px;" />
+                                <input id="punnettAICourse" type="text" value="${_('4th ESO')}" style="width: 130px;" />
                             </label>
                             <label for="punnettAINumber">${this.t('Number of activities')}:
                                 <input id="punnettAINumber" type="number" min="1" max="30" value="10" class="form-control form-control-sm" style="width:6ch;" />
@@ -1037,12 +1043,15 @@ var $exeDevice = {
             return null;
         }
 
+        const parents = this.extractImportedParents(parts[2], parts[3], geneCount);
+        if (!parents) return null;
+
         return this.normalizeActivity(
             {
                 title: parts[0],
                 geneCount,
-                parent1: this.sanitizeGenotype(parts[2]),
-                parent2: this.sanitizeGenotype(parts[3]),
+                parent1: parents.parent1,
+                parent2: parents.parent2,
                 traits: [
                     {
                         geneLetter: parts[4],
@@ -1063,6 +1072,50 @@ var $exeDevice = {
             },
             index
         );
+    },
+
+    extractImportedParents(rawParent1, rawParent2, geneCount) {
+        const expectedLength = geneCount * 2;
+        const splitCross = (value) => {
+            const parts = String(value || '')
+                .split(/(?:\s*[xX×]\s*)/)
+                .map((part) => this.sanitizeGenotype(part))
+                .filter(Boolean);
+            return parts.length === 2 ? parts : null;
+        };
+
+        let parent1 = this.sanitizeGenotype(rawParent1);
+        let parent2 = this.sanitizeGenotype(rawParent2);
+
+        if (parent1.length === expectedLength && parent2.length === expectedLength) {
+            return { parent1, parent2 };
+        }
+
+        const cross1 = splitCross(rawParent1);
+        const cross2 = splitCross(rawParent2);
+
+        if (cross1 && cross2 && cross1[0] === cross2[0] && cross1[1] === cross2[1]) {
+            parent1 = cross1[0];
+            parent2 = cross1[1];
+        } else if (cross1 && parent2.length === expectedLength) {
+            parent1 = cross1[0];
+            parent2 = cross1[1];
+        } else if (cross2 && parent1.length === expectedLength) {
+            parent1 = cross2[0];
+            parent2 = cross2[1];
+        } else if (cross1) {
+            parent1 = cross1[0];
+            parent2 = cross1[1];
+        } else if (cross2) {
+            parent1 = cross2[0];
+            parent2 = cross2[1];
+        }
+
+        if (parent1.length !== expectedLength || parent2.length !== expectedLength) {
+            return null;
+        }
+
+        return { parent1, parent2 };
     },
 
     importActivitiesFromLines(lines) {
@@ -1219,6 +1272,7 @@ var $exeDevice = {
         lines.push(this.t('Monohybrid format: Title#1#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1'));
         lines.push(this.t('Dihybrid format: Title#2#Parent1#Parent2#Gene1Letter#DominantPhenotype1#RecessivePhenotype1#Gene2Letter#DominantPhenotype2#RecessivePhenotype2'));
         lines.push(this.t('Do not include numbering, bullets, explanations or the # character inside any field.'));
+        lines.push(this.t('Write Parent1 and Parent2 separately. Do not write crosses like Aa x aa inside a single field.'));
         this.ideviceBody.querySelector('#punnettAIPrompt').value = lines.join('\n');
     },
 
