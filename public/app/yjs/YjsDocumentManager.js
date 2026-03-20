@@ -85,6 +85,7 @@ class YjsDocumentManager {
     // LocalStorage key that signals a recoverable local draft for static mode
     this._recoverOnOpenKey = `exe-recover-on-open-${projectId}`;
     this._recoverProjectIdKey = 'exe-static-recover-project-id';
+    this._skipRecoveryOnReloadKey = 'exe-static-skip-recovery-on-reload';
 
     // Bind beforeunload handler
     this._beforeUnloadHandler = this._handleBeforeUnload.bind(this);
@@ -1830,12 +1831,29 @@ class YjsDocumentManager {
   _cleanupOnLastTabClose() {
     Logger.log(`[YjsDocumentManager] Last tab closed for project ${this.projectId}, scheduling deferred cleanup`);
 
-    if (this._isStaticMode() && this.isDirty) {
+    const shouldSkipStaticRecovery = this._isStaticMode() && (() => {
+      try {
+        return sessionStorage.getItem(this._skipRecoveryOnReloadKey) === 'true';
+      } catch (_) {
+        return false;
+      }
+    })();
+
+    if (this._isStaticMode() && this.isDirty && !shouldSkipStaticRecovery) {
       try {
         localStorage.setItem(this._recoverOnOpenKey, 'true');
         localStorage.setItem(this._recoverProjectIdKey, this.projectId);
       } catch (_) {}
       return;
+    }
+
+    if (shouldSkipStaticRecovery) {
+      try { localStorage.removeItem(this._recoverOnOpenKey); } catch (_) {}
+      try {
+        if (localStorage.getItem(this._recoverProjectIdKey) === this.projectId) {
+          localStorage.removeItem(this._recoverProjectIdKey);
+        }
+      } catch (_) {}
     }
 
     // Set a flag so initialize() handles cleanup on next open.

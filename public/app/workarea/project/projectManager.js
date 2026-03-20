@@ -6,6 +6,15 @@ import ImportProgress from '../interface/importProgress.js';
 // Use global AppLogger for debug-controlled logging
 const Logger = window.AppLogger || console;
 const STATIC_PROJECT_ID_SESSION_KEY = 'exe-static-project-id';
+const STATIC_SKIP_RECOVERY_ON_RELOAD_KEY = 'exe-static-skip-recovery-on-reload';
+
+function createStaticProjectId() {
+    if (window.crypto?.randomUUID) {
+        return window.crypto.randomUUID();
+    }
+
+    return `static-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
 
 /**
  * IndexedDB store name and key for pending local file imports.
@@ -622,10 +631,17 @@ export default class projectManager {
         switch (action) {
             case 'new': {
                 if (isStaticMode) {
-                    // Static/Electron: reload generates a fresh UUID automatically
+                    // Static/Electron: create the target project ID before reload so
+                    // the static bootstrap never falls back to the previous draft.
+                    const projectUuid = createStaticProjectId();
                     try {
-                        sessionStorage.removeItem(STATIC_PROJECT_ID_SESSION_KEY);
+                        sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectUuid);
+                        sessionStorage.setItem(
+                            STATIC_SKIP_RECOVERY_ON_RELOAD_KEY,
+                            'true'
+                        );
                     } catch (_) {}
+                    window.eXeLearning.projectId = projectUuid;
                     window.location.reload();
                 } else {
                     const resp = await fetch(`${basePath}/api/project/create-quick`, {
@@ -648,6 +664,10 @@ export default class projectManager {
                     window.eXeLearning.projectId = projectUuid;
                     try {
                         sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectUuid);
+                        sessionStorage.setItem(
+                            STATIC_SKIP_RECOVERY_ON_RELOAD_KEY,
+                            'true'
+                        );
                     } catch (_) {}
                     window.location.reload();
                 } else {
@@ -659,9 +679,15 @@ export default class projectManager {
                 await storePendingImport(file);
                 if (isStaticMode) {
                     // Signal for _processPendingImport after reload
+                    const projectUuid = createStaticProjectId();
                     try {
-                        sessionStorage.removeItem(STATIC_PROJECT_ID_SESSION_KEY);
+                        sessionStorage.setItem(STATIC_PROJECT_ID_SESSION_KEY, projectUuid);
+                        sessionStorage.setItem(
+                            STATIC_SKIP_RECOVERY_ON_RELOAD_KEY,
+                            'true'
+                        );
                     } catch (_) {}
+                    window.eXeLearning.projectId = projectUuid;
                     sessionStorage.setItem('exe-pending-import', '1');
                     window.location.reload();
                 } else {

@@ -3384,25 +3384,47 @@ describe('ProjectManager', () => {
                 window.location.reload = vi.fn();
             });
 
-            it('new action: reloads page without server call', async () => {
+            it('new action: assigns a fresh static project id and reloads', async () => {
                 sessionStorage.setItem('exe-static-project-id', 'old-project');
+                const randomUuidSpy = vi
+                    .spyOn(window.crypto, 'randomUUID')
+                    .mockReturnValue('new-project-uuid');
 
                 await projectManager.transitionToProject({ action: 'new' });
 
                 expect(global.fetch).not.toHaveBeenCalled();
-                expect(sessionStorage.getItem('exe-static-project-id')).toBeNull();
+                expect(window.eXeLearning.projectId).toBe('new-project-uuid');
+                expect(sessionStorage.getItem('exe-static-project-id')).toBe(
+                    'new-project-uuid'
+                );
+                expect(
+                    sessionStorage.getItem('exe-static-skip-recovery-on-reload')
+                ).toBe('true');
                 expect(window.location.reload).toHaveBeenCalled();
+
+                randomUuidSpy.mockRestore();
             });
 
-            it('import action: stores file, sets sessionStorage flag, and reloads', async () => {
+            it('import action: stores file, switches to a fresh static project id, and reloads', async () => {
                 const file = new File(['content'], 'course.elpx');
                 sessionStorage.setItem('exe-static-project-id', 'old-project');
+                const randomUuidSpy = vi
+                    .spyOn(window.crypto, 'randomUUID')
+                    .mockReturnValue('import-project-uuid');
                 await projectManager.transitionToProject({ action: 'import', file });
 
                 expect(global.fetch).not.toHaveBeenCalled();
-                expect(sessionStorage.getItem('exe-static-project-id')).toBeNull();
+                expect(window.eXeLearning.projectId).toBe('import-project-uuid');
+                expect(sessionStorage.getItem('exe-static-project-id')).toBe(
+                    'import-project-uuid'
+                );
+                expect(
+                    sessionStorage.getItem('exe-static-skip-recovery-on-reload')
+                ).toBe('true');
                 expect(sessionStorage.getItem('exe-pending-import')).toBe('1');
                 expect(window.location.reload).toHaveBeenCalled();
+
+                randomUuidSpy.mockRestore();
             });
 
             it('open action: sets projectId and reloads', async () => {
@@ -3410,6 +3432,9 @@ describe('ProjectManager', () => {
 
                 expect(window.eXeLearning.projectId).toBe('existing-uuid');
                 expect(sessionStorage.getItem('exe-static-project-id')).toBe('existing-uuid');
+                expect(
+                    sessionStorage.getItem('exe-static-skip-recovery-on-reload')
+                ).toBe('true');
                 expect(window.location.reload).toHaveBeenCalled();
             });
 

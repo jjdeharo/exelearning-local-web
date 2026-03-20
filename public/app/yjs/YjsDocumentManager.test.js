@@ -2514,6 +2514,35 @@ describe('YjsDocumentManager', () => {
 
       delete window.__EXE_STATIC_MODE__;
     });
+
+    it('discards static recovery when a project transition explicitly skips draft recovery', () => {
+      window.__EXE_STATIC_MODE__ = true;
+      manager.isDirty = true;
+      global.sessionStorage.setItem('exe-static-skip-recovery-on-reload', 'true');
+      global.localStorage.setItem('exe-static-recover-project-id', 'test-project-123');
+      global.localStorage.setItem('exe-recover-on-open-test-project-123', 'true');
+      global.localStorage.setItem.mockClear();
+      global.localStorage.removeItem.mockClear();
+
+      manager._cleanupOnLastTabClose();
+
+      expect(global.localStorage.setItem).toHaveBeenCalledWith(
+        'exe-needs-cleanup-test-project-123',
+        'true',
+      );
+      expect(global.localStorage.setItem).not.toHaveBeenCalledWith(
+        'exe-recover-on-open-test-project-123',
+        'true',
+      );
+      expect(global.localStorage.removeItem).toHaveBeenCalledWith(
+        'exe-recover-on-open-test-project-123',
+      );
+      expect(global.localStorage.removeItem).toHaveBeenCalledWith(
+        'exe-static-recover-project-id',
+      );
+
+      delete window.__EXE_STATIC_MODE__;
+    });
   });
 
   describe('initialize — needs-cleanup flag', () => {
