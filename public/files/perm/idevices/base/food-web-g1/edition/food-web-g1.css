@@ -1,0 +1,97 @@
+.food-web-editor {
+    font-family: sans-serif;
+    background: #f9f9f9;
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+.food-web-tabs {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 15px 0;
+    display: flex;
+    border-bottom: 2px solid #ddd;
+}
+
+.food-web-tabs li {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #eee;
+    margin-right: 5px;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+}
+
+.food-web-tabs li.active {
+    background: #fff;
+    font-weight: bold;
+    border-bottom: 2px solid #fff;
+    margin-bottom: -2px;
+}
+
+.food-web-tab-content {
+    display: none;
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #ccc;
+}
+
+.food-web-tab-content.active {
+    display: block;
+}
+
+.field {
+    margin-bottom: 15px;
+}
+
+.field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.field input, .field textarea, .field select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.species-row, .relation-row, .question-row, .scenario-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+    background: #f1f1f1;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.species-row input, .relation-row select, .question-row input {
+    flex: 1;
+}
+
+button {
+    padding: 8px 15px;
+    cursor: pointer;
+}
+
+#add-species, #add-relation, #add-question, #add-scenario {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.remove-species, .remove-relation, .remove-question, .remove-scenario {
+    background: #f44336;
+    color: white;
+    border: none;
+    border-radius: 4px;
+}
+
+.ai-assistant textarea, .import-export textarea {
+    width: 100%;
+    height: 150px;
+    margin-bottom: 10px;
+}

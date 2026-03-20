@@ -1,0 +1,94 @@
+.food-web-c1-editor {
+    font-family: Arial, sans-serif;
+    color: #223127;
+}
+
+.food-web-c1-editor .fwc1-header {
+    margin-bottom: 1rem;
+}
+
+.food-web-c1-editor .fwc1-section {
+    border: 1px solid #ced9c9;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background: #fbfdf9;
+}
+
+.food-web-c1-editor .fwc1-section-header,
+.food-web-c1-editor .fwc1-button-row,
+.food-web-c1-editor .fwc1-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.food-web-c1-editor .fwc1-card-actions {
+    justify-content: flex-end;
+    margin-bottom: 0.75rem;
+}
+
+.food-web-c1-editor .fwc1-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 0.85rem;
+}
+
+.food-web-c1-editor .fwc1-grid-tight {
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+}
+
+.food-web-c1-editor .fwc1-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.food-web-c1-editor .fwc1-field-full {
+    grid-column: 1 / -1;
+}
+
+.food-web-c1-editor .fwc1-field input,
+.food-web-c1-editor .fwc1-field select,
+.food-web-c1-editor .fwc1-field textarea {
+    border: 1px solid #b9c7b2;
+    border-radius: 8px;
+    padding: 0.55rem 0.7rem;
+    background: #fff;
+}
+
+.food-web-c1-editor .fwc1-field small {
+    color: #516059;
+}
+
+.food-web-c1-editor .fwc1-checkbox {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.55rem;
+    padding-top: 1.6rem;
+}
+
+.food-web-c1-editor .fwc1-card {
+    border: 1px solid #d6e1d2;
+    border-radius: 10px;
+    background: #fff;
+    padding: 0.85rem;
+    margin-bottom: 0.85rem;
+}
+
+.food-web-c1-editor .fwc1-subsection {
+    margin-top: 1rem;
+}
+
+.food-web-c1-editor .fwc1-hidden-input {
+    display: none;
+}
+
+@media (max-width: 720px) {
+    .food-web-c1-editor .fwc1-section-header,
+    .food-web-c1-editor .fwc1-button-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

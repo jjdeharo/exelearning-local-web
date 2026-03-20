@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<idevice>
+    <name>food-web-c1</name>
+    <title>Food web</title>
+    <css-class>food-web-c1</css-class>
+    <category>Science</category>
+    <icon>
+        <name>food-web-c1-icon</name>
+        <url>food-web-c1-icon.svg</url>
+        <type>img</type>
+    </icon>
+    <version>1.0</version>
+    <api-version>3.0</api-version>
+    <component-type>json</component-type>
+    <edition-js>
+        <filename>food-web-c1.js</filename>
+    </edition-js>
+    <edition-css>
+        <filename>food-web-c1.css</filename>
+    </edition-css>
+    <export-js>
+        <filename>food-web-c1.js</filename>
+    </export-js>
+    <export-css>
+        <filename>food-web-c1.css</filename>
+    </export-css>
+    <export-template-filename>food-web-c1.html</export-template-filename>
+    <export-object>$foodwebc1</export-object>
+    <description>Interactive food web activity for ecology practice.</description>
+    <downloadable>1</downloadable>
+    <default-visibility>0</default-visibility>
+</idevice>

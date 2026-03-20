@@ -1,0 +1,130 @@
+.food-web-c1-content {
+    --fwx-surface: #f7fbf1;
+    --fwx-border: #d6e4cf;
+    --fwx-text: #243126;
+    --fwx-muted: #55645a;
+    --fwx-accent: #2f7d32;
+    color: var(--fwx-text);
+    display: grid;
+    gap: 1rem;
+}
+
+.food-web-c1-content .fwx-head,
+.food-web-c1-content .fwx-context,
+.food-web-c1-content .fwx-legend,
+.food-web-c1-content .fwx-scenario-tabs,
+.food-web-c1-content .fwx-question-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.food-web-c1-content .fwx-head {
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.food-web-c1-content .fwx-context span,
+.food-web-c1-content .fwx-legend-item {
+    border: 1px solid var(--fwx-border);
+    background: var(--fwx-surface);
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+}
+
+.food-web-c1-content .fwx-legend-item i {
+    display: inline-block;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 50%;
+    margin-right: 0.45rem;
+    vertical-align: middle;
+}
+
+.food-web-c1-content .fwx-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1rem;
+}
+
+.food-web-c1-content .fwx-level,
+.food-web-c1-content .fwx-detail-panel,
+.food-web-c1-content .fwx-relations-panel,
+.food-web-c1-content .fwx-question,
+.food-web-c1-content .fwx-scenario-card {
+    border: 1px solid var(--fwx-border);
+    border-radius: 14px;
+    background: white;
+    padding: 1rem;
+}
+
+.food-web-c1-content .fwx-levels {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.food-web-c1-content .fwx-level-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.65rem;
+}
+
+.food-web-c1-content .fwx-species-button {
+    border: 1px solid color-mix(in srgb, var(--species-color, #2f7d32) 30%, white);
+    background: color-mix(in srgb, var(--species-color, #2f7d32) 10%, white);
+    border-radius: 12px;
+    padding: 0.7rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 11rem;
+    text-align: left;
+}
+
+.food-web-c1-content .fwx-species-button.is-active {
+    box-shadow: 0 0 0 2px var(--species-color, #2f7d32);
+}
+
+.food-web-c1-content .fwx-species-group,
+.food-web-c1-content .fwx-subtitle,
+.food-web-c1-content .fwx-detail-role {
+    color: var(--fwx-muted);
+}
+
+.food-web-c1-content .fwx-side {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.food-web-c1-content .fwx-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    margin-bottom: 0.45rem;
+}
+
+.food-web-c1-content .fwx-open-answer {
+    width: 100%;
+    min-height: 6rem;
+}
+
+.food-web-c1-content .fwx-question-feedback {
+    margin-top: 0.75rem;
+    border-radius: 10px;
+    padding: 0.75rem;
+    background: #eef3ea;
+}
+
+.food-web-c1-content .fwx-question-feedback.is-correct {
+    background: #e1f1e2;
+}
+
+.food-web-c1-content .fwx-question-feedback.is-incorrect {
+    background: #f7e7dc;
+}
+
+@media (max-width: 900px) {
+    .food-web-c1-content .fwx-layout {
+        grid-template-columns: 1fr;
+    }
+}
