@@ -1198,6 +1198,13 @@ class YjsDocumentManager {
    */
   async _updateVersionMetadata() {
     try {
+      const runtimeVersion = window.eXeLearning?.version;
+      if (runtimeVersion) {
+        const metadata = this.getMetadata();
+        metadata.set('exelearning_version', runtimeVersion);
+        return;
+      }
+
       const response = await fetch(`${this.config.apiUrl}/version`);
       if (response.ok) {
         const { version } = await response.json();
