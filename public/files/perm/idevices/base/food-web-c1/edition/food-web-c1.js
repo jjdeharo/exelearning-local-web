@@ -593,7 +593,7 @@ var $exeDevice = {
                         role: 'tertiary-consumer',
                         group: 'ave',
                         description:
-                            'Ave rapaz que captura serpientes, reptiles y otros pequeños vertebrados.',
+                            'Ave rapaz que captura serpientes, conejos y otros pequeños vertebrados.',
                         image: '',
                         traits: ['rapaz', 'depredadora'],
                         importance: 'superdepredador',
@@ -626,6 +626,24 @@ var $exeDevice = {
                         strength: 'high',
                         note:
                             'La culebra bastarda forma parte de su dieta en ecosistemas mediterráneos.',
+                    },
+                    {
+                        id: 'rel-4',
+                        from: 'sp-aguila',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'También puede capturar conejos, sobre todo ejemplares jóvenes o desprevenidos.',
+                    },
+                    {
+                        id: 'rel-5',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'competes',
+                        strength: 'medium',
+                        note:
+                            'Águila culebrera y culebra bastarda compiten indirectamente por presas como el conejo joven.',
                     },
                 ],
                 questions: [
@@ -711,7 +729,7 @@ var $exeDevice = {
                         role: 'tertiary-consumer',
                         group: 'bird',
                         description:
-                            'A bird of prey that hunts snakes, reptiles, and other small vertebrates.',
+                            'A bird of prey that hunts snakes, rabbits, and other small vertebrates.',
                         image: '',
                         traits: ['raptor', 'predator'],
                         importance: 'top predator',
@@ -744,6 +762,24 @@ var $exeDevice = {
                         strength: 'high',
                         note:
                             'The Montpellier snake is part of its diet in Mediterranean ecosystems.',
+                    },
+                    {
+                        id: 'rel-4',
+                        from: 'sp-aguila',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'It can also capture rabbits, especially young or exposed individuals.',
+                    },
+                    {
+                        id: 'rel-5',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'competes',
+                        strength: 'medium',
+                        note:
+                            'The eagle and the snake indirectly compete for prey such as young rabbits.',
                     },
                 ],
                 questions: [
@@ -829,7 +865,7 @@ var $exeDevice = {
                         role: 'tertiary-consumer',
                         group: 'au',
                         description:
-                            'Au rapaç que captura serps, rèptils i altres petits vertebrats.',
+                            'Au rapaç que captura serps, conills i altres petits vertebrats.',
                         image: '',
                         traits: ['rapinyaire', 'depredadora'],
                         importance: 'superdepredador',
@@ -862,6 +898,24 @@ var $exeDevice = {
                         strength: 'high',
                         note:
                             'La serp verda-i-groga forma part de la seva dieta en ecosistemes mediterranis.',
+                    },
+                    {
+                        id: 'rel-4',
+                        from: 'sp-aguila',
+                        to: 'sp-conejo',
+                        type: 'eats',
+                        strength: 'medium',
+                        note:
+                            'També pot capturar conills, sobretot exemplars joves o confiats.',
+                    },
+                    {
+                        id: 'rel-5',
+                        from: 'sp-aguila',
+                        to: 'sp-culebra',
+                        type: 'competes',
+                        strength: 'medium',
+                        note:
+                            'L’àguila marcenca i la serp verda-i-groga competeixen indirectament per preses com el conill jove.',
                     },
                 ],
                 questions: [

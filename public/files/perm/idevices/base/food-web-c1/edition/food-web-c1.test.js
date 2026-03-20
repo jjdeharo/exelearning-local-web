@@ -73,6 +73,17 @@ QUESTION: multiple-choice | ¿Qué pasa si disminuye la encina? | Disminuye el c
         expect(data.species[1].name).toBe('Conill europeu');
         expect(data.species[2].name).toBe('Serp verda-i-groga');
         expect(data.species[3].name).toBe('Àguila marcenca');
+        expect(
+            data.relations.some(
+                (relation) =>
+                    relation.type === 'eats' &&
+                    relation.from === 'sp-aguila' &&
+                    relation.to === 'sp-conejo'
+            )
+        ).toBe(true);
+        expect(data.relations.some((relation) => relation.type === 'competes')).toBe(
+            true
+        );
     });
 
     it('prefers a global eXe translation when available', () => {
