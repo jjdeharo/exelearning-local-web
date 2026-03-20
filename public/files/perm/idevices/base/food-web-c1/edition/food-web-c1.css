@@ -7,6 +7,35 @@
     margin-bottom: 1rem;
 }
 
+.food-web-c1-editor .fwc1-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 1rem;
+}
+
+.food-web-c1-editor .fwc1-tab {
+    border: 1px solid #c8d5c2;
+    background: #f1f5ee;
+    color: #2b3a2f;
+    border-radius: 10px 10px 0 0;
+    padding: 0.7rem 1rem;
+    font-weight: 600;
+}
+
+.food-web-c1-editor .fwc1-tab.is-active {
+    background: #ffffff;
+    border-bottom-color: #ffffff;
+}
+
+.food-web-c1-editor .fwc1-tab-panel {
+    display: none;
+}
+
+.food-web-c1-editor .fwc1-tab-panel.is-active {
+    display: block;
+}
+
 .food-web-c1-editor .fwc1-section {
     border: 1px solid #ced9c9;
     border-radius: 12px;
@@ -77,6 +106,16 @@
     margin-bottom: 0.85rem;
 }
 
+.food-web-c1-editor .fwc1-repeatable-grid {
+    grid-template-columns: repeat(2, minmax(280px, 1fr));
+    align-items: start;
+}
+
+.food-web-c1-editor .fwc1-repeatable .fwc1-field span {
+    font-weight: 600;
+    line-height: 1.25;
+}
+
 .food-web-c1-editor .fwc1-subsection {
     margin-top: 1rem;
 }
@@ -86,9 +125,14 @@
 }
 
 @media (max-width: 720px) {
+    .food-web-c1-editor .fwc1-tabs,
     .food-web-c1-editor .fwc1-section-header,
     .food-web-c1-editor .fwc1-button-row {
         flex-direction: column;
         align-items: stretch;
+    }
+
+    .food-web-c1-editor .fwc1-repeatable-grid {
+        grid-template-columns: 1fr;
     }
 }

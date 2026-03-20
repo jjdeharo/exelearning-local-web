@@ -24,6 +24,7 @@ var $exeDevice = {
             'Interactive ecology activity with species, relations and scenarios.':
                 'Actividad interactiva de ecología con especies, relaciones y escenarios.',
             'General settings': 'Configuración general',
+            General: 'General',
             Title: 'Título',
             Subtitle: 'Subtítulo',
             Instructions: 'Instrucciones',
@@ -51,6 +52,7 @@ var $exeDevice = {
             Questions: 'Preguntas',
             Scenarios: 'Escenarios',
             'Artificial Intelligence': 'IA',
+            'AI Assistant': 'Asistente IA',
             'Import/Export': 'Importar/Exportar',
             'Add species': 'Añadir especie',
             'Add relation': 'Añadir relación',
@@ -398,24 +400,57 @@ var $exeDevice = {
         html += `<section class="fwc1-header"><h2>${this.t('Food web')}</h2><p>${this.t(
             'Interactive ecology activity with species, relations and scenarios.'
         )}</p></section>`;
-        html += this.getGeneralSection(data);
-        html += this.getSpeciesSection(data);
-        html += this.getRelationsSection(data);
-        html += this.getQuestionsSection(data);
-        html += this.getScenariosSection(data);
-        html += this.getAiSection(data);
-        html += this.getImportExportSection();
+        html += this.getTabsNavigation();
+        html += `<div class="fwc1-tab-panels">`;
+        html += this.wrapTabPanel('general', this.getGeneralSection(data), true);
+        html += this.wrapTabPanel('species', this.getSpeciesSection(data), false);
+        html += this.wrapTabPanel('relations', this.getRelationsSection(data), false);
+        html += this.wrapTabPanel('questions', this.getQuestionsSection(data), false);
+        html += this.wrapTabPanel('scenarios', this.getScenariosSection(data), false);
+        html += this.wrapTabPanel('ai', this.getAiSection(data), false);
+        html += this.wrapTabPanel('import', this.getImportExportSection(), false);
+        html += `</div>`;
         html += `</div>`;
         this.ideviceBody.innerHTML = html;
         this.syncPresetValues();
         this.setBehaviour();
     },
 
+    getTabsNavigation: function () {
+        const tabs = [
+            { id: 'general', label: this.t('General') },
+            { id: 'species', label: this.t('Species') },
+            { id: 'relations', label: this.t('Relations') },
+            { id: 'questions', label: this.t('Questions') },
+            { id: 'scenarios', label: this.t('Scenarios') },
+            { id: 'ai', label: this.t('AI Assistant') },
+            { id: 'import', label: this.t('Import/Export') },
+        ];
+        return `<nav class="fwc1-tabs" aria-label="Food web sections">
+            ${tabs
+                .map(
+                    (tab, index) => `<button
+                        type="button"
+                        class="fwc1-tab ${index === 0 ? 'is-active' : ''}"
+                        data-tab="${tab.id}"
+                        aria-selected="${index === 0 ? 'true' : 'false'}"
+                    >${this.escapeHtml(tab.label)}</button>`
+                )
+                .join('')}
+        </nav>`;
+    },
+
+    wrapTabPanel: function (id, content, isActive) {
+        return `<section class="fwc1-tab-panel ${isActive ? 'is-active' : ''}" data-panel="${id}">
+            ${content}
+        </section>`;
+    },
+
     getGeneralSection: function (data) {
         const options = data.displayOptions;
         return `<section class="fwc1-section">
             <h3>${this.t('General settings')}</h3>
-            <div class="fwc1-grid">
+            <div class="fwc1-grid fwc1-repeatable-grid">
                 ${this.inputField('fwc1-title', this.t('Title'), data.title)}
                 ${this.inputField('fwc1-subtitle', this.t('Subtitle'), data.subtitle)}
                 ${this.textareaField('fwc1-instructions', this.t('Instructions'), data.instructions, 4)}
@@ -512,7 +547,7 @@ var $exeDevice = {
     getAiSection: function (data) {
         return `<section class="fwc1-section">
             <h3>${this.t('Artificial Intelligence')}</h3>
-            <div class="fwc1-grid">
+            <div class="fwc1-grid fwc1-repeatable-grid">
                 ${this.inputField('fwc1-ai-ecosystem', this.t('Ecosystem'), data.ecosystemContext.name)}
                 ${this.inputField('fwc1-ai-level', this.t('Level'), data.ecosystemContext.level)}
                 ${this.inputField('fwc1-ai-course', this.t('Course'), data.ecosystemContext.course)}
@@ -571,7 +606,7 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-duplicate-row">${this.t('Duplicate')}</button>
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
-            <div class="fwc1-grid">
+            <div class="fwc1-grid fwc1-repeatable-grid">
                 ${this.inputField('species-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
                 ${this.inputField('species-name', this.t('Name'), item.name)}
                 ${this.selectField('species-role', this.t('Role'), this.getRoleOptions(), item.role)}
@@ -592,7 +627,7 @@ var $exeDevice = {
                 <button type="button" class="btn btn-link fwc1-duplicate-row">${this.t('Duplicate')}</button>
                 <button type="button" class="btn btn-link fwc1-delete-row">${this.t('Delete')}</button>
             </div>
-            <div class="fwc1-grid">
+            <div class="fwc1-grid fwc1-repeatable-grid">
                 ${this.inputField('relation-id', 'ID', item.id, 'text', '', 'fwc1-inline-field', true)}
                 ${this.selectField('relation-from', this.t('Source'), this.getSpeciesSelectOptions(species), item.from)}
                 ${this.selectField('relation-to', this.t('Target'), this.getSpeciesSelectOptions(species), item.to)}
@@ -696,6 +731,18 @@ var $exeDevice = {
 
     setBehaviour: function () {
         const root = this.ideviceBody;
+        root.querySelectorAll('.fwc1-tab').forEach((tab) => {
+            tab.addEventListener('click', () => {
+                const target = tab.dataset.tab;
+                root.querySelectorAll('.fwc1-tab').forEach((item) => {
+                    item.classList.toggle('is-active', item === tab);
+                    item.setAttribute('aria-selected', item === tab ? 'true' : 'false');
+                });
+                root.querySelectorAll('.fwc1-tab-panel').forEach((panel) => {
+                    panel.classList.toggle('is-active', panel.dataset.panel === target);
+                });
+            });
+        });
         root.querySelectorAll('.fwc1-add-row').forEach((button) => {
             button.addEventListener('click', () => this.addRow(button.dataset.target));
         });
