@@ -1387,9 +1387,16 @@ export default class MenuStructureBehaviour {
      *
      */
     async selectFirst() {
-        let navElements = this.menuNav.querySelectorAll('.nav-element');
-        if (navElements.length >= 1 && navElements[0]) {
-            return await this.selectNode(navElements[0]);
+        const firstPageElement = this.menuNav.querySelector(
+            '.nav-element[nav-id]:not([nav-id="root"])'
+        );
+        const fallbackRootElement = this.menuNav.querySelector(
+            '.nav-element[nav-id="root"]'
+        );
+        const elementToSelect = firstPageElement || fallbackRootElement;
+
+        if (elementToSelect) {
+            return await this.selectNode(elementToSelect);
         }
         // No elements found - return null gracefully
         console.warn('[MenuStructureBehaviour] No nav elements found to select');

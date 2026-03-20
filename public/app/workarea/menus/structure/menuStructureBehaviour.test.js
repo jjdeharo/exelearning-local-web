@@ -916,6 +916,42 @@ describe('MenuStructureBehaviour', () => {
     });
 
     describe('selectFirst', () => {
+        it('prefers the first real page over root on initial selection', async () => {
+            document.getElementById('nav_list').innerHTML = `
+                <div class="nav-element toggle-on" nav-id="root" page-id="root"></div>
+                <div class="nav-element toggle-on" nav-id="node-1" page-id="page-1"></div>
+                <div class="nav-element toggle-on" nav-id="node-2" page-id="page-2"></div>
+            `;
+
+            const selectSpy = vi
+                .spyOn(behaviour, 'selectNode')
+                .mockResolvedValue(document.querySelector('.nav-element[nav-id="node-1"]'));
+
+            const result = await behaviour.selectFirst();
+
+            expect(selectSpy).toHaveBeenCalledWith(
+                document.querySelector('.nav-element[nav-id="node-1"]')
+            );
+            expect(result?.getAttribute('nav-id')).toBe('node-1');
+        });
+
+        it('falls back to root when there are no real pages', async () => {
+            document.getElementById('nav_list').innerHTML = `
+                <div class="nav-element toggle-on" nav-id="root" page-id="root"></div>
+            `;
+
+            const selectSpy = vi
+                .spyOn(behaviour, 'selectNode')
+                .mockResolvedValue(document.querySelector('.nav-element[nav-id="root"]'));
+
+            const result = await behaviour.selectFirst();
+
+            expect(selectSpy).toHaveBeenCalledWith(
+                document.querySelector('.nav-element[nav-id="root"]')
+            );
+            expect(result?.getAttribute('nav-id')).toBe('root');
+        });
+
         it('returns null if no nav elements found', async () => {
             document.getElementById('nav_list').innerHTML = ''; // Clear nav list
             const result = await behaviour.selectFirst();

@@ -71,7 +71,7 @@ test.describe('Text iDevice', () => {
             // Reload the page
             await reloadPage(page);
 
-            // Navigate to the page (after reload, project shows metadata by default)
+            // After reload the first editable page should be selected automatically.
             const pageNode = page
                 .locator('.nav-element-text')
                 .filter({ hasText: /New page|Nueva página/i })
