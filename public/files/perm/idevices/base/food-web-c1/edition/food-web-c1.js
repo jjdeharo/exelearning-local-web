@@ -462,11 +462,19 @@ var $exeDevice = {
     },
 
     getLocale: function () {
-        const htmlLang =
-            (document.documentElement &&
-                document.documentElement.lang &&
-                document.documentElement.lang.toLowerCase()) ||
+        const explicit =
+            this.ideviceBody?.querySelector?.('#fwc1-locale')?.value ||
+            this.idevicePreviousData?.ecosystemContext?.locale ||
+            this.idevicePreviousData?.locale ||
             '';
+        const htmlLang =
+            String(
+                explicit ||
+                    (document.documentElement &&
+                        document.documentElement.lang &&
+                        document.documentElement.lang.toLowerCase()) ||
+                    ''
+            ).toLowerCase();
         if (htmlLang.indexOf('ca') === 0) return 'ca';
         if (htmlLang.indexOf('en') === 0) return 'en';
         return 'es';
@@ -480,15 +488,15 @@ var $exeDevice = {
 
     getDefaultData: function () {
         return {
-            title: 'Red trófica del humedal',
-            subtitle: 'Ecosistema de agua dulce',
+            title: 'Red trófica del bosque mediterráneo',
+            subtitle: 'Interacciones básicas en un ecosistema mediterráneo',
             instructions:
                 '<p>Explora las especies, observa las relaciones y responde a las preguntas.</p>',
             ecosystemContext: {
-                name: 'Humedal mediterráneo',
-                biome: 'humedal',
+                name: 'Bosque mediterráneo',
+                biome: 'bosque y matorral mediterráneo',
                 level: 'ESO',
-                course: '1.º ESO',
+                course: '2.º ESO',
                 locale: 'es',
                 notes: '',
             },
@@ -503,77 +511,136 @@ var $exeDevice = {
             },
             species: [
                 {
-                    id: 'sp-alga',
-                    name: 'Algas',
+                    id: 'sp-encina',
+                    name: 'Encina',
                     role: 'producer',
-                    group: 'protist',
-                    description: 'Base fotosintética del ecosistema.',
+                    group: 'planta',
+                    description:
+                        'Árbol característico del bosque mediterráneo. Produce hojas, brotes y bellotas.',
                     image: '',
-                    traits: ['native', 'aquatic'],
-                    importance: 'base',
+                    traits: ['autótrofa', 'perenne'],
+                    importance: 'productor principal',
                 },
                 {
-                    id: 'sp-caracol',
-                    name: 'Caracol acuático',
+                    id: 'sp-romero',
+                    name: 'Romero',
+                    role: 'producer',
+                    group: 'planta',
+                    description:
+                        'Arbusto aromático frecuente en el matorral mediterráneo.',
+                    image: '',
+                    traits: ['autótrofa', 'aromática'],
+                    importance: 'productor secundario',
+                },
+                {
+                    id: 'sp-conejo',
+                    name: 'Conejo europeo',
                     role: 'primary-consumer',
-                    group: 'mollusk',
-                    description: 'Consume algas y restos vegetales.',
+                    group: 'mamífero',
+                    description:
+                        'Herbívoro común que consume brotes, hojas y tallos tiernos.',
                     image: '',
-                    traits: ['native', 'herbivore'],
-                    importance: 'intermediate',
+                    traits: ['herbívoro', 'presa frecuente'],
+                    importance: 'consumidor primario clave',
                 },
                 {
-                    id: 'sp-rana',
-                    name: 'Rana',
+                    id: 'sp-lagartija',
+                    name: 'Lagartija ibérica',
                     role: 'secondary-consumer',
-                    group: 'amphibian',
-                    description: 'Depreda pequeños invertebrados.',
+                    group: 'reptil',
+                    description:
+                        'Pequeño depredador de insectos y otros invertebrados.',
                     image: '',
-                    traits: ['native', 'predator'],
-                    importance: 'indicator',
+                    traits: ['insectívora', 'presa'],
+                    importance: 'consumidor secundario',
+                },
+                {
+                    id: 'sp-aguila',
+                    name: 'Águila culebrera',
+                    role: 'tertiary-consumer',
+                    group: 'ave',
+                    description:
+                        'Ave rapaz que se alimenta de reptiles y pequeños vertebrados.',
+                    image: '',
+                    traits: ['depredadora', 'rapaz'],
+                    importance: 'superdepredador',
                 },
             ],
             relations: [
                 {
                     id: 'rel-1',
-                    from: 'sp-caracol',
-                    to: 'sp-alga',
+                    from: 'sp-conejo',
+                    to: 'sp-encina',
                     type: 'eats',
                     strength: 'medium',
-                    note: 'El caracol se alimenta de algas.',
+                    note:
+                        'Consume brotes tiernos, plántulas y partes vegetativas de la encina.',
                 },
                 {
                     id: 'rel-2',
-                    from: 'sp-rana',
-                    to: 'sp-caracol',
+                    from: 'sp-conejo',
+                    to: 'sp-romero',
+                    type: 'eats',
+                    strength: 'low',
+                    note:
+                        'Puede ramonear brotes tiernos y plantas jóvenes del matorral.',
+                },
+                {
+                    id: 'rel-3',
+                    from: 'sp-lagartija',
+                    to: 'sp-conejo',
+                    type: 'competes',
+                    strength: 'low',
+                    note:
+                        'Compiten de forma indirecta por algunos recursos del sotobosque y refugios.',
+                },
+                {
+                    id: 'rel-4',
+                    from: 'sp-aguila',
+                    to: 'sp-lagartija',
                     type: 'eats',
                     strength: 'medium',
-                    note: 'La rana se alimenta del caracol.',
+                    note:
+                        'Puede capturar lagartijas cuando están expuestas al sol.',
+                },
+                {
+                    id: 'rel-5',
+                    from: 'sp-aguila',
+                    to: 'sp-conejo',
+                    type: 'eats',
+                    strength: 'high',
+                    note:
+                        'También captura pequeños mamíferos como el conejo europeo.',
                 },
             ],
             questions: [
                 {
                     id: 'q-1',
                     type: 'multiple-choice',
-                    prompt: '¿Qué ocurriría si disminuyen mucho las algas?',
+                    prompt:
+                        '¿Qué ocurriría si disminuye mucho la población de encinas?',
                     options: [
-                        'Aumentarían todos los consumidores primarios',
-                        'Disminuirían algunos consumidores primarios',
-                        'No cambiaría nada',
+                        'Aumentaría la disponibilidad de alimento para el conejo',
+                        'Disminuiría parte del alimento disponible para el conejo europeo',
+                        'No afectaría a ningún otro organismo',
                     ],
                     correctAnswers: [1],
                     explanation:
-                        'Las algas sostienen a parte de los consumidores primarios.',
+                        'La encina es uno de los productores principales y sostiene a varios consumidores.',
                 },
             ],
             scenarios: [
                 {
                     id: 'sc-1',
-                    title: 'Llegada de especie invasora',
-                    changeType: 'invasive-arrival',
-                    targetSpeciesId: 'sp-rana',
-                    prompt: 'Predice una consecuencia probable en la red.',
-                    expectedEffects: ['Competencia por alimento', 'Cambio en las poblaciones'],
+                    title: 'Sequía prolongada',
+                    changeType: 'drought',
+                    targetSpeciesId: 'sp-encina',
+                    prompt:
+                        'Predice una consecuencia probable en la red si disminuye la producción vegetal por falta de agua.',
+                    expectedEffects: [
+                        'Disminución del alimento disponible para el conejo europeo',
+                        'Cambios en las poblaciones de depredadores',
+                    ],
                 },
             ],
             evaluation: false,
@@ -881,7 +948,7 @@ var $exeDevice = {
                 ${this.inputField('fwc1-ai-ecosystem', this.t('Ecosystem'), data.ecosystemContext.name)}
                 ${this.inputField('fwc1-ai-level', this.t('Level'), data.ecosystemContext.level)}
                 ${this.inputField('fwc1-ai-course', this.t('Course'), data.ecosystemContext.course)}
-                ${this.inputField('fwc1-ai-species-count', this.t('Approx. species'), String(data.species.length), 'number')}
+                ${this.inputField('fwc1-ai-species-count', this.t('Approx. species'), '5', 'number')}
                 ${this.checkboxField('fwc1-ai-include-decomposer', this.t('Include decomposer'), true)}
                 ${this.checkboxField('fwc1-ai-include-invasive', this.t('Include invasive species'), false)}
                 ${this.checkboxField('fwc1-ai-include-questions', this.t('Include questions'), true)}
@@ -1384,7 +1451,7 @@ var $exeDevice = {
         const ecosystem = this.valueById('fwc1-ai-ecosystem');
         const level = this.valueById('fwc1-ai-level');
         const course = this.valueById('fwc1-ai-course');
-        const speciesCount = this.valueById('fwc1-ai-species-count') || '8';
+        const speciesCount = this.valueById('fwc1-ai-species-count') || '5';
         const locale = this.valueById('fwc1-ai-locale');
         const difficulty = this.valueById('fwc1-ai-difficulty');
         const includeDecomposer = this.checkedById('fwc1-ai-include-decomposer');
