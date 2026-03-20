@@ -66,7 +66,7 @@ var $exeDevice = {
             'The file does not contain a valid Punnett square activity set.':
                 'The file does not contain a valid Punnett square activity set.',
             'Import/Export': 'Import/Export',
-            'Artificial Intelligence': 'Artificial Intelligence',
+            'Artificial Intelligence': 'AI',
             'Import activity set': 'Import activity set',
             'Export activity set': 'Export activity set',
             'Choose': 'Choose',
@@ -190,7 +190,7 @@ var $exeDevice = {
             'The file does not contain a valid Punnett square activity set.':
                 'El archivo no contiene una batería válida de actividades de cuadro de Punnett.',
             'Import/Export': 'Importar/Exportar',
-            'Artificial Intelligence': 'Inteligencia artificial',
+            'Artificial Intelligence': 'IA',
             'Import activity set': 'Importar batería de actividades',
             'Export activity set': 'Exportar batería de actividades',
             'Choose': 'Elegir',
@@ -313,7 +313,7 @@ var $exeDevice = {
             'The file does not contain a valid Punnett square activity set.':
                 'El fitxer no conté una bateria vàlida d\'activitats de quadre de Punnett.',
             'Import/Export': 'Importa/Exporta',
-            'Artificial Intelligence': 'Intel·ligència artificial',
+            'Artificial Intelligence': 'IA',
             'Import activity set': 'Importa bateria d\'activitats',
             'Export activity set': 'Exporta bateria d\'activitats',
             'Choose': 'Tria',
@@ -796,8 +796,8 @@ var $exeDevice = {
                     </fieldset>
                     ${$exeDevicesEdition.iDevice.common.getTextFieldset('after')}
                 </div>
-                ${$exeDevicesEdition.iDevice.gamification.common.getLanguageTab(this.ci18n)}
                 ${$exeDevicesEdition.iDevice.gamification.scorm.getTab(true, true, true)}
+                ${$exeDevicesEdition.iDevice.gamification.common.getLanguageTab(this.ci18n)}
                 <div class="exe-form-tab" title="${this.t('Import/Export')}">
                     <p class="exe-block-info">${this.t('You can import a full Punnett square activity set in JSON format or a plain text list of activities.')}</p>
                     <div class="mb-3" data-punnett-upload>
