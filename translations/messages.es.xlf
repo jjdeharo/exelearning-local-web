@@ -137,17 +137,17 @@
         <source>eXeLearning %s is a development version. It is not for production use.</source>
         <target>eXeLearning %s es una versión en desarrollo. No se debe usar en producción.</target>
       </trans-unit>
-      <trans-unit id="Kk_KT2R" resname="This is just a demo version. Not for real projects.">
-        <source>This is just a demo version. Not for real projects.</source>
-        <target>Esta es una versión no oficial para pruebas. No se garantiza su correcto funcionamiento. Puedes usarla bajo tu propia responsabilidad.</target>
+      <trans-unit id="Kk_KT2R" resname="This is an unofficial version for testing and experimentation.">
+        <source>This is an unofficial version for testing and experimentation.</source>
+        <target>Esta es una versión no oficial para pruebas y experimentación. No se garantiza su correcto funcionamiento. Puedes usarla bajo tu propia responsabilidad.</target>
       </trans-unit>
       <trans-unit id="PH37mHg" resname="eXeLearning %s has expired! Please download the latest version.">
         <source>eXeLearning %s has expired! Please download the latest version.</source>
         <target>eXeLearning %s es una versión para pruebas y ha caducado. Por favor, descarga la última versión.</target>
       </trans-unit>
-      <trans-unit id="0z54hWm" resname="This is just a demo version. Not for real projects. Days before it expires: %s">
-        <source>This is just a demo version. Not for real projects. Days before it expires: %s</source>
-        <target>Esta es una versión no oficial para pruebas. No se garantiza su correcto funcionamiento. Puedes usarla bajo tu propia responsabilidad. Días antes de que deje de funcionar: %s</target>
+      <trans-unit id="0z54hWm" resname="This is an unofficial version for testing and experimentation. Days before it expires: %s">
+        <source>This is an unofficial version for testing and experimentation. Days before it expires: %s</source>
+        <target>Esta es una versión no oficial para pruebas y experimentación. No se garantiza su correcto funcionamiento. Puedes usarla bajo tu propia responsabilidad. Días antes de que deje de funcionar: %s</target>
       </trans-unit>
       <trans-unit id="tiw1v87" resname="Accept">
         <source>Accept</source>

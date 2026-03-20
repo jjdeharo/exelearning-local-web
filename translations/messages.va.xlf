@@ -137,17 +137,17 @@
         <source>eXeLearning %s is a development version. It is not for production use.</source>
         <target>eXeLearning %s és una versió de desenvolupament. No és per a ús en producció.</target>
       </trans-unit>
-      <trans-unit id="Kk_KT2R" resname="This is just a demo version. Not for real projects.">
-        <source>This is just a demo version. Not for real projects.</source>
-        <target>Aquesta és una versió no oficial de prova. No es garanteix el seu funcionament correcte. Pots utilitzar-la sota la teua pròpia responsabilitat.</target>
+      <trans-unit id="Kk_KT2R" resname="This is an unofficial version for testing and experimentation.">
+        <source>This is an unofficial version for testing and experimentation.</source>
+        <target>Aquesta és una versió no oficial de prova i experimentació. No es garanteix el seu funcionament correcte. Pots utilitzar-la sota la teua pròpia responsabilitat.</target>
       </trans-unit>
       <trans-unit id="PH37mHg" resname="eXeLearning %s has expired! Please download the latest version.">
         <source>eXeLearning %s has expired! Please download the latest version.</source>
         <target>eXeLearning %s ha expirat! Si us plau, descarrega la darrera versió.</target>
       </trans-unit>
-      <trans-unit id="0z54hWm" resname="This is just a demo version. Not for real projects. Days before it expires: %s">
-        <source>This is just a demo version. Not for real projects. Days before it expires: %s</source>
-        <target>Aquesta és una versió no oficial de prova. No es garanteix el seu funcionament correcte. Pots utilitzar-la sota la teua pròpia responsabilitat. Dies abans que expiri: %s</target>
+      <trans-unit id="0z54hWm" resname="This is an unofficial version for testing and experimentation. Days before it expires: %s">
+        <source>This is an unofficial version for testing and experimentation. Days before it expires: %s</source>
+        <target>Aquesta és una versió no oficial de prova i experimentació. No es garanteix el seu funcionament correcte. Pots utilitzar-la sota la teua pròpia responsabilitat. Dies abans que expiri: %s</target>
       </trans-unit>
       <trans-unit id="tiw1v87" resname="Accept">
         <source>Accept</source>

@@ -1454,7 +1454,9 @@ export default class App {
 
         // Disable static versions after DEMO_EXPIRATION_DATE
         if ($('body').attr('installation-type') == 'static') {
-            msg = _('This is just a demo version. Not for real projects.');
+            msg = _(
+                'This is an unofficial version for testing and experimentation.'
+            );
             var expires = eXeLearning.expires;
             if (expires.length == 8) {
                 expires = parseInt(expires);
@@ -1483,7 +1485,7 @@ export default class App {
                             return;
                         } else {
                             msg = _(
-                                'This is just a demo version. Not for real projects. Days before it expires: %s'
+                                'This is an unofficial version for testing and experimentation. Days before it expires: %s'
                             );
 
                             var expiresObj = expires.toString();

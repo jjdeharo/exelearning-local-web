@@ -137,17 +137,17 @@
         <source>eXeLearning %s is a development version. It is not for production use.</source>
         <target>~eXeLearning %s estas evoluoversiono. Ĝi ne estas por produktada uzo.</target>
       </trans-unit>
-      <trans-unit id="Kk_KT2R" resname="This is just a demo version. Not for real projects.">
-        <source>This is just a demo version. Not for real projects.</source>
-        <target>~Ĉi tio estas neoficiala prova versio. Ĝia ĝusta funkciado ne estas garantiata. Vi povas uzi ĝin je via propra respondeco.</target>
+      <trans-unit id="Kk_KT2R" resname="This is an unofficial version for testing and experimentation.">
+        <source>This is an unofficial version for testing and experimentation.</source>
+        <target>~Ĉi tio estas neoficiala versio por testado kaj eksperimentado. Ĝia ĝusta funkciado ne estas garantiata. Vi povas uzi ĝin je via propra respondeco.</target>
       </trans-unit>
       <trans-unit id="PH37mHg" resname="eXeLearning %s has expired! Please download the latest version.">
         <source>eXeLearning %s has expired! Please download the latest version.</source>
         <target>~eXeLearning %s eksvalidiĝis! Bonvolu elŝuti la plej novan version.</target>
       </trans-unit>
-      <trans-unit id="0z54hWm" resname="This is just a demo version. Not for real projects. Days before it expires: %s">
-        <source>This is just a demo version. Not for real projects. Days before it expires: %s</source>
-        <target>~Ĉi tio estas neoficiala prova versio. Ĝia ĝusta funkciado ne estas garantiata. Vi povas uzi ĝin je via propra respondeco. Tagoj antaŭ ĝia eksvalidiĝo: %s</target>
+      <trans-unit id="0z54hWm" resname="This is an unofficial version for testing and experimentation. Days before it expires: %s">
+        <source>This is an unofficial version for testing and experimentation. Days before it expires: %s</source>
+        <target>~Ĉi tio estas neoficiala versio por testado kaj eksperimentado. Ĝia ĝusta funkciado ne estas garantiata. Vi povas uzi ĝin je via propra respondeco. Tagoj antaŭ ĝia eksvalidiĝo: %s</target>
       </trans-unit>
       <trans-unit id="tiw1v87" resname="Accept">
         <source>Accept</source>
