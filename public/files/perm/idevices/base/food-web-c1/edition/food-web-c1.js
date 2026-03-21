@@ -65,8 +65,16 @@ var $exeDevice = {
             Group: 'Grupo',
             Description: 'Descripción',
             Image: 'Imagen',
+            'Image URL': 'URL de la imagen',
             Traits: 'Rasgos',
             Importance: 'Importancia',
+            'Select image': 'Seleccionar imagen',
+            'Clear image': 'Quitar imagen',
+            'Use a remote URL or select/upload an image from the file manager.':
+                'Usa una URL remota o selecciona/sube una imagen desde el gestor de archivos.',
+            'Image preview': 'Vista previa de la imagen',
+            'Unable to upload the image.':
+                'No se ha podido subir la imagen.',
             Source: 'Origen',
             Target: 'Destino',
             Type: 'Tipo',
@@ -206,8 +214,16 @@ var $exeDevice = {
             Group: 'Group',
             Description: 'Description',
             Image: 'Image',
+            'Image URL': 'Image URL',
             Traits: 'Traits',
             Importance: 'Importance',
+            'Select image': 'Select image',
+            'Clear image': 'Clear image',
+            'Use a remote URL or select/upload an image from the file manager.':
+                'Use a remote URL or select/upload an image from the file manager.',
+            'Image preview': 'Image preview',
+            'Unable to upload the image.':
+                'Unable to upload the image.',
             Source: 'Source',
             Target: 'Target',
             Type: 'Type',
@@ -347,8 +363,16 @@ var $exeDevice = {
             Group: 'Grup',
             Description: 'Descripció',
             Image: 'Imatge',
+            'Image URL': "URL de la imatge",
             Traits: 'Trets',
             Importance: 'Importància',
+            'Select image': 'Selecciona una imatge',
+            'Clear image': 'Treu la imatge',
+            'Use a remote URL or select/upload an image from the file manager.':
+                'Fes servir una URL remota o selecciona/puja una imatge des del gestor de fitxers.',
+            'Image preview': 'Vista prèvia de la imatge',
+            'Unable to upload the image.':
+                'No s’ha pogut pujar la imatge.',
             Source: 'Origen',
             Target: 'Destí',
             Type: 'Tipus',
@@ -540,6 +564,8 @@ var $exeDevice = {
     },
 
     getDefaultExampleData: function (locale) {
+        const exampleImageBase =
+            'https://raw.githubusercontent.com/jjdeharo/gist/main/idevice_web_food';
         const examples = {
             es: {
                 title: 'Red trófica del bosque mediterráneo',
@@ -561,7 +587,7 @@ var $exeDevice = {
                         group: 'planta',
                         description:
                             'Árbol característico del bosque mediterráneo que produce hojas y bellotas.',
-                        image: '',
+                        image: `${exampleImageBase}/encina.jpg`,
                         traits: ['autótrofa', 'perenne'],
                         importance: 'productor principal',
                     },
@@ -572,7 +598,7 @@ var $exeDevice = {
                         group: 'mamífero',
                         description:
                             'Herbívoro frecuente que se alimenta de brotes, hierbas y hojas tiernas.',
-                        image: '',
+                        image: `${exampleImageBase}/conejo.jpg`,
                         traits: ['herbívoro', 'presa habitual'],
                         importance: 'consumidor primario clave',
                     },
@@ -583,7 +609,7 @@ var $exeDevice = {
                         group: 'reptil',
                         description:
                             'Reptil depredador que puede capturar pequeños mamíferos y otros vertebrados.',
-                        image: '',
+                        image: `${exampleImageBase}/bastarda.jpg`,
                         traits: ['carnívora', 'depredadora'],
                         importance: 'consumidor secundario',
                     },
@@ -594,7 +620,7 @@ var $exeDevice = {
                         group: 'ave',
                         description:
                             'Ave rapaz que captura serpientes, conejos y otros pequeños vertebrados.',
-                        image: '',
+                        image: `${exampleImageBase}/culebrera.jpg`,
                         traits: ['rapaz', 'depredadora'],
                         importance: 'superdepredador',
                     },
@@ -697,7 +723,7 @@ var $exeDevice = {
                         group: 'plant',
                         description:
                             'A characteristic Mediterranean tree that produces leaves and acorns.',
-                        image: '',
+                        image: `${exampleImageBase}/encina.jpg`,
                         traits: ['autotroph', 'evergreen'],
                         importance: 'main producer',
                     },
@@ -708,7 +734,7 @@ var $exeDevice = {
                         group: 'mammal',
                         description:
                             'A common herbivore that feeds on shoots, grasses, and tender leaves.',
-                        image: '',
+                        image: `${exampleImageBase}/conejo.jpg`,
                         traits: ['herbivore', 'common prey'],
                         importance: 'key primary consumer',
                     },
@@ -719,7 +745,7 @@ var $exeDevice = {
                         group: 'reptile',
                         description:
                             'A predatory reptile that can capture small mammals and other vertebrates.',
-                        image: '',
+                        image: `${exampleImageBase}/bastarda.jpg`,
                         traits: ['carnivorous', 'predator'],
                         importance: 'secondary consumer',
                     },
@@ -730,7 +756,7 @@ var $exeDevice = {
                         group: 'bird',
                         description:
                             'A bird of prey that hunts snakes, rabbits, and other small vertebrates.',
-                        image: '',
+                        image: `${exampleImageBase}/culebrera.jpg`,
                         traits: ['raptor', 'predator'],
                         importance: 'top predator',
                     },
@@ -833,7 +859,7 @@ var $exeDevice = {
                         group: 'planta',
                         description:
                             'Arbre característic del bosc mediterrani que produeix fulles i glans.',
-                        image: '',
+                        image: `${exampleImageBase}/encina.jpg`,
                         traits: ['autòtrofa', 'perenne'],
                         importance: 'productor principal',
                     },
@@ -844,7 +870,7 @@ var $exeDevice = {
                         group: 'mamífer',
                         description:
                             'Herbívor freqüent que s’alimenta de brots, herbes i fulles tendres.',
-                        image: '',
+                        image: `${exampleImageBase}/conejo.jpg`,
                         traits: ['herbívor', 'presa habitual'],
                         importance: 'consumidor primari clau',
                     },
@@ -855,7 +881,7 @@ var $exeDevice = {
                         group: 'rèptil',
                         description:
                             'Rèptil depredador que pot capturar petits mamífers i altres vertebrats.',
-                        image: '',
+                        image: `${exampleImageBase}/bastarda.jpg`,
                         traits: ['carnívora', 'depredadora'],
                         importance: 'consumidor secundari',
                     },
@@ -866,7 +892,7 @@ var $exeDevice = {
                         group: 'au',
                         description:
                             'Au rapaç que captura serps, conills i altres petits vertebrats.',
-                        image: '',
+                        image: `${exampleImageBase}/culebrera.jpg`,
                         traits: ['rapinyaire', 'depredadora'],
                         importance: 'superdepredador',
                     },
@@ -1361,12 +1387,42 @@ var $exeDevice = {
                 ${this.inputField('species-name', this.t('Name'), item.name, 'text', '', 'fwc1-field-wide')}
                 ${this.selectField('species-role', this.t('Role'), this.getRoleOptions(), item.role, 'fwc1-field-medium')}
                 ${this.inputField('species-group', this.t('Group'), item.group, 'text', '', 'fwc1-field-medium')}
-                ${this.inputField('species-image', this.t('Image'), item.image, 'text', '', 'fwc1-field-wide')}
+                ${this.getSpeciesImageField(item)}
                 ${this.inputField('species-importance', this.t('Importance'), item.importance, 'text', '', 'fwc1-field-wide')}
                 ${this.textareaField('species-description', this.t('Description'), item.description, 3, '', 'fwc1-field-full')}
                 ${this.inputField('species-traits', this.t('Traits'), item.traits.join(', '), 'text', this.t('One trait per comma.'), 'fwc1-field-full')}
             </div>
         </article>`;
+    },
+
+    getSpeciesImageField: function (item) {
+        const imageValue = item.image || '';
+        const hasImage = !!imageValue.trim();
+        const previewContent = hasImage
+            ? `<img src="${this.escapeAttribute(
+                  imageValue
+              )}" alt="${this.escapeAttribute(item.name || this.t('Image preview'))}" />`
+            : `<span>${this.t('Image preview')}</span>`;
+        return `<div class="fwc1-field fwc1-field-full fwc1-species-image-field">
+            <span>${this.t('Image URL')}</span>
+            <div class="fwc1-species-image-row">
+                <input id="species-image" type="text" data-field="species-image" value="${this.escapeAttribute(
+                    imageValue
+                )}" />
+                <button type="button" class="btn btn-secondary fwc1-select-image">${this.t(
+                    'Select image'
+                )}</button>
+                <button type="button" class="btn btn-link fwc1-clear-image" ${
+                    hasImage ? '' : 'hidden'
+                }>${this.t('Clear image')}</button>
+            </div>
+            <div class="fwc1-species-image-preview ${
+                hasImage ? 'has-image' : ''
+            }" data-image-preview="true">
+                ${previewContent}
+            </div>
+            <small>${this.t('Use a remote URL or select/upload an image from the file manager.')}</small>
+        </div>`;
     },
 
     getRelationRow: function (item, species) {
@@ -1502,6 +1558,24 @@ var $exeDevice = {
             const remove = event.target.closest('.fwc1-delete-row');
             if (remove) {
                 this.deleteRow(remove.closest('.fwc1-repeatable'));
+                return;
+            }
+            const selectImage = event.target.closest('.fwc1-select-image');
+            if (selectImage) {
+                const card = selectImage.closest('[data-kind="species"]');
+                this.openSpeciesImagePicker(card);
+                return;
+            }
+            const clearImage = event.target.closest('.fwc1-clear-image');
+            if (clearImage) {
+                const card = clearImage.closest('[data-kind="species"]');
+                if (!card) return;
+                const imageField = card.querySelector('[data-field="species-image"]');
+                if (imageField) {
+                    imageField.value = '';
+                    delete imageField.dataset.blobUrl;
+                }
+                this.updateSpeciesImagePreview(card);
             }
         });
         root.addEventListener('input', (event) => {
@@ -1510,6 +1584,12 @@ var $exeDevice = {
                 const idInput = card.querySelector('[data-field="species-id"]');
                 idInput.value = this.slugify(event.target.value, 'sp');
                 this.refreshSpeciesDependentSelects();
+                this.updateSpeciesImagePreview(card);
+            }
+            if (event.target && event.target.dataset.field === 'species-image') {
+                const card = event.target.closest('[data-kind="species"]');
+                delete event.target.dataset.blobUrl;
+                this.updateSpeciesImagePreview(card);
             }
         });
         root.querySelector('#fwc1-generate-prompt').addEventListener('click', () => {
@@ -1553,6 +1633,82 @@ var $exeDevice = {
         root.querySelector('#fwc1-import-pasted').addEventListener('click', () => {
             this.importText(root.querySelector('#fwc1-pasted-import').value);
         });
+        this.refreshSpeciesImagePreviews();
+    },
+
+    refreshSpeciesImagePreviews: function () {
+        this.ideviceBody
+            .querySelectorAll('[data-kind="species"]')
+            .forEach((card) => this.updateSpeciesImagePreview(card));
+    },
+
+    resolveSpeciesImagePreviewUrl: async function (input) {
+        const imageUrl = (input?.value || '').trim();
+        if (!imageUrl) return '';
+        if (input.dataset.blobUrl) return input.dataset.blobUrl;
+        if (
+            imageUrl.indexOf('asset://') === 0 &&
+            eXeLearning?.app?.project?._yjsBridge?.assetManager?.resolveAssetURL
+        ) {
+            const blobUrl =
+                await eXeLearning.app.project._yjsBridge.assetManager.resolveAssetURL(
+                    imageUrl
+                );
+            if (blobUrl) {
+                input.dataset.blobUrl = blobUrl;
+                return blobUrl;
+            }
+        }
+        return imageUrl;
+    },
+
+    updateSpeciesImagePreview: async function (card) {
+        if (!card) return;
+        const input = card.querySelector('[data-field="species-image"]');
+        const preview = card.querySelector('[data-image-preview="true"]');
+        const clearButton = card.querySelector('.fwc1-clear-image');
+        const speciesName = card.querySelector('[data-field="species-name"]')?.value || '';
+        if (!input || !preview) return;
+        const imageUrl = (input.value || '').trim();
+        if (clearButton) clearButton.hidden = !imageUrl;
+        if (!imageUrl) {
+            preview.classList.remove('has-image');
+            preview.innerHTML = `<span>${this.t('Image preview')}</span>`;
+            return;
+        }
+        const currentValue = imageUrl;
+        const previewUrl = await this.resolveSpeciesImagePreviewUrl(input);
+        if ((input.value || '').trim() !== currentValue) return;
+        preview.classList.add('has-image');
+        preview.innerHTML = `<img src="${this.escapeAttribute(
+            previewUrl
+        )}" alt="${this.escapeAttribute(speciesName || this.t('Image preview'))}" />`;
+    },
+
+    openSpeciesImagePicker: function (card) {
+        if (!card) return;
+        const filemanager = window.eXeLearning?.app?.modals?.filemanager;
+        if (!filemanager?.show) return;
+        filemanager.show({
+            accept: 'image',
+            onSelect: (result) => this.applySelectedSpeciesImage(card, result),
+        });
+    },
+
+    applySelectedSpeciesImage: async function (card, result) {
+        if (!card || !result?.assetUrl) return;
+        const imageField = card.querySelector('[data-field="species-image"]');
+        if (!imageField) return;
+        try {
+            imageField.value = result.assetUrl;
+            if (result.blobUrl) imageField.dataset.blobUrl = result.blobUrl;
+            else delete imageField.dataset.blobUrl;
+            await this.updateSpeciesImagePreview(card);
+            imageField.dispatchEvent(new Event('change', { bubbles: true }));
+        } catch (error) {
+            console.error('[food-web-c1] Error applying selected image:', error);
+            window.eXe?.app?.alert?.(this.t('Unable to upload the image.'));
+        }
     },
 
     addRow: function (target) {
@@ -1602,6 +1758,10 @@ var $exeDevice = {
         const list = this.ideviceBody.querySelector(`#fwc1-${target}-list`);
         list.insertAdjacentHTML('beforeend', defaults[target]);
         this.refreshSpeciesDependentSelects();
+        if (target === 'species') {
+            const lastCard = list.lastElementChild;
+            this.updateSpeciesImagePreview(lastCard);
+        }
     },
 
     duplicateRow: function (card) {
@@ -1615,6 +1775,9 @@ var $exeDevice = {
         }
         card.insertAdjacentElement('afterend', clone);
         this.refreshSpeciesDependentSelects();
+        if (kind === 'species') {
+            this.updateSpeciesImagePreview(clone);
+        }
     },
 
     deleteRow: function (card) {

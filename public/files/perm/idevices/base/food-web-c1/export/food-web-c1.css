@@ -128,10 +128,10 @@ body.fwx-graph-open {
     border: 1px solid color-mix(in srgb, var(--species-color, #2f7d32) 30%, white);
     background: color-mix(in srgb, var(--species-color, #2f7d32) 10%, white);
     border-radius: 12px;
-    padding: 0.7rem 0.85rem;
+    padding: 0.5rem 0.65rem;
     display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    gap: 0.1rem;
     min-width: 11rem;
     max-width: 14rem;
     text-align: left;
@@ -144,6 +144,25 @@ body.fwx-graph-open {
         box-shadow 0.2s ease,
         transform 0.2s ease,
         border-color 0.2s ease;
+}
+
+.food-web-c1-content .fwx-species-thumb {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    margin-bottom: 0.2rem;
+    padding: 0.15rem;
+    border-radius: 10px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.55);
+}
+
+.food-web-c1-content .fwx-species-thumb img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 7rem;
+    object-fit: contain;
 }
 
 .food-web-c1-content .fwx-species-button.is-active {
@@ -169,12 +188,6 @@ body.fwx-graph-open {
     stroke-linecap: round;
 }
 
-.food-web-c1-content .fwx-edge.is-active .fwx-edge-path {
-    stroke: var(--fwx-accent);
-    stroke-width: 6;
-    opacity: 1;
-}
-
 .food-web-c1-content .fwx-edge-label {
     fill: #45544a;
     font-size: 12px;
@@ -184,6 +197,24 @@ body.fwx-graph-open {
     stroke: #fcfdfb;
     stroke-width: 5px;
     stroke-linejoin: round;
+}
+
+.food-web-c1-content .fwx-detail-image {
+    display: grid;
+    place-items: center;
+    margin-bottom: 0.9rem;
+    padding: 0.45rem;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f5f8f2;
+}
+
+.food-web-c1-content .fwx-detail-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 20rem;
+    object-fit: contain;
 }
 
 .food-web-c1-content .fwx-side {

@@ -18,7 +18,7 @@ var $foodwebc1 = {
             decomposes: 'descompone',
             'competes with': 'compite con',
             'parasite of': 'parasita a',
-            Traits: 'Trets',
+            Traits: 'Rasgos',
             Importance: 'Importancia',
             Relations: 'Relaciones',
             'No direct relations available.': 'No hay relaciones directas.',
@@ -505,7 +505,6 @@ var $foodwebc1 = {
                 });
                 this.updateDetailPanel(root, species);
                 this.updateRelationsPanel(root, runtime, species);
-                this.highlightGraph(root, species.id);
             });
         });
         root.querySelectorAll('.fwx-question').forEach((questionNode) => {
@@ -929,6 +928,7 @@ var $foodwebc1 = {
                     )}" data-role="${this.escapeAttribute(
                         item.role
                     )}" style="--species-color:${this.rolePalette[item.role] || '#4d908e'}">
+                        ${this.getSpeciesImageMarkup(item, 'fwx-species-thumb')}
                         <span class="fwx-species-name">${this.escapeHtml(item.name)}</span>
                     </button>`
                 )
@@ -940,6 +940,7 @@ var $foodwebc1 = {
         if (!species) return '<div class="fwx-detail-panel"></div>';
         return `<div class="fwx-detail-panel" data-detail-panel="true">
             <h3>${this.escapeHtml(species.name)}</h3>
+            ${this.getSpeciesImageMarkup(species, 'fwx-detail-image')}
             <p class="fwx-detail-role">${this.escapeHtml(this.t(this.roleLabels[species.role] || species.role, data))}</p>
             ${species.description ? `<p>${this.escapeHtml(species.description)}</p>` : ''}
             ${
@@ -953,6 +954,20 @@ var $foodwebc1 = {
                     : ''
             }
         </div>`;
+    },
+
+    getSpeciesImageMarkup: function (species, className) {
+        const imageUrl = (species?.image || '').trim();
+        if (!imageUrl) return '';
+        const escapedUrl = this.escapeAttribute(imageUrl);
+        const assetAttrs = imageUrl.indexOf('asset://') === 0
+            ? ` data-asset-url="${escapedUrl}" data-asset-origin="${escapedUrl}"`
+            : '';
+        return `<span class="${className}">
+            <img src="${escapedUrl}"${assetAttrs} alt="${this.escapeAttribute(
+                species.name || ''
+            )}" loading="lazy" />
+        </span>`;
     },
 
     getRelationsPanel: function (data, species) {
@@ -1086,9 +1101,6 @@ var $foodwebc1 = {
             const height = stage.clientHeight;
             if (width > 80 && height > 80) {
                 this.drawGraph(root, data, ideviceId);
-                if (data.species[0]) {
-                    this.highlightGraph(root, data.species[0].id);
-                }
                 return;
             }
             if (remaining <= 0 || typeof window === 'undefined') return;
@@ -1143,19 +1155,24 @@ var $foodwebc1 = {
                     `.fwx-species-button[data-species-id="${relation.to}"]`
                 );
                 if (!fromNode || !toNode) return '';
-                const fromRect = fromNode.getBoundingClientRect();
-                const toRect = toNode.getBoundingClientRect();
-                const fromCenter = this.getNodeCenter(fromRect, stageRect);
-                const toCenter = this.getNodeCenter(toRect, stageRect);
-                const start = this.getEdgePoint(fromRect, stageRect, toCenter);
+                const usesEnergyFlowDirection = this.usesEnergyFlowDirection(
+                    relation.type
+                );
+                const visualSourceNode = usesEnergyFlowDirection ? toNode : fromNode;
+                const visualTargetNode = usesEnergyFlowDirection ? fromNode : toNode;
+                const sourceRect = visualSourceNode.getBoundingClientRect();
+                const targetRect = visualTargetNode.getBoundingClientRect();
+                const sourceCenter = this.getNodeCenter(sourceRect, stageRect);
+                const targetCenter = this.getNodeCenter(targetRect, stageRect);
+                const start = this.getEdgePoint(sourceRect, stageRect, targetCenter);
                 const end = this.shortenSegmentEnd(
                     start,
-                    this.getEdgePoint(toRect, stageRect, fromCenter),
+                    this.getEdgePoint(targetRect, stageRect, sourceCenter),
                     12
                 );
                 const curve = this.buildCurve(start, end);
                 const edgeColor =
-                    this.rolePalette[fromNode.dataset.role] || '#2f7d32';
+                    this.rolePalette[visualSourceNode.dataset.role] || '#2f7d32';
                 const label = this.relationLabels[relation.type] || relation.type;
                 const labelX = (start.x + end.x) / 2;
                 const labelY = (start.y + end.y) / 2 - 8;
@@ -1185,6 +1202,14 @@ var $foodwebc1 = {
             </marker>
         </defs>${paths}`;
         this.applyPanTransform(root);
+    },
+
+    usesEnergyFlowDirection: function (relationType) {
+        return (
+            relationType === 'eats' ||
+            relationType === 'decomposes' ||
+            relationType === 'parasite-of'
+        );
     },
 
     applyPanTransform: function (root) {
@@ -1255,11 +1280,7 @@ var $foodwebc1 = {
     },
 
     highlightGraph: function (root, speciesId) {
-        root.querySelectorAll('.fwx-edge').forEach((edge) => {
-            const active =
-                edge.dataset.from === speciesId || edge.dataset.to === speciesId;
-            edge.classList.toggle('is-active', active);
-        });
+        return;
     },
 
     positionNodes: function (root, data) {
@@ -1270,56 +1291,251 @@ var $foodwebc1 = {
         const stageHeight = stage.clientHeight;
         if (!stageWidth || !stageHeight) return;
 
-        const roleAnchors = {
-            producer: { x: 0.14, y: 0.18 },
-            'primary-consumer': { x: 0.4, y: 0.42 },
-            'secondary-consumer': { x: 0.68, y: 0.44 },
-            'tertiary-consumer': { x: 0.86, y: 0.18 },
-            omnivore: { x: 0.84, y: 0.74 },
-            decomposer: { x: 0.18, y: 0.78 },
-        };
         const nodesById = {};
+        const nodeSizes = {};
         Array.from(canvas.querySelectorAll('.fwx-species-button')).forEach((node) => {
             nodesById[node.dataset.speciesId] = node;
+            nodeSizes[node.dataset.speciesId] = {
+                width: node.offsetWidth || 180,
+                height: node.offsetHeight || 96,
+            };
         });
-        this.roleOrder.forEach((role) => {
-            const nodes = Array.from(
-                canvas.querySelectorAll(`.fwx-species-button[data-role="${role}"]`)
-            );
-            if (!nodes.length) return;
-            const anchor = roleAnchors[role] || { x: 0.5, y: 0.5 };
-            const bandWidth = Math.min(stageWidth * 0.14, 140);
-            const bandHeight = Math.min(stageHeight * 0.12, 90);
-            nodes.forEach((node, index) => {
-                if (node.dataset.manualX && node.dataset.manualY) {
-                    node.style.left = `${node.dataset.manualX}px`;
-                    node.style.top = `${node.dataset.manualY}px`;
-                    return;
-                }
-                const rect = node.getBoundingClientRect();
-                const width = rect.width || 180;
-                const height = rect.height || 76;
-                const offsetX =
-                    nodes.length > 1
-                        ? ((index % 3) - 1) * bandWidth
-                        : 0;
-                const offsetY =
-                    nodes.length > 1
-                        ? (Math.floor(index / 3) - Math.floor((nodes.length - 1) / 6)) *
-                          bandHeight
-                        : 0;
-                const x = anchor.x * stageWidth + offsetX - width / 2;
-                const y = anchor.y * stageHeight + offsetY - height / 2;
-                node.style.left = `${Math.max(12, Math.min(stageWidth - width - 12, x))}px`;
-                node.style.top = `${Math.max(12, Math.min(stageHeight - height - 12, y))}px`;
-            });
+        const autoLayout = this.buildAutoLayout(data, stageWidth, stageHeight, nodeSizes);
+        Object.keys(nodesById).forEach((speciesId) => {
+            const node = nodesById[speciesId];
+            if (!node) return;
+            if (node.dataset.manualX && node.dataset.manualY) {
+                node.style.left = `${node.dataset.manualX}px`;
+                node.style.top = `${node.dataset.manualY}px`;
+                return;
+            }
+            const size = nodeSizes[speciesId] || { width: 180, height: 96 };
+            const layout = autoLayout[speciesId];
+            const left = layout?.left ?? 12;
+            const top = layout?.top ?? (stageHeight - size.height) / 2;
+            node.style.left = `${Math.max(12, Math.min(stageWidth - size.width - 12, left))}px`;
+            node.style.top = `${Math.max(12, Math.min(stageHeight - size.height - 12, top))}px`;
         });
         this.resolveNodeCollisions(canvas, stageWidth, stageHeight);
     },
 
+    buildAutoLayout: function (data, stageWidth, stageHeight, nodeSizes) {
+        const species = data?.species || [];
+        if (!species.length) return {};
+        const marginX = Math.max(22, Math.min(44, stageWidth * 0.04));
+        const marginY = Math.max(18, Math.min(34, stageHeight * 0.05));
+        const minGapY = Math.max(18, Math.min(36, stageHeight * 0.045));
+        const levels = this.computeSpeciesLevels(data);
+        const preferences = this.computeNodeVerticalPreferences(data, levels);
+        const columns = {};
+        species.forEach((item, index) => {
+            const level = levels[item.id] ?? this.getRoleBaseLevel(item.role);
+            if (!columns[level]) columns[level] = [];
+            columns[level].push({ id: item.id, index: index, role: item.role });
+        });
+        const orderedLevels = Object.keys(columns)
+            .map((value) => Number(value))
+            .sort((a, b) => a - b);
+        const columnWidths = orderedLevels.map((level) =>
+            Math.max(
+                ...columns[level].map((entry) => nodeSizes[entry.id]?.width || 180),
+                180
+            )
+        );
+        const columnLefts = this.computeColumnLefts(
+            columnWidths,
+            stageWidth,
+            Math.max(12, Math.min(24, stageWidth * 0.025))
+        );
+        const layout = {};
+        orderedLevels.forEach((level, columnIndex) => {
+            const entries = (columns[level] || []).slice().sort((a, b) => {
+                const preferenceA = preferences[a.id] ?? 0.5;
+                const preferenceB = preferences[b.id] ?? 0.5;
+                if (Math.abs(preferenceA - preferenceB) > 0.0001) {
+                    return preferenceA - preferenceB;
+                }
+                return a.index - b.index;
+            });
+            const tops = this.computeColumnTops(
+                entries.map((entry) => ({
+                    id: entry.id,
+                    desiredCenter: (preferences[entry.id] ?? 0.5) * stageHeight,
+                    height: nodeSizes[entry.id]?.height || 96,
+                })),
+                stageHeight,
+                marginY,
+                minGapY
+            );
+            entries.forEach((entry, entryIndex) => {
+                const size = nodeSizes[entry.id] || { width: 180, height: 96 };
+                layout[entry.id] = {
+                    left:
+                        columnLefts[columnIndex] +
+                        (columnWidths[columnIndex] - size.width) / 2,
+                    top: tops[entryIndex],
+                };
+            });
+        });
+        return layout;
+    },
+
+    getRoleBaseLevel: function (role) {
+        const baseLevels = {
+            producer: 0,
+            'primary-consumer': 1,
+            'secondary-consumer': 2,
+            'tertiary-consumer': 3,
+            omnivore: 2,
+            decomposer: 1,
+        };
+        return baseLevels[role] ?? 0;
+    },
+
+    getTrophicRelations: function (data) {
+        return (data?.relations || []).filter(
+            (relation) =>
+                relation.type === 'eats' ||
+                relation.type === 'decomposes' ||
+                relation.type === 'parasite-of'
+        );
+    },
+
+    computeSpeciesLevels: function (data) {
+        const species = data?.species || [];
+        const levels = {};
+        species.forEach((item) => {
+            levels[item.id] = this.getRoleBaseLevel(item.role);
+        });
+        const trophicRelations = this.getTrophicRelations(data);
+        for (let pass = 0; pass < species.length * 2; pass += 1) {
+            let changed = false;
+            trophicRelations.forEach((relation) => {
+                const preyLevel = levels[relation.to] ?? 0;
+                const predatorLevel = levels[relation.from] ?? 0;
+                const nextLevel = Math.max(predatorLevel, preyLevel + 1);
+                if (nextLevel !== predatorLevel) {
+                    levels[relation.from] = nextLevel;
+                    changed = true;
+                }
+            });
+            if (!changed) break;
+        }
+        return levels;
+    },
+
+    computeNodeVerticalPreferences: function (data, levels) {
+        const species = data?.species || [];
+        const basePreferences = {
+            producer: 0.18,
+            'primary-consumer': 0.58,
+            'secondary-consumer': 0.82,
+            'tertiary-consumer': 0.16,
+            omnivore: 0.5,
+            decomposer: 0.9,
+        };
+        const preferences = {};
+        const neighbors = {};
+        species.forEach((item) => {
+            preferences[item.id] = basePreferences[item.role] ?? 0.5;
+            neighbors[item.id] = [];
+        });
+        this.getTrophicRelations(data).forEach((relation) => {
+            if (!neighbors[relation.from] || !neighbors[relation.to]) return;
+            neighbors[relation.from].push(relation.to);
+            neighbors[relation.to].push(relation.from);
+        });
+        for (let pass = 0; pass < 4; pass += 1) {
+            species.forEach((item) => {
+                const linked = (neighbors[item.id] || []).filter(
+                    (neighborId) => levels[neighborId] !== levels[item.id]
+                );
+                if (!linked.length) return;
+                const average =
+                    linked.reduce(
+                        (sum, neighborId) => sum + (preferences[neighborId] ?? 0.5),
+                        0
+                    ) / linked.length;
+                const base = basePreferences[item.role] ?? 0.5;
+                preferences[item.id] = Math.max(
+                    0.08,
+                    Math.min(0.92, base * 0.75 + average * 0.25)
+                );
+            });
+        }
+        return preferences;
+    },
+
+    computeColumnTops: function (entries, stageHeight, marginY, minGapY) {
+        if (!entries.length) return [];
+        const desiredTops = entries.map((entry) =>
+            Math.max(
+                marginY,
+                Math.min(stageHeight - marginY - entry.height, entry.desiredCenter - entry.height / 2)
+            )
+        );
+        const tops = [];
+        entries.forEach((entry, index) => {
+            const previousBottom =
+                index === 0 ? marginY : tops[index - 1] + entries[index - 1].height + minGapY;
+            tops[index] = Math.max(desiredTops[index], previousBottom);
+        });
+        const lastIndex = entries.length - 1;
+        const maxBottom = stageHeight - marginY;
+        const overflow = tops[lastIndex] + entries[lastIndex].height - maxBottom;
+        if (overflow > 0) {
+            tops[lastIndex] -= overflow;
+            for (let index = lastIndex - 1; index >= 0; index -= 1) {
+                tops[index] = Math.min(
+                    tops[index],
+                    tops[index + 1] - entries[index].height - minGapY
+                );
+            }
+            if (tops[0] < marginY) {
+                const shift = marginY - tops[0];
+                tops.forEach((_, index) => {
+                    tops[index] += shift;
+                });
+            }
+        }
+        return tops;
+    },
+
+    computeColumnLefts: function (columnWidths, stageWidth, marginX) {
+        if (!columnWidths.length) return [];
+        if (columnWidths.length === 1) {
+            return [Math.max(marginX, (stageWidth - columnWidths[0]) / 2)];
+        }
+        const totalColumnWidth = columnWidths.reduce((sum, width) => sum + width, 0);
+        const usableWidth = Math.max(0, stageWidth - marginX * 2);
+        const gap =
+            totalColumnWidth < usableWidth
+                ? Math.max(
+                      18,
+                      (usableWidth - totalColumnWidth) / (columnWidths.length - 1)
+                  )
+                : 12;
+        const lefts = [marginX];
+        for (let index = 1; index < columnWidths.length; index += 1) {
+            lefts[index] = lefts[index - 1] + columnWidths[index - 1] + gap;
+        }
+        const overflow =
+            lefts[lefts.length - 1] +
+            columnWidths[columnWidths.length - 1] +
+            marginX -
+            stageWidth;
+        if (overflow > 0) {
+            lefts.forEach((_, index) => {
+                lefts[index] = Math.max(marginX, lefts[index] - overflow);
+            });
+        }
+        return lefts;
+    },
+
     resolveNodeCollisions: function (canvas, stageWidth, stageHeight) {
         const nodes = Array.from(canvas.querySelectorAll('.fwx-species-button'));
-        for (let pass = 0; pass < 4; pass += 1) {
+        const nodeMargin = 18;
+        for (let pass = 0; pass < 8; pass += 1) {
             nodes.forEach((node, index) => {
                 const rectA = {
                     left: parseFloat(node.style.left || '0'),
@@ -1336,15 +1552,23 @@ var $foodwebc1 = {
                     };
                     const overlapX =
                         Math.min(rectA.left + rectA.width, rectB.left + rectB.width) -
-                        Math.max(rectA.left, rectB.left);
+                        Math.max(rectA.left, rectB.left) +
+                        nodeMargin;
                     const overlapY =
                         Math.min(rectA.top + rectA.height, rectB.top + rectB.height) -
-                        Math.max(rectA.top, rectB.top);
+                        Math.max(rectA.top, rectB.top) +
+                        nodeMargin;
                     if (overlapX <= 0 || overlapY <= 0) return;
-                    const pushX = overlapX / 2 + 10;
-                    const pushY = overlapY / 2 + 10;
-                    const directionX = rectA.left <= rectB.left ? -1 : 1;
-                    const directionY = rectA.top <= rectB.top ? -1 : 1;
+                    const centerAX = rectA.left + rectA.width / 2;
+                    const centerBX = rectB.left + rectB.width / 2;
+                    const centerAY = rectA.top + rectA.height / 2;
+                    const centerBY = rectB.top + rectB.height / 2;
+                    const moveHorizontally =
+                        overlapX < overlapY && Math.abs(centerAX - centerBX) > 18;
+                    const directionX = centerAX <= centerBX ? -1 : 1;
+                    const directionY = centerAY <= centerBY ? -1 : 1;
+                    const pushX = moveHorizontally ? overlapX / 2 + 6 : 0;
+                    const pushY = moveHorizontally ? 0 : overlapY / 2 + 6;
                     const nextALeft = Math.max(
                         12,
                         Math.min(stageWidth - rectA.width - 12, rectA.left + directionX * pushX)
@@ -1423,9 +1647,6 @@ var $foodwebc1 = {
                     node.style.left = `${nextX}px`;
                     node.style.top = `${nextY}px`;
                     this.drawGraph(root, data, ideviceId);
-                    if (node.classList.contains('is-active')) {
-                        this.highlightGraph(root, node.dataset.speciesId);
-                    }
                 };
                 const stop = () => {
                     window.removeEventListener('pointermove', move);

@@ -160,6 +160,45 @@
     color: #4d5d52;
 }
 
+.food-web-c1-editor .fwc1-species-image-row {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+}
+
+.food-web-c1-editor .fwc1-species-image-row input {
+    flex: 1 1 auto;
+}
+
+.food-web-c1-editor .fwc1-species-image-row .btn-link {
+    white-space: nowrap;
+}
+
+.food-web-c1-editor .fwc1-species-image-preview {
+    display: grid;
+    place-items: center;
+    min-height: 8rem;
+    border: 1px dashed var(--fwc1-border-strong);
+    border-radius: 12px;
+    background: var(--fwc1-surface-alt);
+    color: var(--fwc1-muted);
+    overflow: hidden;
+}
+
+.food-web-c1-editor .fwc1-species-image-preview.has-image {
+    padding: 0.5rem;
+    background: #fff;
+    border-style: solid;
+}
+
+.food-web-c1-editor .fwc1-species-image-preview img {
+    display: block;
+    max-width: 100%;
+    max-height: 11rem;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
 .food-web-c1-editor .fwc1-ai-actions {
     justify-content: flex-start;
     flex-wrap: wrap;
@@ -266,7 +305,7 @@
     white-space: nowrap;
 }
 
-.food-web-c1-editor .fwc1-hidden-input {
+.food-web-c1-editor input.fwc1-hidden-input {
     display: none;
 }
 
@@ -291,6 +330,11 @@
     .food-web-c1-editor .fwc1-grid,
     .food-web-c1-editor .fwc1-ai-panels {
         grid-template-columns: 1fr;
+    }
+
+    .food-web-c1-editor .fwc1-species-image-row {
+        flex-wrap: wrap;
+        align-items: stretch;
     }
 
     .food-web-c1-editor .fwc1-field,

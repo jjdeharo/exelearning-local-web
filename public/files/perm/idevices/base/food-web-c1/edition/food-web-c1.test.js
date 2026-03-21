@@ -16,14 +16,32 @@ function loadIdevice(code) {
 
 describe('food-web-c1 edition', () => {
     let $exeDevice;
+    let filemanagerShowMock;
 
     beforeEach(() => {
         global.$exeDevice = undefined;
         eXe.app.clearHistory();
         document.documentElement.setAttribute('lang', 'en');
         document.body.setAttribute('lang', 'en');
+        filemanagerShowMock = vi.fn();
         window.eXeLearning = globalThis.eXeLearning;
         window.eXeLearning.config.locale = 'en';
+        window.eXeLearning.app = {
+            modals: {
+                filemanager: {
+                    show: filemanagerShowMock,
+                },
+            },
+            project: {
+                _yjsBridge: {
+                    assetManager: {
+                        resolveAssetURL: vi
+                            .fn()
+                            .mockResolvedValue('blob:http://localhost/species-image'),
+                    },
+                },
+            },
+        };
         global.$exeDevicesEdition.iDevice.tabs = {
             init: vi.fn(),
         };
@@ -73,6 +91,18 @@ QUESTION: multiple-choice | ¿Qué pasa si disminuye la encina? | Disminuye el c
         expect(data.species[1].name).toBe('Conill europeu');
         expect(data.species[2].name).toBe('Serp verda-i-groga');
         expect(data.species[3].name).toBe('Àguila marcenca');
+        expect(data.species[0].image).toBe(
+            'https://raw.githubusercontent.com/jjdeharo/gist/main/idevice_web_food/encina.jpg'
+        );
+        expect(data.species[1].image).toBe(
+            'https://raw.githubusercontent.com/jjdeharo/gist/main/idevice_web_food/conejo.jpg'
+        );
+        expect(data.species[2].image).toBe(
+            'https://raw.githubusercontent.com/jjdeharo/gist/main/idevice_web_food/bastarda.jpg'
+        );
+        expect(data.species[3].image).toBe(
+            'https://raw.githubusercontent.com/jjdeharo/gist/main/idevice_web_food/culebrera.jpg'
+        );
         expect(
             data.relations.some(
                 (relation) =>
@@ -147,5 +177,38 @@ QUESTION: multiple-choice | ¿Qué pasa si disminuye la encina? | Disminuye el c
         expect(mockElement.textContent).toContain('Configuració general');
         expect(mockElement.textContent).toContain('Títol');
         expect(mockElement.textContent).not.toContain('Configuración general');
+    });
+
+    it('shows an image URL field and uses the standard file manager for species images', async () => {
+        const mockElement = document.createElement('div');
+        document.body.appendChild(mockElement);
+
+        $exeDevice.init(mockElement, $exeDevice.getDefaultData());
+
+        expect(mockElement.textContent).toContain('Image URL');
+        expect(mockElement.textContent).toContain('Select image');
+
+        const firstSpeciesCard = mockElement.querySelector('[data-kind="species"]');
+        expect(firstSpeciesCard?.querySelector('.fwc1-species-image-input')).toBeNull();
+        const imageInput = firstSpeciesCard.querySelector('[data-field="species-image"]');
+        const changeHandler = vi.fn();
+        imageInput.addEventListener('change', changeHandler);
+
+        firstSpeciesCard.querySelector('.fwc1-select-image').click();
+
+        expect(filemanagerShowMock).toHaveBeenCalledOnce();
+        expect(filemanagerShowMock.mock.calls[0][0].accept).toBe('image');
+
+        const onSelect = filemanagerShowMock.mock.calls[0][0].onSelect;
+        await onSelect({
+            assetUrl: 'asset://species/test-image.png',
+            blobUrl: 'blob:http://localhost/species-image',
+        });
+
+        const previewImage = firstSpeciesCard.querySelector('[data-image-preview="true"] img');
+        expect(imageInput.value).toBe('asset://species/test-image.png');
+        expect(imageInput.dataset.blobUrl).toBe('blob:http://localhost/species-image');
+        expect(previewImage.getAttribute('src')).toBe('blob:http://localhost/species-image');
+        expect(changeHandler).toHaveBeenCalledOnce();
     });
 });
