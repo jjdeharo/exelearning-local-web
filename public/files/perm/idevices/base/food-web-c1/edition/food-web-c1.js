@@ -37,13 +37,9 @@ var $exeDevice = {
             'Display options': 'Opciones de visualización',
             'Show legend': 'Mostrar leyenda',
             'Show species cards': 'Mostrar tarjetas de especies',
-            'Show arrows': 'Mostrar flechas',
             'Show relation labels': 'Mostrar etiquetas de relación',
             'Randomize questions': 'Aleatorizar preguntas',
             'Allow reveal answers': 'Permitir mostrar respuestas',
-            Layout: 'Distribución',
-            'By trophic levels': 'Por niveles tróficos',
-            Network: 'Red',
             Evaluation: 'Evaluación',
             'Enable evaluation': 'Activar evaluación',
             'Evaluation ID': 'ID de evaluación',
@@ -186,13 +182,9 @@ var $exeDevice = {
             'Display options': 'Display options',
             'Show legend': 'Show legend',
             'Show species cards': 'Show species cards',
-            'Show arrows': 'Show arrows',
             'Show relation labels': 'Show relation labels',
             'Randomize questions': 'Randomize questions',
             'Allow reveal answers': 'Allow reveal answers',
-            Layout: 'Layout',
-            'By trophic levels': 'By trophic levels',
-            Network: 'Network',
             Evaluation: 'Evaluation',
             'Enable evaluation': 'Enable evaluation',
             'Evaluation ID': 'Evaluation ID',
@@ -335,13 +327,9 @@ var $exeDevice = {
             'Display options': 'Opcions de visualització',
             'Show legend': 'Mostra la llegenda',
             'Show species cards': "Mostra les targetes d'espècies",
-            'Show arrows': 'Mostra les fletxes',
             'Show relation labels': 'Mostra les etiquetes de relació',
             'Randomize questions': 'Barreja les preguntes',
             'Allow reveal answers': 'Permet mostrar les respostes',
-            Layout: 'Distribució',
-            'By trophic levels': 'Per nivells tròfics',
-            Network: 'Xarxa',
             Evaluation: 'Avaluació',
             'Enable evaluation': "Activa l'avaluació",
             'Evaluation ID': "ID d'avaluació",
@@ -1205,20 +1193,9 @@ var $exeDevice = {
                 <div class="fwc1-grid fwc1-grid-tight">
                     ${this.checkboxField('fwc1-show-legend', this.t('Show legend'), options.showLegend, 'fwc1-field-medium')}
                     ${this.checkboxField('fwc1-show-species-cards', this.t('Show species cards'), options.showSpeciesCards, 'fwc1-field-medium')}
-                    ${this.checkboxField('fwc1-show-arrows', this.t('Show arrows'), options.showArrows, 'fwc1-field-medium')}
                     ${this.checkboxField('fwc1-show-relation-labels', this.t('Show relation labels'), options.showRelationLabels, 'fwc1-field-medium')}
                     ${this.checkboxField('fwc1-randomize-questions', this.t('Randomize questions'), options.randomizeQuestions, 'fwc1-field-medium')}
                     ${this.checkboxField('fwc1-allow-reveal', this.t('Allow reveal answers'), options.allowRevealAnswers, 'fwc1-field-medium')}
-                    ${this.selectField(
-                        'fwc1-layout',
-                        this.t('Layout'),
-                        [
-                            { value: 'levels', label: this.t('By trophic levels') },
-                            { value: 'network', label: this.t('Network') },
-                        ],
-                        options.layout,
-                        'fwc1-field-medium'
-                    )}
                 </div>
             </div>
             ${this.getAssessmentSection(data)}
@@ -1806,11 +1783,11 @@ var $exeDevice = {
             displayOptions: {
                 showLegend: this.checkedById('fwc1-show-legend'),
                 showSpeciesCards: this.checkedById('fwc1-show-species-cards'),
-                showArrows: this.checkedById('fwc1-show-arrows'),
+                showArrows: true,
                 showRelationLabels: this.checkedById('fwc1-show-relation-labels'),
                 randomizeQuestions: this.checkedById('fwc1-randomize-questions'),
                 allowRevealAnswers: this.checkedById('fwc1-allow-reveal'),
-                layout: this.valueById('fwc1-layout'),
+                layout: 'levels',
             },
             species: this.collectSpecies(),
             relations: this.collectRelations(),

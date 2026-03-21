@@ -185,6 +185,60 @@ describe('food-web-c1 export', () => {
         expect(Number(curveStart[3])).toBeGreaterThan(220);
     });
 
+    it('translates relation labels in the graph using the idevice locale', () => {
+        const wrapper = document.createElement('div');
+        wrapper.innerHTML = `
+            <section class="food-web-c1-content">
+                <div class="fwx-graph-stage" data-graph-stage="true">
+                    <svg class="fwx-graph-svg" data-graph-svg="true"></svg>
+                    <div class="fwx-graph-canvas" data-graph-canvas="true">
+                        <button class="fwx-species-button" data-species-id="oak" data-role="producer"></button>
+                        <button class="fwx-species-button" data-species-id="rabbit" data-role="primary-consumer"></button>
+                    </div>
+                </div>
+            </section>
+        `;
+        const root = wrapper.querySelector('.food-web-c1-content');
+        const stage = wrapper.querySelector('[data-graph-stage="true"]');
+        const oak = wrapper.querySelector('.fwx-species-button[data-species-id="oak"]');
+        const rabbit = wrapper.querySelector('.fwx-species-button[data-species-id="rabbit"]');
+        const svg = wrapper.querySelector('[data-graph-svg="true"]');
+        const data = {
+            ecosystemContext: { locale: 'es' },
+            displayOptions: { showRelationLabels: true },
+            relations: [{ from: 'rabbit', to: 'oak', type: 'eats' }],
+        };
+
+        stage.getBoundingClientRect = () => ({
+            left: 0,
+            top: 0,
+            width: 400,
+            height: 240,
+            right: 400,
+            bottom: 240,
+        });
+        oak.getBoundingClientRect = () => ({
+            left: 20,
+            top: 40,
+            width: 120,
+            height: 48,
+            right: 140,
+            bottom: 88,
+        });
+        rabbit.getBoundingClientRect = () => ({
+            left: 240,
+            top: 130,
+            width: 120,
+            height: 48,
+            right: 360,
+            bottom: 178,
+        });
+
+        $foodwebc1.drawGraph(root, data, 'fw-test');
+
+        expect(svg.querySelector('.fwx-edge-label')?.textContent).toBe('se alimenta de');
+    });
+
     it('uses the idevice locale instead of the page lang when rendering labels', () => {
         document.documentElement.lang = 'en';
         const data = {

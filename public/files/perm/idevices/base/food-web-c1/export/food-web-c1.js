@@ -1173,7 +1173,10 @@ var $foodwebc1 = {
                 const curve = this.buildCurve(start, end);
                 const edgeColor =
                     this.rolePalette[visualSourceNode.dataset.role] || '#2f7d32';
-                const label = this.relationLabels[relation.type] || relation.type;
+                const label = this.t(
+                    this.relationLabels[relation.type] || relation.type,
+                    data
+                );
                 const labelX = (start.x + end.x) / 2;
                 const labelY = (start.y + end.y) / 2 - 8;
                 const isCompetition = relation.type === 'competes';
