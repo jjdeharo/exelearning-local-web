@@ -306,7 +306,12 @@ function readTemplateContent(basePath: string, folder: string, filename: string)
 /**
  * Parse iDevice config.xml (same logic as server)
  */
-export function parseIdeviceConfig(xmlContent: string, ideviceId: string, basePath: string): IdeviceConfig | null {
+export function parseIdeviceConfig(
+    xmlContent: string,
+    ideviceId: string,
+    basePath: string,
+    ideviceScope: 'base' | 'users' = 'base',
+): IdeviceConfig | null {
     try {
         const getValue = (tag: string): string => {
             const match = xmlContent.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`));
@@ -405,7 +410,7 @@ export function parseIdeviceConfig(xmlContent: string, ideviceId: string, basePa
             licenseUrl: getValue('license-url') || '',
             description: getValue('description') || '',
             downloadable: getValue('downloadable') === '1',
-            url: `/files/perm/idevices/base/${ideviceId}`,
+            url: `/files/perm/idevices/${ideviceScope}/${ideviceId}`,
             editionJs: getValidFilenames('edition-js', 'edition'),
             editionCss: getValidFilenames('edition-css', 'edition'),
             exportJs: getValidFilenames('export-js', 'export'),
@@ -427,36 +432,53 @@ export function parseIdeviceConfig(xmlContent: string, ideviceId: string, basePa
  * Build iDevices list from directory structure with full config data
  */
 function buildIdevicesList(): { idevices: IdeviceConfig[] } {
-    const idevicesDir = path.join(projectRoot, 'public/files/perm/idevices/base');
-    const idevices: IdeviceConfig[] = [];
+    const idevices = new Map<string, IdeviceConfig>();
 
-    if (!fs.existsSync(idevicesDir)) {
-        console.warn('iDevices directory not found:', idevicesDir);
-        return { idevices };
-    }
+    const scanIdevicesDir = (scope: 'base' | 'users') => {
+        const idevicesDir = path.join(projectRoot, `public/files/perm/idevices/${scope}`);
 
-    const dirs = fs.readdirSync(idevicesDir, { withFileTypes: true });
-    for (const dir of dirs) {
-        if (dir.isDirectory() && !dir.name.startsWith('.')) {
+        if (!fs.existsSync(idevicesDir)) {
+            console.warn('iDevices directory not found:', idevicesDir);
+            return;
+        }
+
+        const dirs = fs.readdirSync(idevicesDir, { withFileTypes: true });
+        for (const dir of dirs) {
+            if (!dir.isDirectory() || dir.name.startsWith('.')) {
+                continue;
+            }
+
             const configPath = path.join(idevicesDir, dir.name, 'config.xml');
-            if (fs.existsSync(configPath)) {
-                const xmlContent = fs.readFileSync(configPath, 'utf-8');
-                const config = parseIdeviceConfig(xmlContent, dir.name, path.join(idevicesDir, dir.name));
-                if (config) {
-                    idevices.push(config);
-                }
+            if (!fs.existsSync(configPath)) {
+                continue;
+            }
+
+            const xmlContent = fs.readFileSync(configPath, 'utf-8');
+            const config = parseIdeviceConfig(
+                xmlContent,
+                dir.name,
+                path.join(idevicesDir, dir.name),
+                scope,
+            );
+            if (config) {
+                idevices.set(config.id, config);
             }
         }
-    }
+    };
+
+    scanIdevicesDir('base');
+    scanIdevicesDir('users');
+
+    const idevicesList = Array.from(idevices.values());
 
     // Sort by category then title
-    idevices.sort((a, b) => {
+    idevicesList.sort((a, b) => {
         if (a.category !== b.category) return a.category.localeCompare(b.category);
         return a.title.localeCompare(b.title);
     });
 
-    console.log(`  Found ${idevices.length} iDevices`);
-    return { idevices };
+    console.log(`  Found ${idevicesList.length} iDevices`);
+    return { idevices: idevicesList };
 }
 
 /**
