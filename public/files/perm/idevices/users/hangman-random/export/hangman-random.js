@@ -192,6 +192,7 @@ var $hangmanrandom = {
             successes: 0,
             guessedHits: [],
             guessedMisses: [],
+            remainingWords: this.shuffleWords(data.words || []),
             targetWord: '',
         };
 
@@ -249,7 +250,7 @@ var $hangmanrandom = {
         var state = root._hangmanRandom;
         state.guessedHits = [];
         state.guessedMisses = [];
-        state.targetWord = this.pickWord(state.data.words);
+        state.targetWord = this.pickWord(state);
         this.renderKeyboardState(root);
         this.updateView(root, 'playing');
         if (!state.targetWord) {
@@ -460,11 +461,28 @@ var $hangmanrandom = {
         return found;
     },
 
-    pickWord: function (words) {
-        if (!words || !words.length) {
+    pickWord: function (state) {
+        var words = state && Array.isArray(state.data && state.data.words)
+            ? state.data.words
+            : [];
+        if (!words.length) {
             return '';
         }
-        return words[Math.floor(Math.random() * words.length)];
+        if (!Array.isArray(state.remainingWords) || !state.remainingWords.length) {
+            state.remainingWords = this.shuffleWords(words);
+        }
+        return state.remainingWords.shift() || '';
+    },
+
+    shuffleWords: function (words) {
+        var shuffled = Array.isArray(words) ? words.slice() : [];
+        for (var i = shuffled.length - 1; i > 0; i -= 1) {
+            var j = Math.floor(Math.random() * (i + 1));
+            var temp = shuffled[i];
+            shuffled[i] = shuffled[j];
+            shuffled[j] = temp;
+        }
+        return shuffled;
     },
 
     getLocale: function (root) {
