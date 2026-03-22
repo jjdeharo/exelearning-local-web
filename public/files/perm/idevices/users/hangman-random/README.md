@@ -1,4 +1,4 @@
-# Ahorcado
+# Ahorcado aleatorio
 
 iDevice para eXeLearning que crea un juego del ahorcado con lista de palabras configurable por el autor del recurso.
 
