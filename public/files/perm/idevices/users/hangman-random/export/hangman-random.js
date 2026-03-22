@@ -68,15 +68,17 @@ var $hangmanrandom = {
     },
 
     renderView: function (data, accesibility, template) {
-        var lang = this.getLocale();
-        var messages = this.getMessages(lang);
         var safeData = {
             title: typeof data.title === 'string' ? data.title : '',
             instructions:
                 typeof data.instructions === 'string' ? data.instructions : '',
             words: Array.isArray(data.words) ? data.words : [],
+            locale:
+                typeof data.locale === 'string' ? this.normalizeLocale(data.locale) : '',
             maxAttempts: this.clamp(parseInt(data.maxAttempts, 10) || 6, 4, 10),
         };
+        var lang = this.getLocale(safeData);
+        var messages = this.getMessages(lang);
 
         var title = safeData.title || messages.defaultTitle;
         var instructions =
@@ -87,6 +89,8 @@ var $hangmanrandom = {
             this.ideviceClass +
             '" data-lang="' +
             this.escapeHtml(lang) +
+            '" data-locale="' +
+            this.escapeHtml(safeData.locale || lang) +
             '">';
         htmlContent += '<div class="hangman-random-header">';
         htmlContent += '<h3>' + this.escapeHtml(title) + '</h3>';
@@ -464,8 +468,15 @@ var $hangmanrandom = {
     },
 
     getLocale: function (root) {
+        var explicit =
+            typeof root === 'string'
+                ? root
+                : (root && root.locale) ||
+                  (root && root.getAttribute && root.getAttribute('data-locale')) ||
+                  (root && root.getAttribute && root.getAttribute('data-lang')) ||
+                  '';
         var lang =
-            (root && root.getAttribute('data-lang')) ||
+            explicit ||
             (document.documentElement && document.documentElement.lang) ||
             (navigator.language || 'es');
         return this.normalizeLocale(lang);
@@ -474,7 +485,11 @@ var $hangmanrandom = {
     normalizeLocale: function (lang) {
         var normalized = String(lang || 'es')
             .toLowerCase()
+            .replace('_', '-')
             .split('-')[0];
+        if (normalized === 'va') {
+            normalized = 'ca';
+        }
         if (this.i18n[normalized]) {
             return normalized;
         }

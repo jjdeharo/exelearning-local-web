@@ -88,7 +88,7 @@ var $exeDevice = {
     init: function (element, previousData) {
         this.ideviceBody = element;
         this.idevicePreviousData = previousData || {};
-        this.lang = this.getLocale();
+        this.lang = this.getLocale(this.idevicePreviousData);
         this.name = this.t('name');
         this.createForm();
     },
@@ -114,6 +114,7 @@ var $exeDevice = {
             title: title,
             instructions: instructions,
             words: words,
+            locale: this.lang,
             maxAttempts: this.clamp(
                 maxAttempts,
                 this.attemptsMin,
@@ -280,15 +281,82 @@ var $exeDevice = {
         return Math.max(min, Math.min(max, value));
     },
 
-    getLocale: function () {
-        var lang = $('HTML').attr('lang') || 'es';
-        return this.normalizeLocale(lang);
+    getLocale: function (context) {
+        var candidates = [];
+        var explicit =
+            typeof context === 'string'
+                ? context
+                : context && context.locale
+                  ? context.locale
+                  : '';
+
+        candidates.push(explicit);
+        try {
+            candidates.push(
+                document.body ? document.body.getAttribute('lang') : ''
+            );
+            candidates.push(
+                top.document && top.document.body
+                    ? top.document.body.getAttribute('lang')
+                    : ''
+            );
+        } catch (e) {}
+        try {
+            candidates.push(
+                window.eXeLearning &&
+                    window.eXeLearning.config &&
+                    window.eXeLearning.config.locale
+                    ? window.eXeLearning.config.locale
+                    : ''
+            );
+            candidates.push(
+                top.eXeLearning &&
+                    top.eXeLearning.config &&
+                    top.eXeLearning.config.locale
+                    ? top.eXeLearning.config.locale
+                    : ''
+            );
+        } catch (e) {}
+        try {
+            candidates.push(
+                document.documentElement
+                    ? document.documentElement.getAttribute('lang')
+                    : ''
+            );
+            candidates.push(
+                top.document && top.document.documentElement
+                    ? top.document.documentElement.getAttribute('lang')
+                    : ''
+            );
+        } catch (e) {}
+        candidates.push(navigator.language || '');
+
+        for (var i = 0; i < candidates.length; i++) {
+            var locale = String(candidates[i] || '')
+                .trim()
+                .replace('_', '-')
+                .toLowerCase();
+            if (locale.indexOf('ca') === 0 || locale.indexOf('va') === 0) {
+                return 'ca';
+            }
+            if (locale.indexOf('en') === 0) {
+                return 'en';
+            }
+            if (locale.indexOf('es') === 0) {
+                return 'es';
+            }
+        }
+        return 'es';
     },
 
     normalizeLocale: function (lang) {
         var normalized = String(lang || 'es')
             .toLowerCase()
+            .replace('_', '-')
             .split('-')[0];
+        if (normalized === 'va') {
+            normalized = 'ca';
+        }
         if (this.i18n[normalized]) {
             return normalized;
         }
