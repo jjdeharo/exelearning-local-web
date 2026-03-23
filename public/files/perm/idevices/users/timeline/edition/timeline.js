@@ -321,7 +321,7 @@ var $exeDevice = {
         weighted = Number.isNaN(weighted) ? 100 : Math.max(1, Math.min(weighted, 100));
         return {
             title: title,
-            intro: this.q('#timelineIntro').value.trim(),
+            intro: this.getRichValue('timelineIntro').trim(),
             mode: this.q('#timelineMode').value,
             showDates: this.q('#timelineShowDates').checked,
             shuffleEvents: this.q('#timelineShuffleEvents').checked,
@@ -361,7 +361,7 @@ var $exeDevice = {
                 ['explore', this.t('modeExplore')],
             ], this.state.mode) +
             '</div>' +
-            this.textarea('timelineIntro', this.t('intro'), this.state.intro) +
+            this.richTextarea('timelineIntro', this.t('intro'), this.state.intro) +
             '<div class="timeline-toggle-row">' +
             this.checkbox('timelineShowDates', this.t('showDates'), this.state.showDates) +
             this.checkbox('timelineShuffleEvents', this.t('shuffle'), this.state.shuffleEvents) +
@@ -429,7 +429,8 @@ var $exeDevice = {
             self.syncRichTextEditors();
             self.state.events = [self.emptyEvent()];
             self.q('#timelineTitle').value = '';
-            self.q('#timelineIntro').value = '';
+            if (typeof tinyMCE !== 'undefined' && tinyMCE.get('timelineIntro')) tinyMCE.get('timelineIntro').setContent('');
+            else self.q('#timelineIntro').value = '';
             self.renderEvents();
         });
         this.q('#timelineEvaluation').addEventListener('change', function () {
@@ -888,9 +889,15 @@ var $exeDevice = {
             });
         });
     },
+    getRichValue: function (id) {
+        if (typeof tinyMCE !== 'undefined' && tinyMCE.get(id)) return tinyMCE.get(id).getContent();
+        var field = this.q('#' + id);
+        return field ? field.value : '';
+    },
 
     input: function (id, label, value) { return '<div class="timeline-field"><label for="' + id + '">' + label + '</label><input type="text" id="' + id + '" value="' + this.escape(value) + '"></div>'; },
     textarea: function (id, label, value) { return '<div class="timeline-field"><label for="' + id + '">' + label + '</label><textarea id="' + id + '">' + this.escape(value) + '</textarea></div>'; },
+    richTextarea: function (id, label, value) { return '<div class="timeline-field"><label for="' + id + '">' + label + '</label><textarea id="' + id + '" class="exe-html-editor">' + this.escape(value) + '</textarea></div>'; },
     checkbox: function (id, label, checked) { return '<label for="' + id + '"><input type="checkbox" id="' + id + '"' + (checked ? ' checked' : '') + '> ' + label + '</label>'; },
     select: function (id, label, options, selected) {
         var html = '<div class="timeline-field"><label for="' + id + '">' + label + '</label><select id="' + id + '">';
