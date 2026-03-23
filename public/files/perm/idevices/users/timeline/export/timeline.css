@@ -92,7 +92,7 @@
 .timeline-idevice .timeline-card::before {
     content: '';
     position: absolute;
-    left: -1.35rem;
+    left: calc(-1.1rem - 7px);
     top: 1rem;
     width: 14px;
     height: 14px;
@@ -147,6 +147,24 @@
     align-items: center;
     gap: 0.45rem;
     margin-top: 0.15rem;
+}
+
+.timeline-idevice .timeline-card-main.timeline-has-date {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+}
+
+.timeline-idevice .timeline-card-main.timeline-has-date .timeline-date {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+}
+
+.timeline-idevice .timeline-card-main.timeline-has-date .timeline-title-row {
+    flex: 1 1 240px;
+    min-width: 0;
+    margin-top: 0;
 }
 
 .timeline-idevice .timeline-media-icon {
@@ -254,6 +272,167 @@
     color: var(--timeline-muted);
 }
 
+.timeline-idevice.timeline-style-classic .timeline-events::before {
+    left: 0.8rem;
+    width: 3px;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    overflow: visible;
+    padding-left: 0;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card::before {
+    left: calc(-0.95rem - 7px);
+    top: 1rem;
+    width: 14px;
+    height: 14px;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-events {
+    padding-left: 3rem;
+    gap: 1rem;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card-header {
+    align-items: flex-start;
+    padding: 0.15rem 0 0.15rem;
+    gap: 0.85rem;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card-main {
+    position: relative;
+    border: 1px solid var(--timeline-border);
+    border-radius: 14px;
+    background: #fff;
+    padding: 0.85rem 1rem 0.85rem 1rem;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card.selected .timeline-card-main {
+    border-color: var(--timeline-accent);
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card.correct .timeline-card-main {
+    border-color: #15803d;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card.incorrect .timeline-card-main {
+    border-color: #b91c1c;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-date {
+    width: auto;
+    justify-content: flex-start;
+    text-align: left;
+    font-size: 0.88rem;
+    line-height: 1.1;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-title-row {
+    margin-top: 0;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card-actions {
+    padding-top: 0.55rem;
+}
+
+.timeline-idevice.timeline-style-classic .timeline-card-detail-mobile {
+    margin-top: 0.35rem;
+    padding: 0.95rem 1rem 1rem;
+    border: 1px solid var(--timeline-border);
+    border-radius: 14px;
+    background: var(--timeline-surface);
+}
+
+.timeline-idevice.timeline-style-editorial {
+    --timeline-accent: #9a3412;
+    --timeline-accent-soft: #ffedd5;
+    --timeline-surface: #fff7ed;
+    --timeline-border: #fed7aa;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-header h3 {
+    font-size: 1.7rem;
+    letter-spacing: -0.02em;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-layout {
+    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+    gap: 1.4rem;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-events {
+    padding-left: 5.25rem;
+    gap: 1rem;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-events::before {
+    left: 2.4rem;
+    width: 2px;
+    background: linear-gradient(to bottom, #fdba74, #9a3412);
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-card {
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 0.1rem 0 0.2rem;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-card::before {
+    left: calc(-2.85rem - 8px);
+    top: 0.95rem;
+    width: 16px;
+    height: 16px;
+    box-shadow: 0 0 0 5px var(--timeline-accent-soft);
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-card-header {
+    align-items: flex-start;
+    padding: 0.2rem 0 0.25rem;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-date {
+    display: inline-block;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    background: var(--timeline-accent-soft);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-title {
+    font-size: 1.1rem;
+    line-height: 1.2;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-media-icon {
+    background: transparent;
+    width: auto;
+    height: auto;
+    font-size: 1.05rem;
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-card-actions button {
+    background: #fff;
+    border-color: var(--timeline-border);
+}
+
+.timeline-idevice.timeline-style-editorial .timeline-detail {
+    border-radius: 22px;
+    background: linear-gradient(180deg, #fff7ed 0%, #ffffff 100%);
+    border-color: var(--timeline-border);
+    box-shadow: 0 18px 40px rgba(154, 52, 18, 0.08);
+}
+
 .timeline-idevice .timeline-card-detail-mobile {
     display: none;
     padding: 0 0.95rem 0.95rem;
@@ -273,6 +452,38 @@
 @media (max-width: 860px) {
     .timeline-idevice .timeline-layout {
         grid-template-columns: 1fr;
+    }
+
+    .timeline-idevice.timeline-style-editorial .timeline-events {
+        padding-left: 1.8rem;
+    }
+
+    .timeline-idevice.timeline-style-classic .timeline-events {
+        padding-left: 1.8rem;
+    }
+
+    .timeline-idevice.timeline-style-classic .timeline-events::before {
+        left: 0.55rem;
+    }
+
+    .timeline-idevice.timeline-style-classic .timeline-card::before {
+        left: calc(-1.25rem - 7px);
+    }
+
+    .timeline-idevice.timeline-style-classic .timeline-date {
+        position: static;
+        width: auto;
+        text-align: left;
+        justify-content: flex-start;
+        margin-bottom: 0.2rem;
+    }
+
+    .timeline-idevice.timeline-style-editorial .timeline-events::before {
+        left: 0.55rem;
+    }
+
+    .timeline-idevice.timeline-style-editorial .timeline-card::before {
+        left: calc(-1.25rem - 8px);
     }
 
     .timeline-idevice .timeline-card-header {

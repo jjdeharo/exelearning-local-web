@@ -110,7 +110,7 @@ var $timeline = {
         var showScoreButton = document.body.classList.contains('exe-scorm') && ldata.isScorm > 0 ? 'inline-block' : 'none';
         var html = '';
         html += '<div class="game-evaluation-ids js-hidden" data-id="' + this.escape(ldata.id) + '" data-evaluationb="' + ldata.evaluation + '" data-evaluationid="' + this.escape(ldata.evaluationID) + '"></div>';
-        html += '<div id="timeline-main-' + this.escape(ldata.id) + '" class="' + this.ideviceClass + '" data-mode="' + this.escape(ldata.mode) + '">';
+        html += '<div id="timeline-main-' + this.escape(ldata.id) + '" class="' + this.ideviceClass + ' timeline-style-' + this.escape(ldata.styleVariant) + '" data-mode="' + this.escape(ldata.mode) + '" data-style="' + this.escape(ldata.styleVariant) + '">';
         html += '<div class="timeline-header"><h3>' + this.escape(ldata.title) + '</h3>' + (ldata.intro ? '<div class="timeline-rich-content timeline-intro">' + ldata.intro + '</div>' : '') + '</div>';
         if (ldata.mode === 'order') {
             html += '<div class="timeline-toolbar"><button type="button" class="primary timeline-check">' + strings.check + '</button><button type="button" class="timeline-reset">' + strings.reset + '</button><button type="button" class="timeline-solution">' + strings.solution + '</button></div>';
@@ -255,9 +255,10 @@ var $timeline = {
             var resultClass = '';
             var mediaIcon = this.cardMediaIcon(item, state.strings);
             var isSelected = state.selectedId === item.id;
+            var mainClass = 'timeline-card-main' + (state.data.showDates ? ' timeline-has-date' : '');
             if (state.results && typeof state.results[item.id] === 'boolean') resultClass = state.results[item.id] ? ' correct' : ' incorrect';
             html += '<li class="timeline-card' + (isSelected ? ' selected' : '') + resultClass + '" data-id="' + this.escape(item.id) + '" draggable="' + (state.data.mode === 'order' ? 'true' : 'false') + '">';
-            html += '<div class="timeline-card-header"><div class="timeline-card-main">';
+            html += '<div class="timeline-card-header"><div class="' + mainClass + '">';
             if (state.data.showDates) html += '<div class="timeline-date">' + this.escape(item.displayDate) + '</div>';
             html += '<div class="timeline-title-row"><h4 class="timeline-title">' + this.escape(item.title) + '</h4>' + mediaIcon + '</div></div>';
             if (state.data.mode === 'order') {
@@ -430,7 +431,7 @@ var $timeline = {
     reset: function (root) {
         var state = root._timeline;
         state.current = state.ordered.slice();
-        if (state.data.mode === 'order' && state.data.shuffleEvents) state.current = this.shuffle(state.current.slice());
+        if (state.data.mode === 'order') state.current = this.shuffle(state.current.slice());
         state.selectedId = state.current.length ? state.current[0].id : '';
         state.results = null;
         state.solutionShown = false;
@@ -448,9 +449,9 @@ var $timeline = {
             ideviceId: id,
             title: data.title || 'Timeline',
             intro: data.intro || '',
-            mode: data.mode === 'explore' ? 'explore' : 'order',
-            showDates: typeof data.showDates === 'boolean' ? data.showDates : true,
-            shuffleEvents: typeof data.shuffleEvents === 'boolean' ? data.shuffleEvents : true,
+            mode: data.mode === 'order' ? 'order' : 'explore',
+            styleVariant: data.styleVariant === 'editorial' ? 'editorial' : 'classic',
+            showDates: typeof data.showDates === 'boolean' ? data.showDates : data.mode === 'order' ? false : true,
             locale: locale,
             isInExe: eXe.app.isInExe() ?? false,
             isScorm: data.isScorm || 0,

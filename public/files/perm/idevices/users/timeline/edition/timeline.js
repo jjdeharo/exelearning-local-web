@@ -8,8 +8,10 @@ var $exeDevice = {
             mode: 'Modo',
             modeOrder: 'Ordenar',
             modeExplore: 'Explorar',
+            visualStyle: 'Estilo visual',
+            styleClassic: 'Clasico',
+            styleEditorial: 'Editorial',
             showDates: 'Mostrar fechas visibles',
-            shuffle: 'Barajar eventos al empezar',
             help: 'La clave de orden puede ser un numero o una fecha ISO (AAAA-MM-DD).',
             addEvent: 'Anadir evento',
             clearEvents: 'Vaciar linea',
@@ -71,6 +73,7 @@ var $exeDevice = {
             scormWeight: 'Peso',
             evaluation: 'Informe de progreso',
             evaluationId: 'Identificador',
+            scormExploreInfo: 'La puntuacion SCORM solo esta disponible en el modo Ordenar. Cambia el modo para activarla.',
             invalidTitle: 'Debes indicar un titulo para la linea temporal.',
             invalidEvents: 'Necesitas al menos dos eventos completos para guardar este iDevice.',
             invalidEvent: 'Cada evento debe tener al menos titulo, fecha visible y clave de orden.',
@@ -89,8 +92,8 @@ var $exeDevice = {
             sample3Text: 'La etapa concluye con un hecho decisivo.',
             prompt1: 'Actua como un docente con experiencia y genera una linea temporal rigurosa.',
             prompt2: 'Devuelve exclusivamente un unico JSON valido escrito en una caja de texto plano, sin comentarios, sin markdown, sin formato enriquecido y sin texto antes o despues del JSON.',
-            prompt3: 'Usa exactamente esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "order",\n  "showDates": true,\n  "shuffleEvents": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
-            prompt4: 'Reglas obligatorias: escapa las comillas internas dentro de los textos; no uses enlaces en formato markdown [texto](url); si incluyes un video externo, pon solo la URL limpia en videoUrl; si no hay medio, usa mediaType="none" y deja vacios mediaSrc, videoUrl y posterSrc.',
+            prompt3: 'Usa exactamente esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "explore",\n  "showDates": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
+            prompt4: 'Reglas obligatorias: escapa las comillas internas dentro de los textos; no uses enlaces en formato markdown [texto](url); en mediaSrc y videoUrl escribe solo una URL limpia que empiece por https://; no escribas corchetes ni parentesis en las URLs; si incluyes un video externo, pon solo la URL limpia en videoUrl; si no hay medio, usa mediaType="none" y deja vacios mediaSrc, videoUrl y posterSrc.',
             prompt5: 'No uses bloques ```json```, no uses listas, no uses encabezados ni texto explicativo. Responde solo con el objeto JSON copiable dentro de una caja de texto plano.',
             saveScoreText: 'Guardar puntuacion',
         },
@@ -102,8 +105,10 @@ var $exeDevice = {
             mode: 'Mode',
             modeOrder: 'Order',
             modeExplore: 'Explore',
+            visualStyle: 'Visual style',
+            styleClassic: 'Classic',
+            styleEditorial: 'Editorial',
             showDates: 'Show visible dates',
-            shuffle: 'Shuffle events at the start',
             help: 'The sort key can be a number or an ISO date (YYYY-MM-DD).',
             addEvent: 'Add event',
             clearEvents: 'Clear timeline',
@@ -165,6 +170,7 @@ var $exeDevice = {
             scormWeight: 'Weight',
             evaluation: 'Progress report',
             evaluationId: 'Identifier',
+            scormExploreInfo: 'SCORM scoring is only available in Order mode. Change the mode to enable it.',
             invalidTitle: 'You must provide a title for the timeline.',
             invalidEvents: 'You need at least two complete events to save this iDevice.',
             invalidEvent: 'Each event must have at least a title, a visible date and a sort key.',
@@ -183,8 +189,8 @@ var $exeDevice = {
             sample3Text: 'The stage ends with a decisive event.',
             prompt1: 'Act as an experienced teacher and generate a rigorous timeline.',
             prompt2: 'Return only a single valid JSON object written in a plain text box, with no comments, no markdown, no rich formatting and no text before or after the JSON.',
-            prompt3: 'Use exactly this structure:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "order",\n  "showDates": true,\n  "shuffleEvents": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
-            prompt4: 'Mandatory rules: escape internal quotes inside texts; do not use markdown links [text](url); if you include an external video, put only the clean URL in videoUrl; if there is no media, use mediaType="none" and leave mediaSrc, videoUrl and posterSrc empty.',
+            prompt3: 'Use exactly this structure:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "explore",\n  "showDates": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
+            prompt4: 'Mandatory rules: escape internal quotes inside texts; do not use markdown links [text](url); in mediaSrc and videoUrl write only a clean URL starting with https://; do not write brackets or parentheses inside URLs; if you include an external video, put only the clean URL in videoUrl; if there is no media, use mediaType="none" and leave mediaSrc, videoUrl and posterSrc empty.',
             prompt5: 'Do not use ```json``` blocks, do not use lists, do not use headings or explanatory text. Reply only with the JSON object, ready to copy inside a plain text box.',
             saveScoreText: 'Save score',
         },
@@ -196,8 +202,10 @@ var $exeDevice = {
             mode: 'Mode',
             modeOrder: 'Ordena',
             modeExplore: 'Explora',
+            visualStyle: 'Estil visual',
+            styleClassic: 'Classic',
+            styleEditorial: 'Editorial',
             showDates: 'Mostra les dates visibles',
-            shuffle: 'Barreja els esdeveniments en començar',
             help: "La clau d'ordre pot ser un numero o una data ISO (AAAA-MM-DD).",
             addEvent: 'Afig esdeveniment',
             clearEvents: 'Buida la linia',
@@ -259,6 +267,7 @@ var $exeDevice = {
             scormWeight: 'Pes',
             evaluation: 'Informe de progres',
             evaluationId: 'Identificador',
+            scormExploreInfo: 'La puntuacio SCORM nomes esta disponible en el mode Ordena. Canvia el mode per a activar-la.',
             invalidTitle: 'Has d’indicar un titol per a la linia temporal.',
             invalidEvents: 'Necessites almenys dos esdeveniments complets per a guardar aquest iDevice.',
             invalidEvent: 'Cada esdeveniment ha de tindre almenys titol, data visible i clau d’ordre.',
@@ -277,8 +286,8 @@ var $exeDevice = {
             sample3Text: 'L’etapa conclou amb un fet decisiu.',
             prompt1: 'Actua com un docent amb experiencia i genera una linia temporal rigorosa.',
             prompt2: 'Torna exclusivament un unic objecte JSON valid escrit en una caixa de text pla, sense comentaris, sense markdown, sense format enriquit i sense text abans o despres del JSON.',
-            prompt3: 'Usa exactament esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "order",\n  "showDates": true,\n  "shuffleEvents": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
-            prompt4: 'Regles obligatories: escapa les cometes internes dins dels textos; no uses enllacos en format markdown [text](url); si inclous un video extern, posa nomes l’URL neta en videoUrl; si no hi ha mitja, usa mediaType="none" i deixa buits mediaSrc, videoUrl i posterSrc.',
+            prompt3: 'Usa exactament esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "mode": "explore",\n  "showDates": true,\n  "events": [\n    {\n      "displayDate": "...",\n      "sortKey": "...",\n      "title": "...",\n      "text": "...",\n      "feedback": "...",\n      "mediaType": "none|image|audio|video",\n      "mediaSrc": "",\n      "videoSource": "local|external",\n      "videoUrl": "",\n      "posterSrc": "",\n      "mediaCaption": ""\n    }\n  ]\n}',
+            prompt4: 'Regles obligatories: escapa les cometes internes dins dels textos; no uses enllacos en format markdown [text](url); en mediaSrc i videoUrl escriu nomes una URL neta que comence per https://; no escrigues claudators ni parentesis en les URLs; si inclous un video extern, posa nomes l’URL neta en videoUrl; si no hi ha mitja, usa mediaType="none" i deixa buits mediaSrc, videoUrl i posterSrc.',
             prompt5: 'No uses blocs ```json```, no uses llistes, no uses encapcalaments ni text explicatiu. Respon nomes amb l’objecte JSON, preparat per a copiar dins d’una caixa de text pla.',
             saveScoreText: 'Guardar puntuacio',
         },
@@ -323,8 +332,8 @@ var $exeDevice = {
             title: title,
             intro: this.getRichValue('timelineIntro').trim(),
             mode: this.q('#timelineMode').value,
+            styleVariant: this.q('#timelineStyleVariant').value,
             showDates: this.q('#timelineShowDates').checked,
-            shuffleEvents: this.q('#timelineShuffleEvents').checked,
             locale: this.lang,
             events: collected.items,
             isScorm: this.q('#timelineIsScorm').checked ? 1 : 0,
@@ -345,6 +354,7 @@ var $exeDevice = {
         this.updateAIPrompt();
         this.loadDefaultAI();
         this.q('#timelineEvaluationID').disabled = !this.state.evaluation;
+        this.updateScormAvailability();
     },
 
     getFormHtml: function () {
@@ -360,11 +370,14 @@ var $exeDevice = {
                 ['order', this.t('modeOrder')],
                 ['explore', this.t('modeExplore')],
             ], this.state.mode) +
+            this.select('timelineStyleVariant', this.t('visualStyle'), [
+                ['classic', this.t('styleClassic')],
+                ['editorial', this.t('styleEditorial')],
+            ], this.state.styleVariant) +
             '</div>' +
             this.richTextarea('timelineIntro', this.t('intro'), this.state.intro) +
             '<div class="timeline-toggle-row">' +
             this.checkbox('timelineShowDates', this.t('showDates'), this.state.showDates) +
-            this.checkbox('timelineShuffleEvents', this.t('shuffle'), this.state.shuffleEvents) +
             '</div>' +
             '<p class="timeline-help">' + this.t('help') + '</p>' +
             '</fieldset>' +
@@ -403,7 +416,7 @@ var $exeDevice = {
             '<p class="timeline-help">' + this.t('formatHelp') + '</p><button type="button" id="timelineAIImportText" class="btn btn-primary">' + this.t('importText') + '</button></section>' +
             '</div>' +
             '<div class="exe-form-tab" title="' + this.t('scormTitle') + '">' +
-            '<section class="timeline-box"><h3>' + this.t('scormTitle') + '</h3><div class="timeline-toggle-row">' +
+            '<section class="timeline-box"><h3>' + this.t('scormTitle') + '</h3><p class="timeline-help timeline-scorm-info" id="timelineScormInfo">' + this.t('scormExploreInfo') + '</p><div class="timeline-toggle-row">' +
             this.checkbox('timelineIsScorm', this.t('scormEnable'), this.state.isScorm > 0) +
             this.checkbox('timelineRepeatActivity', this.t('scormRepeat'), this.state.repeatActivity) +
             this.checkbox('timelineEvaluation', this.t('evaluation'), this.state.evaluation) +
@@ -435,6 +448,10 @@ var $exeDevice = {
         });
         this.q('#timelineEvaluation').addEventListener('change', function () {
             self.q('#timelineEvaluationID').disabled = !this.checked;
+        });
+        this.q('#timelineMode').addEventListener('change', function () {
+            self.q('#timelineShowDates').checked = this.value !== 'order';
+            self.updateScormAvailability();
         });
         this.addImportExportEvents();
         this.q('#timelineEvents').addEventListener('click', function (event) {
@@ -558,7 +575,6 @@ var $exeDevice = {
             intro: data.intro,
             mode: data.mode,
             showDates: data.showDates,
-            shuffleEvents: data.shuffleEvents,
             events: data.events,
         };
         var blob = new Blob([JSON.stringify(payload, null, 2)], {
@@ -578,7 +594,7 @@ var $exeDevice = {
         var imported = null;
         if (fileType && fileType.match('application/json')) {
             try {
-                imported = JSON.parse(this.extractJsonText(content));
+                imported = JSON.parse(this.prepareJsonText(content));
             } catch (error) {
                 imported = null;
             }
@@ -588,14 +604,13 @@ var $exeDevice = {
             }
             if (Array.isArray(imported.events) || Array.isArray(imported)) {
                 var items = Array.isArray(imported) ? imported : imported.events;
-                this.state.events = this.normalizeEvents(items).filter(function (item) {
+                this.state.events = this.normalizeEvents(this.cleanImportedItems(items)).filter(function (item) {
                     return item.title && item.displayDate && item.sortKey;
                 });
                 if (typeof imported.title === 'string') this.q('#timelineTitle').value = imported.title;
                 if (typeof imported.intro === 'string') this.q('#timelineIntro').value = imported.intro;
                 if (imported.mode === 'order' || imported.mode === 'explore') this.q('#timelineMode').value = imported.mode;
                 if (typeof imported.showDates === 'boolean') this.q('#timelineShowDates').checked = imported.showDates;
-                if (typeof imported.shuffleEvents === 'boolean') this.q('#timelineShuffleEvents').checked = imported.shuffleEvents;
                 this.renderEvents();
                 eXe.app.alert(this.t('importSuccess'));
                 return;
@@ -622,12 +637,12 @@ var $exeDevice = {
         var self = this;
         var text = String(raw || '').trim();
         if (!text) return [];
-        var jsonText = this.extractJsonText(text);
+        var jsonText = this.prepareJsonText(text);
         if (jsonText) {
             try {
                 var parsed = JSON.parse(jsonText);
                 var items = Array.isArray(parsed) ? parsed : parsed.events;
-                if (Array.isArray(items)) return this.normalizeEvents(items).filter(function (item) {
+                if (Array.isArray(items)) return this.normalizeEvents(this.cleanImportedItems(items)).filter(function (item) {
                     return item.title && item.displayDate && item.sortKey;
                 });
             } catch (error) {}
@@ -661,6 +676,101 @@ var $exeDevice = {
             if (eventData.title && eventData.displayDate && eventData.sortKey) result.push(eventData);
         });
         return result;
+    },
+
+    cleanImportedItems: function (items) {
+        var self = this;
+        return (items || []).map(function (item) {
+            var clean = Object.assign({}, item);
+            clean.mediaSrc = self.cleanUrlField(clean.mediaSrc || '');
+            clean.videoUrl = self.cleanUrlField(clean.videoUrl || '');
+            if (clean.mediaType === 'video' && clean.videoSource === 'external' && clean.mediaSrc && !clean.videoUrl) clean.videoUrl = clean.mediaSrc;
+            return clean;
+        });
+    },
+
+    prepareJsonText: function (raw) {
+        return this.sanitizeBrokenJson(this.extractJsonText(raw));
+    },
+
+    sanitizeBrokenJson: function (raw) {
+        var text = String(raw || '').trim();
+        if (!text) return '';
+        var result = '';
+        var inString = false;
+        var escaped = false;
+        for (var i = 0; i < text.length; i++) {
+            var char = text[i];
+            if (!inString) {
+                result += char;
+                if (char === '"') {
+                    inString = true;
+                    escaped = false;
+                }
+                continue;
+            }
+            if (escaped) {
+                result += char;
+                escaped = false;
+                continue;
+            }
+            if (char === '\\') {
+                result += char;
+                escaped = true;
+                continue;
+            }
+            if (char === '"') {
+                var nextInfo = this.nextSignificantInfo(text, i + 1);
+                var next = nextInfo.char;
+                var closesObjectValue = next === '}' || next === ']';
+                var closesKey = next === ':';
+                var closesListValue = false;
+                if (next === ',') {
+                    var afterComma = this.nextSignificantInfo(text, nextInfo.index + 1).char;
+                    closesListValue = afterComma === '"' || afterComma === '}' || afterComma === ']';
+                }
+                if (closesKey || closesObjectValue || closesListValue) {
+                    result += char;
+                    inString = false;
+                } else {
+                    result += '\\"';
+                }
+                continue;
+            }
+            result += char;
+        }
+        return result;
+    },
+
+    nextSignificantChar: function (text, start) {
+        for (var i = start; i < text.length; i++) {
+            if (!/\s/.test(text[i])) return text[i];
+        }
+        return '';
+    },
+
+    nextSignificantInfo: function (text, start) {
+        for (var i = start; i < text.length; i++) {
+            if (!/\s/.test(text[i])) return { index: i, char: text[i] };
+        }
+        return { index: -1, char: '' };
+    },
+
+    cleanUrlField: function (value) {
+        value = String(value || '').trim();
+        if (!value) return '';
+        var markdownWithSuffix = value.match(/\[[^\]]*]\((https?:\/\/[^)\s]+)\)([^\s"]*)/i);
+        if (markdownWithSuffix && markdownWithSuffix[1]) {
+            return (markdownWithSuffix[1] + (markdownWithSuffix[2] || '')).trim();
+        }
+        var markdown = value.match(/\[[^\]]*]\((https?:\/\/[^)\s]+)\)/i);
+        if (markdown && markdown[1]) return markdown[1].trim();
+        if (/^https?:\/\/[^)\s]+\)([^\s"]*)$/i.test(value)) {
+            return value.replace(/\)/g, '').trim();
+        }
+        var direct = value.match(/https?:\/\/[^\s\])"]+/i);
+        if (direct && direct[0]) return direct[0].trim();
+        return value;
     },
 
     extractJsonText: function (raw) {
@@ -771,9 +881,9 @@ var $exeDevice = {
         return {
             title: typeof data.title === 'string' && data.title ? data.title : this.t('sampleTitle'),
             intro: typeof data.intro === 'string' && data.intro ? data.intro : this.t('sampleIntro'),
-            mode: data.mode === 'explore' ? 'explore' : 'order',
-            showDates: typeof data.showDates === 'boolean' ? data.showDates : true,
-            shuffleEvents: typeof data.shuffleEvents === 'boolean' ? data.shuffleEvents : true,
+            mode: data.mode === 'order' ? 'order' : 'explore',
+            styleVariant: data.styleVariant === 'editorial' ? 'editorial' : 'classic',
+            showDates: typeof data.showDates === 'boolean' ? data.showDates : data.mode === 'order' ? false : true,
             isScorm: data.isScorm || 0,
             textButtonScorm: typeof data.textButtonScorm === 'string' && data.textButtonScorm ? data.textButtonScorm : this.t('saveScoreText'),
             repeatActivity: typeof data.repeatActivity === 'boolean' ? data.repeatActivity : true,
@@ -782,6 +892,22 @@ var $exeDevice = {
             evaluationID: typeof data.evaluationID === 'string' ? data.evaluationID : '',
             events: Array.isArray(data.events) && data.events.length ? this.normalizeEvents(data.events) : this.samples(),
         };
+    },
+
+    updateScormAvailability: function () {
+        var isOrderMode = this.q('#timelineMode').value === 'order';
+        var ids = ['timelineIsScorm', 'timelineRepeatActivity', 'timelineEvaluation', 'timelineScormButtonText', 'timelineWeighted'];
+        for (var i = 0; i < ids.length; i++) {
+            var field = this.q('#' + ids[i]);
+            if (field) field.disabled = !isOrderMode;
+        }
+        var info = this.q('#timelineScormInfo');
+        if (info) info.style.display = isOrderMode ? 'none' : 'block';
+        if (!isOrderMode) {
+            this.q('#timelineIsScorm').checked = false;
+            this.q('#timelineEvaluation').checked = false;
+        }
+        this.q('#timelineEvaluationID').disabled = !isOrderMode || !this.q('#timelineEvaluation').checked;
     },
 
     normalizeEvents: function (events) {
