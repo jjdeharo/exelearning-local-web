@@ -253,14 +253,13 @@ var $timeline = {
         for (var i = 0; i < state.current.length; i++) {
             var item = state.current[i];
             var resultClass = '';
-            var mediaIcon = this.cardMediaIcon(item, state.strings);
             var isSelected = state.selectedId === item.id;
             var mainClass = 'timeline-card-main' + (state.data.showDates ? ' timeline-has-date' : '');
             if (state.results && typeof state.results[item.id] === 'boolean') resultClass = state.results[item.id] ? ' correct' : ' incorrect';
             html += '<li class="timeline-card' + (isSelected ? ' selected' : '') + resultClass + '" data-id="' + this.escape(item.id) + '" draggable="' + (state.data.mode === 'order' ? 'true' : 'false') + '">';
             html += '<div class="timeline-card-header"><div class="' + mainClass + '">';
             if (state.data.showDates) html += '<div class="timeline-date">' + this.escape(item.displayDate) + '</div>';
-            html += '<div class="timeline-title-row"><h4 class="timeline-title">' + this.escape(item.title) + '</h4>' + mediaIcon + '</div></div>';
+            html += '<div class="timeline-title-row"><h4 class="timeline-title">' + this.escape(item.title) + '</h4></div></div>';
             if (state.data.mode === 'order') {
                 html += '<div class="timeline-card-actions"><button type="button" aria-label="' + state.strings.upLabel + '" title="' + state.strings.upLabel + '" data-action="up" data-id="' + this.escape(item.id) + '">' + state.strings.up + '</button><button type="button" aria-label="' + state.strings.downLabel + '" title="' + state.strings.downLabel + '" data-action="down" data-id="' + this.escape(item.id) + '">' + state.strings.down + '</button></div>';
             }
@@ -269,24 +268,6 @@ var $timeline = {
             html += '</li>';
         }
         return html;
-    },
-
-    cardMediaIcon: function (item, strings) {
-        if (!item || !item.mediaType || item.mediaType === 'none') return '';
-        var icon = '';
-        var label = '';
-        if (item.mediaType === 'image') {
-            icon = 'image';
-            label = strings.mediaImage;
-        } else if (item.mediaType === 'audio') {
-            icon = 'volume_up';
-            label = strings.mediaAudio;
-        } else if (item.mediaType === 'video') {
-            icon = item.videoSource === 'external' ? 'smart_display' : 'movie';
-            label = strings.mediaVideo;
-        }
-        if (!icon) return '';
-        return '<span class="timeline-media-icon auto-icon" aria-label="' + this.escape(label) + '" title="' + this.escape(label) + '">' + icon + '</span>';
     },
 
     detail: function (state) {
@@ -450,7 +431,7 @@ var $timeline = {
             title: data.title || 'Timeline',
             intro: data.intro || '',
             mode: data.mode === 'order' ? 'order' : 'explore',
-            styleVariant: data.styleVariant === 'editorial' ? 'editorial' : 'classic',
+            styleVariant: data.styleVariant === 'classic' ? 'classic' : 'editorial',
             showDates: typeof data.showDates === 'boolean' ? data.showDates : data.mode === 'order' ? false : true,
             locale: locale,
             isInExe: eXe.app.isInExe() ?? false,

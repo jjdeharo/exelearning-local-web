@@ -11,7 +11,7 @@
  *   │   ├── base.zip
  *   │   ├── flux.zip
  *   │   └── ...
- *   ├── idevices.zip        # All base iDevices
+ *   ├── idevices.zip        # All base/user iDevices export resources
  *   ├── libs.zip            # Base libraries
  *   └── manifest.json       # Bundle metadata with hashes
  *
@@ -36,6 +36,7 @@ const buildVersion = `v${packageJson.version}`;
 // Paths - bundles stored without version (version is virtual cache buster in URLs)
 const THEMES_BASE_PATH = path.join(projectRoot, 'public/files/perm/themes/base');
 const IDEVICES_BASE_PATH = path.join(projectRoot, 'public/files/perm/idevices/base');
+const IDEVICES_USERS_PATH = path.join(projectRoot, 'public/files/perm/idevices/users');
 const LIBS_PATH = path.join(projectRoot, 'public/libs');
 const COMMON_PATH = path.join(projectRoot, 'public/app/common');
 const OUTPUT_PATH = path.join(projectRoot, 'public/bundles');
@@ -158,37 +159,50 @@ function buildThemeBundles(manifest) {
 function buildIdevicesBundle(manifest) {
   console.log('\nBuilding iDevices bundle...');
 
-  if (!fs.existsSync(IDEVICES_BASE_PATH)) {
-    console.log('  No base iDevices directory found, skipping');
+  if (!fs.existsSync(IDEVICES_BASE_PATH) && !fs.existsSync(IDEVICES_USERS_PATH)) {
+    console.log('  No iDevices directories found, skipping');
     return;
   }
 
-  const idevices = fs.readdirSync(IDEVICES_BASE_PATH, { withFileTypes: true })
-    .filter(d => d.isDirectory() && !d.name.startsWith('.'))
-    .map(d => d.name);
-
-  const allFiles = [];
+  const allFilesMap = new Map();
   manifest.idevices = {};
+  const sourceRoots = [
+    { rootPath: IDEVICES_BASE_PATH, source: 'base' },
+    { rootPath: IDEVICES_USERS_PATH, source: 'users' },
+  ];
 
-  for (const ideviceName of idevices) {
-    const exportPath = path.join(IDEVICES_BASE_PATH, ideviceName, 'export');
+  for (const { rootPath, source } of sourceRoots) {
+    if (!fs.existsSync(rootPath)) continue;
+    const idevices = fs.readdirSync(rootPath, { withFileTypes: true })
+      .filter(d => d.isDirectory() && !d.name.startsWith('.'))
+      .map(d => d.name);
 
-    if (!fs.existsSync(exportPath)) {
-      continue;
+    for (const ideviceName of idevices) {
+      const exportPath = path.join(rootPath, ideviceName, 'export');
+
+      if (!fs.existsSync(exportPath)) {
+        continue;
+      }
+
+      const files = scanDirectory(exportPath);
+      if (files.length === 0) continue;
+
+      for (const file of files) {
+        const relativePath = `${ideviceName}/${file.relativePath}`;
+        allFilesMap.set(relativePath, {
+          fullPath: file.fullPath,
+          relativePath,
+        });
+      }
+
+      manifest.idevices[ideviceName] = {
+        files: files.length,
+        source,
+      };
     }
-
-    const files = scanDirectory(exportPath);
-
-    for (const file of files) {
-      // Prefix with iDevice name for export structure
-      allFiles.push({
-        fullPath: file.fullPath,
-        relativePath: `${ideviceName}/${file.relativePath}`,
-      });
-    }
-
-    manifest.idevices[ideviceName] = files.length;
   }
+
+  const allFiles = Array.from(allFilesMap.values());
 
   if (allFiles.length === 0) {
     console.log('  No iDevice export files found, skipping');

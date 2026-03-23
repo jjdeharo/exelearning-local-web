@@ -131,5 +131,15 @@ describe('build-resource-bundles', () => {
                 expect(filePath.includes('/')).toBe(true);
             }
         });
+
+        it('should include user idevices export files', () => {
+            const bundlePath = path.join(bundlesPath, 'idevices.zip');
+            const zipBuffer = fs.readFileSync(bundlePath);
+            const unzipped = unzipSync(new Uint8Array(zipBuffer));
+
+            const filePaths = Object.keys(unzipped);
+            expect(filePaths).toContain('timeline/timeline.js');
+            expect(filePaths).toContain('timeline/timeline.css');
+        });
     });
 });

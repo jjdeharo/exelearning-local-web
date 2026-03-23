@@ -56,7 +56,7 @@
 .timeline-idevice .timeline-layout {
     display: grid;
     gap: 1rem;
-    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr);
+    grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr);
     align-items: start;
 }
 
@@ -165,20 +165,6 @@
     flex: 1 1 240px;
     min-width: 0;
     margin-top: 0;
-}
-
-.timeline-idevice .timeline-media-icon {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    width: 1.45rem;
-    height: 1.45rem;
-    border-radius: 999px;
-    background: var(--timeline-accent-soft);
-    color: var(--timeline-accent);
-    font-size: 1rem;
-    line-height: 1;
 }
 
 .timeline-idevice .timeline-card-actions {
@@ -362,7 +348,7 @@
 }
 
 .timeline-idevice.timeline-style-editorial .timeline-layout {
-    grid-template-columns: minmax(0, 1.2fr) minmax(300px, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 0.98fr);
     gap: 1.4rem;
 }
 
@@ -412,13 +398,6 @@
 .timeline-idevice.timeline-style-editorial .timeline-title {
     font-size: 1.1rem;
     line-height: 1.2;
-}
-
-.timeline-idevice.timeline-style-editorial .timeline-media-icon {
-    background: transparent;
-    width: auto;
-    height: auto;
-    font-size: 1.05rem;
 }
 
 .timeline-idevice.timeline-style-editorial .timeline-card-actions button {
