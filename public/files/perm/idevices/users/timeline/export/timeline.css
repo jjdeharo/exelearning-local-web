@@ -1,0 +1,289 @@
+.timeline-idevice {
+    --timeline-accent: #0f766e;
+    --timeline-accent-soft: #ccfbf1;
+    --timeline-ink: #0f172a;
+    --timeline-muted: #475569;
+    --timeline-surface: #f8fafc;
+    --timeline-border: #cbd5e1;
+    color: var(--timeline-ink);
+}
+
+.timeline-idevice * {
+    box-sizing: border-box;
+}
+
+.timeline-idevice .timeline-header {
+    margin-bottom: 1rem;
+}
+
+.timeline-idevice .timeline-header h3 {
+    margin: 0 0 0.4rem;
+    color: var(--timeline-accent);
+}
+
+.timeline-idevice .timeline-header p {
+    margin: 0;
+    color: var(--timeline-muted);
+}
+
+.timeline-idevice .timeline-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+}
+
+.timeline-idevice .timeline-toolbar button {
+    border: 1px solid var(--timeline-accent);
+    background: #fff;
+    color: var(--timeline-accent);
+    border-radius: 999px;
+    padding: 0.5rem 0.9rem;
+    cursor: pointer;
+}
+
+.timeline-idevice .timeline-toolbar button.primary {
+    background: var(--timeline-accent);
+    color: #fff;
+}
+
+.timeline-idevice .timeline-status {
+    margin: 0 0 1rem;
+    color: var(--timeline-muted);
+    font-weight: 600;
+}
+
+.timeline-idevice .timeline-layout {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: minmax(0, 1.4fr) minmax(260px, 0.9fr);
+    align-items: start;
+}
+
+.timeline-idevice .timeline-events {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.6rem;
+    position: relative;
+    display: grid;
+    gap: 0.7rem;
+}
+
+.timeline-idevice .timeline-events::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 0.2rem;
+    bottom: 0.2rem;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--timeline-accent), #94a3b8);
+    border-radius: 999px;
+}
+
+.timeline-idevice .timeline-card {
+    position: relative;
+    border: 1px solid var(--timeline-border);
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.timeline-idevice .timeline-card::before {
+    content: '';
+    position: absolute;
+    left: -1.35rem;
+    top: 1rem;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--timeline-accent);
+    box-shadow: 0 0 0 4px var(--timeline-accent-soft);
+}
+
+.timeline-idevice .timeline-card.selected {
+    border-color: var(--timeline-accent);
+    box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.timeline-idevice .timeline-card.correct {
+    border-color: #15803d;
+}
+
+.timeline-idevice .timeline-card.incorrect {
+    border-color: #b91c1c;
+}
+
+.timeline-idevice .timeline-card-header {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0.95rem;
+}
+
+.timeline-idevice .timeline-card-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.timeline-idevice .timeline-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--timeline-accent);
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.timeline-idevice .timeline-title {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.25;
+}
+
+.timeline-idevice .timeline-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-top: 0.15rem;
+}
+
+.timeline-idevice .timeline-media-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.45rem;
+    height: 1.45rem;
+    border-radius: 999px;
+    background: var(--timeline-accent-soft);
+    color: var(--timeline-accent);
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.timeline-idevice .timeline-card-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 0.2rem;
+    flex-shrink: 0;
+}
+
+.timeline-idevice .timeline-card-actions button {
+    border: 1px solid var(--timeline-border);
+    background: var(--timeline-surface);
+    border-radius: 999px;
+    width: 1.7rem;
+    height: 1.7rem;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+}
+
+.timeline-idevice .timeline-detail {
+    border: 1px solid var(--timeline-border);
+    border-radius: 16px;
+    background: var(--timeline-surface);
+    padding: 1rem;
+    position: relative;
+    top: 0;
+    align-self: start;
+    transform: translateY(var(--timeline-detail-offset, 0px));
+    transition: transform 0.18s ease;
+}
+
+.timeline-idevice .timeline-detail h4 {
+    margin: 0 0 0.35rem;
+}
+
+.timeline-idevice .timeline-detail p {
+    margin: 0 0 0.9rem;
+}
+
+.timeline-idevice .timeline-rich-content {
+    color: var(--timeline-muted);
+}
+
+.timeline-idevice .timeline-rich-content > :first-child {
+    margin-top: 0;
+}
+
+.timeline-idevice .timeline-rich-content > :last-child {
+    margin-bottom: 0;
+}
+
+.timeline-idevice .timeline-media {
+    margin: 1rem 0;
+}
+
+.timeline-idevice .timeline-media img,
+.timeline-idevice .timeline-media video,
+.timeline-idevice .timeline-media audio,
+.timeline-idevice .timeline-media iframe {
+    width: 100%;
+    max-width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+
+.timeline-idevice .timeline-media iframe {
+    aspect-ratio: 16 / 9;
+    min-height: 220px;
+    border: 0;
+}
+
+.timeline-idevice .timeline-caption,
+.timeline-idevice .timeline-feedback {
+    color: var(--timeline-muted);
+}
+
+.timeline-idevice .timeline-feedback {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed var(--timeline-border);
+}
+
+.timeline-idevice .timeline-feedback strong {
+    color: var(--timeline-ink);
+}
+
+.timeline-idevice .timeline-empty-detail {
+    margin: 0;
+    color: var(--timeline-muted);
+}
+
+.timeline-idevice .timeline-card-detail-mobile {
+    display: none;
+    padding: 0 0.95rem 0.95rem;
+    color: var(--timeline-muted);
+    border-top: 1px solid #e2e8f0;
+}
+
+.timeline-idevice .timeline-card-detail-mobile h4 {
+    margin: 0 0 0.35rem;
+    color: var(--timeline-ink);
+}
+
+.timeline-idevice .timeline-card-detail-mobile p {
+    margin: 0 0 0.8rem;
+}
+
+@media (max-width: 860px) {
+    .timeline-idevice .timeline-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .timeline-idevice .timeline-card-header {
+        align-items: flex-start;
+    }
+
+    .timeline-idevice .timeline-card-detail-mobile {
+        display: block;
+    }
+
+    .timeline-idevice .timeline-detail {
+        display: none;
+    }
+}
