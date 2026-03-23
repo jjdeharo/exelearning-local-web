@@ -1,21 +1,37 @@
 .idevices-bottom-menu {
     position: fixed;
     min-width: 100px;
+    width: max-content;
+    max-width: calc(100vw - 24px);
     bottom: 12px;
     z-index: 0;
     transform: translateX(-50%);
-    display: inline-flex;
+    display: flex;
     height: 56px;
     padding: 3px 0 3px 3px;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     gap: 3px;
     flex-shrink: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
     border-radius: 8px;
     border: 1px solid #e8e6e6;
     background: var(--white);
     box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.10);
+    &::-webkit-scrollbar {
+        height: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--gray-border-dark);
+        border-radius: 999px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
     .idevice_item {
+        flex: 0 0 auto;
         &.draggable {
             .idevice_icon {
                 cursor: grab;
@@ -30,6 +46,7 @@
     .idevice_icon {
         height: 48px;
         width: 48px;
+        flex: 0 0 auto;
         border-radius: 6px;
         font-family: var(--icons-ff);
         font-size: var(--idevice_icon-fs);
@@ -45,6 +62,9 @@
         &.settings-icon {
             width: 36px;
             height: 55px;
+            position: sticky;
+            right: 0;
+            flex-shrink: 0;
             border-top-left-radius: 0;
             border-bottom-left-radius: 0;
             cursor: pointer;

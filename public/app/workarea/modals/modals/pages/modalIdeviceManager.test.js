@@ -912,6 +912,7 @@ describe('ModalIdeviceManager', () => {
 
   describe('makeRowTableIdevicesElement', () => {
     let idevice;
+    let saveIdevicesSpy;
 
     beforeEach(() => {
       idevice = {
@@ -922,6 +923,14 @@ describe('ModalIdeviceManager', () => {
         visible: true,
       };
       modalIdeviceManager.alertFiveIdevices = document.createElement('div');
+      saveIdevicesSpy = vi.spyOn(modalIdeviceManager, 'saveIdevices').mockResolvedValue();
+      vi.spyOn(modalIdeviceManager, 'getUserListIdevices').mockResolvedValue([
+        'text',
+        'form',
+        'az-quiz-game',
+        'download-source-file',
+        'image-gallery',
+      ]);
     });
 
     it('should create toggle item', () => {
@@ -964,6 +973,27 @@ describe('ModalIdeviceManager', () => {
       const result = modalIdeviceManager.makeRowTableIdevicesElement(idevice, ['other']);
       const input = result.querySelector('input[type="checkbox"]');
       expect(input.checked).toBe(false);
+    });
+
+    it('should allow selecting more than five favourite iDevices', async () => {
+      idevice.name = 'timeline';
+      const result = modalIdeviceManager.makeRowTableIdevicesElement(idevice, ['other']);
+      const input = result.querySelector('input[type="checkbox"]');
+
+      input.checked = true;
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+      await Promise.resolve();
+
+      expect(input.checked).toBe(true);
+      expect(saveIdevicesSpy).toHaveBeenCalledWith([
+        'text',
+        'form',
+        'az-quiz-game',
+        'download-source-file',
+        'image-gallery',
+        'timeline',
+      ]);
+      expect(modalIdeviceManager.alertFiveIdevices.classList.contains('show')).toBe(false);
     });
   });
 

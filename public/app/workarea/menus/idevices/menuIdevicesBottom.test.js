@@ -132,6 +132,7 @@ describe('MenuIdevicesBottom', () => {
     });
 
     window.addEventListener = vi.fn();
+    window.localStorage.clear();
 
     menuIdevicesBottom = new MenuIdevicesBottom();
   });
@@ -149,10 +150,10 @@ describe('MenuIdevicesBottom', () => {
     it('should store default idevices list', () => {
       expect(menuIdevicesBottom.defaultIdevices).toEqual([
         'text',
-        'az-quiz-game',
-        'form',
-        'download-source-file',
-        'image-gallery',
+        'food-web-c1',
+        'punnett-square',
+        'timeline',
+        'hangman-random',
       ]);
     });
 
@@ -228,9 +229,37 @@ describe('MenuIdevicesBottom', () => {
       expect(menuIdevicesBottom.saveIdevices).toHaveBeenCalledWith(menuIdevicesBottom.defaultIdevices);
     });
 
-    it('should use saved idevices when getIdevices returns data', async () => {
+    it('should merge saved idevices with the expanded defaults once', async () => {
       const savedIdevices = ['text', 'form'];
       menuIdevicesBottom.getIdevices.mockResolvedValue(savedIdevices);
+
+      await menuIdevicesBottom.init();
+
+      expect(menuIdevicesBottom.filtreIdevices).toHaveBeenCalledWith([
+        'text',
+        'form',
+        'food-web-c1',
+        'punnett-square',
+        'timeline',
+        'hangman-random',
+      ]);
+      expect(menuIdevicesBottom.saveIdevices).toHaveBeenCalledWith([
+        'text',
+        'form',
+        'food-web-c1',
+        'punnett-square',
+        'timeline',
+        'hangman-random',
+      ]);
+    });
+
+    it('should respect saved idevices after the defaults migration is marked', async () => {
+      const savedIdevices = ['text', 'form'];
+      menuIdevicesBottom.getIdevices.mockResolvedValue(savedIdevices);
+      window.localStorage.setItem(
+        `exelearning.quickbar.defaults.${menuIdevicesBottom.defaultsMigrationVersion}.testuser`,
+        '1'
+      );
 
       await menuIdevicesBottom.init();
 
@@ -342,6 +371,30 @@ describe('MenuIdevicesBottom', () => {
       menuIdevicesBottom.centerMenuIdevices();
 
       expect(menuIdevicesBottom.menuIdevices.style.transform).toBe('translateX(-50%)');
+    });
+
+    it('should constrain quickbar max width to the node container', () => {
+      menuIdevicesBottom.nodeContainer = mockNodeContainer;
+      menuIdevicesBottom.menuIdevices = { style: {} };
+
+      menuIdevicesBottom.centerMenuIdevices();
+
+      expect(menuIdevicesBottom.menuIdevices.style.maxWidth).toBe('776px');
+    });
+
+    it('should clamp quickbar max width to the viewport when needed', () => {
+      menuIdevicesBottom.nodeContainer = {
+        getBoundingClientRect: vi.fn(() => ({
+          left: 0,
+          width: 2000,
+        })),
+      };
+      menuIdevicesBottom.menuIdevices = { style: {} };
+      window.innerWidth = 600;
+
+      menuIdevicesBottom.centerMenuIdevices();
+
+      expect(menuIdevicesBottom.menuIdevices.style.maxWidth).toBe('576px');
     });
   });
 

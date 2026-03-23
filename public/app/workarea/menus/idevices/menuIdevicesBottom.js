@@ -1,11 +1,12 @@
 export default class MenuIdevicesBottom {
     constructor() {
+        this.defaultsMigrationVersion = 'v1';
         this.defaultIdevices = [
             'text',
-            'az-quiz-game',
-            'form',
-            'download-source-file',
-            'image-gallery',
+            'food-web-c1',
+            'punnett-square',
+            'timeline',
+            'hangman-random',
         ];
         this.menuIdevices = document.querySelector('#idevices-bottom');
     }
@@ -19,12 +20,15 @@ export default class MenuIdevicesBottom {
         if (this.nodeContainer) resizeObserver.observe(this.nodeContainer);
         window.addEventListener('resize', this.centerMenuIdevices);
         this.getIdevices().then((response) => {
+            let quickbarIdevices;
             if (response === null) {
-                this.idevicesData = this.filtreIdevices(this.defaultIdevices);
-                this.saveIdevices(this.defaultIdevices);
+                quickbarIdevices = [...this.defaultIdevices];
+                this.saveIdevices(quickbarIdevices);
+                this.markDefaultsMigrationApplied();
             } else {
-                this.idevicesData = this.filtreIdevices(response);
+                quickbarIdevices = this.getQuickbarIdevices(response);
             }
+            this.idevicesData = this.filtreIdevices(quickbarIdevices);
             Object.values(this.idevicesData).forEach((ideviceData) => {
                 this.menuIdevices.append(this.elementDivIdevice(ideviceData));
             });
@@ -39,13 +43,63 @@ export default class MenuIdevicesBottom {
         });
     }
 
+    getQuickbarIdevices(savedIdevices) {
+        if (!Array.isArray(savedIdevices)) return [...this.defaultIdevices];
+
+        if (this.shouldMigrateDefaults(savedIdevices)) {
+            const mergedIdevices = this.mergeWithDefaultIdevices(savedIdevices);
+            this.saveIdevices(mergedIdevices);
+            this.markDefaultsMigrationApplied();
+            return mergedIdevices;
+        }
+
+        return savedIdevices;
+    }
+
+    mergeWithDefaultIdevices(savedIdevices) {
+        const mergedIdevices = [...savedIdevices];
+        this.defaultIdevices.forEach((ideviceId) => {
+            if (!mergedIdevices.includes(ideviceId)) {
+                mergedIdevices.push(ideviceId);
+            }
+        });
+        return mergedIdevices;
+    }
+
+    getDefaultsMigrationKey() {
+        return `exelearning.quickbar.defaults.${this.defaultsMigrationVersion}.${eXeLearning.app.user.name}`;
+    }
+
+    shouldMigrateDefaults(savedIdevices) {
+        if (!Array.isArray(savedIdevices)) return false;
+        try {
+            return window.localStorage.getItem(this.getDefaultsMigrationKey()) !== '1';
+        } catch {
+            return false;
+        }
+    }
+
+    markDefaultsMigrationApplied() {
+        try {
+            window.localStorage.setItem(this.getDefaultsMigrationKey(), '1');
+        } catch {
+            // Ignore storage errors and keep the quickbar usable.
+        }
+    }
+
     centerMenuIdevices() {
         if (!this.nodeContainer || !this.menuIdevices) return;
         const rect = this.nodeContainer.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
+        const horizontalPadding = 24;
+        const maxWidth = Math.max(
+            100,
+            Math.min(rect.width - horizontalPadding, window.innerWidth - horizontalPadding)
+        );
         this.menuIdevices.style.position = 'fixed';
         this.menuIdevices.style.left = `${centerX}px`;
         this.menuIdevices.style.transform = 'translateX(-50%)';
+        this.menuIdevices.style.maxWidth = `${maxWidth}px`;
     }
 
     elementDivIdevice(ideviceData) {

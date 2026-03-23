@@ -528,37 +528,9 @@ export default class ModalIdeviceManager extends Modal {
             input.checked = !input.checked;
             input.dispatchEvent(new Event('change', { bubbles: true }));
         });
-        const showLimitMessage = () => {
-            if (this.alertFiveIdevices) {
-                this.alertFiveIdevices.textContent = _(
-                    'You can only select 5 iDevices as favourites. Please remove an iDevice so you can add another one.'
-                );
-                this.alertFiveIdevices.classList.add('show');
-            }
-        };
-        const hideLimitMessage = () => {
+        input.addEventListener('change', () => {
             if (this.alertFiveIdevices) {
                 this.alertFiveIdevices.classList.remove('show');
-            }
-        };
-        const countChecked = () => {
-            const listContainer = row.parentElement || document;
-            return listContainer.querySelectorAll('.toggle-input:checked')
-                .length;
-        };
-
-        input.addEventListener('change', () => {
-            if (input.checked) {
-                const checkedNow = countChecked();
-                if (checkedNow > 5) {
-                    input.checked = false;
-                    showLimitMessage();
-                    return;
-                } else {
-                    hideLimitMessage();
-                }
-            } else {
-                hideLimitMessage();
             }
             idevice.visible = input.checked;
             this.getUserListIdevices()
