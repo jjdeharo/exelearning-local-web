@@ -158,6 +158,32 @@ describe('MenuIdevices', () => {
     });
   });
 
+  describe('refresh', () => {
+    beforeEach(() => {
+      MenuIdevicesBottom.mockClear();
+    });
+
+    it('should recompose and rebind behaviour', () => {
+      const composeSpy = vi.spyOn(menuIdevices, 'compose');
+      const behaviourSpy = vi.spyOn(menuIdevices, 'behaviour');
+
+      menuIdevices.refresh();
+
+      expect(composeSpy).toHaveBeenCalled();
+      expect(behaviourSpy).toHaveBeenCalled();
+    });
+
+    it('should rebuild quickbar content', () => {
+      mockBottomElement.innerHTML = '<div>old</div>';
+
+      menuIdevices.refresh();
+
+      expect(mockBottomElement.innerHTML).toBe('');
+      expect(MenuIdevicesBottom).toHaveBeenCalledWith(menuIdevices);
+      expect(menuIdevices.menuIdevicesBottom.init).toHaveBeenCalled();
+    });
+  });
+
   describe('compose', () => {
     it('should call compose on menuIdevicesCompose', () => {
       menuIdevices.compose();

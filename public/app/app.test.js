@@ -2105,6 +2105,20 @@ describe('refreshTranslations', () => {
     // Should not throw
     expect(() => appInstance.refreshTranslations()).not.toThrow();
   });
+
+  it('reloads idevices and refreshes the menu for locale-dependent data', async () => {
+    const loadIdevicesSpy = vi.fn().mockResolvedValue();
+    const refreshMenuSpy = vi.fn();
+    appInstance.idevices = { loadIdevicesFromAPI: loadIdevicesSpy };
+    appInstance.menus = { menuIdevices: { refresh: refreshMenuSpy } };
+    appInstance._domTranslator = { refresh: vi.fn() };
+
+    await appInstance.refreshLocaleDependentData();
+
+    expect(appInstance._domTranslator.refresh).toHaveBeenCalled();
+    expect(loadIdevicesSpy).toHaveBeenCalled();
+    expect(refreshMenuSpy).toHaveBeenCalled();
+  });
 });
 
 describe('_waitForController edge cases', () => {

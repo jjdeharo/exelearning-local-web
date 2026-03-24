@@ -19,6 +19,17 @@ export default class MenuIdevices {
         this.behaviour();
     }
 
+    refresh() {
+        this.compose();
+        this.behaviour();
+
+        if (this.menuIdevicesBottomContent) {
+            this.menuIdevicesBottomContent.innerHTML = '';
+            this.menuIdevicesBottom = new MenuIdevicesBottom(this);
+            this.menuIdevicesBottom.init();
+        }
+    }
+
     compose() {
         this.menuIdevicesCompose.compose();
         this.categoriesIdevices = document.querySelectorAll(

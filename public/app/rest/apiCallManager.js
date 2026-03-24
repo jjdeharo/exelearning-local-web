@@ -266,6 +266,11 @@ export default class ApiCallManager {
 
         // Server mode - fetch from API
         let url = this.endpoints.api_idevices_installed.path;
+        const locale = this.app?.eXeLearning?.config?.locale;
+        if (locale) {
+            const separator = url.includes('?') ? '&' : '?';
+            url += `${separator}locale=${encodeURIComponent(locale)}`;
+        }
         return await this.func.get(url);
     }
 

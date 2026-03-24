@@ -130,6 +130,18 @@ describe('iDevices Routes', () => {
             // URL should start with /v followed by version number (e.g., /v0.0.0-alpha/files/perm/idevices/...)
             expect(idevice.url).toMatch(/^\/v[\d.]+[^/]*\/files\/perm\/idevices\//);
         });
+
+        it('should localize user idevice titles using the requested locale', async () => {
+            const res = await app.handle(
+                new Request('http://localhost/api/idevices/installed?locale=es'),
+            );
+
+            const body = await res.json();
+            const idevice = body.idevices.find((item: any) => item.id === 'rating-scale');
+
+            expect(idevice).toBeDefined();
+            expect(idevice.title).toBe('Escala de valoración');
+        });
     });
 
     describe('GET /api/idevices/installed/:ideviceId', () => {

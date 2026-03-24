@@ -1053,6 +1053,21 @@ export default class App {
     }
 
     /**
+     * Refresh locale-dependent runtime data without a full page reload.
+     * This is mainly needed in static builds, where changing the language
+     * updates GUI strings but does not automatically rebuild dynamic menus.
+     */
+    async refreshLocaleDependentData() {
+        this.refreshTranslations();
+
+        await this.loadIdevicesInstalled();
+
+        if (this.menus?.menuIdevices?.refresh) {
+            this.menus.menuIdevices.refresh();
+        }
+    }
+
+    /**
      *
      */
     async initializedToasts() {

@@ -7,6 +7,7 @@ import * as fs from 'fs';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import { getFilesDir } from '../services/file-helper';
+import { detectLocaleFromHeader, trans } from '../services/translation';
 import { getAppVersion } from '../utils/version';
 import { getBasePath } from '../utils/basepath.util';
 import type { IdeviceFileUploadRequest } from './types/request-payloads';
@@ -245,25 +246,42 @@ function scanIdevices(basePath: string): IdeviceConfig[] {
     return idevices;
 }
 
+function localizeIdeviceConfig(idevice: IdeviceConfig, locale: string): IdeviceConfig {
+    return {
+        ...idevice,
+        title: trans(idevice.title, {}, locale),
+        description: idevice.description ? trans(idevice.description, {}, locale) : idevice.description,
+    };
+}
+
 /**
  * iDevices routes
  */
 export const idevicesRoutes = new Elysia({ name: 'idevices-routes' })
     // GET /api/idevices/installed - Get list of installed iDevices
-    .get('/api/idevices/installed', () => {
+    .get('/api/idevices/installed', ({ request, query }) => {
         const baseIdevices = scanIdevices(IDEVICES_BASE_PATH);
         const userIdevices = scanIdevices(IDEVICES_USERS_PATH);
+        const locale =
+            (query as { locale?: string })?.locale ||
+            detectLocaleFromHeader(request.headers.get('accept-language'));
 
         // Merge user iDevices with base, user takes priority
         const ideviceMap = new Map<string, IdeviceConfig>();
         const version = getAppVersion();
 
         for (const idevice of baseIdevices) {
-            ideviceMap.set(idevice.id, { ...idevice, url: `/${version}/files/perm/idevices/base/${idevice.id}` });
+            ideviceMap.set(idevice.id, {
+                ...localizeIdeviceConfig(idevice, locale),
+                url: `/${version}/files/perm/idevices/base/${idevice.id}`,
+            });
         }
 
         for (const idevice of userIdevices) {
-            ideviceMap.set(idevice.id, { ...idevice, url: `/${version}/files/perm/idevices/users/${idevice.id}` });
+            ideviceMap.set(idevice.id, {
+                ...localizeIdeviceConfig(idevice, locale),
+                url: `/${version}/files/perm/idevices/users/${idevice.id}`,
+            });
         }
 
         const result = Array.from(ideviceMap.values());
@@ -286,8 +304,11 @@ export const idevicesRoutes = new Elysia({ name: 'idevices-routes' })
     })
 
     // GET /api/idevices/installed/:ideviceId - Get specific iDevice
-    .get('/api/idevices/installed/:ideviceId', ({ params, set }) => {
+    .get('/api/idevices/installed/:ideviceId', ({ params, query, request, set }) => {
         const { ideviceId } = params;
+        const locale =
+            (query as { locale?: string })?.locale ||
+            detectLocaleFromHeader(request.headers.get('accept-language'));
 
         // Check user iDevices first
         let configPath = path.join(IDEVICES_USERS_PATH, ideviceId, 'config.xml');
@@ -312,7 +333,7 @@ export const idevicesRoutes = new Elysia({ name: 'idevices-routes' })
             return { error: 'Parse Error', message: 'Failed to parse iDevice config' };
         }
 
-        return config;
+        return localizeIdeviceConfig(config, locale);
     })
 
     // GET /api/idevices/download-file-resources - Download iDevice/theme file resources

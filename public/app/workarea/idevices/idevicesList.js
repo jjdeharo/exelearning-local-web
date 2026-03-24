@@ -18,6 +18,7 @@ export default class IdeviceList {
      */
     async loadIdevicesInstalled() {
         // Use ApiCallManager which handles both static and server modes internally
+        this.installed = {};
         let installedIdevicesJSON =
             await this.manager.app.api.getIdevicesInstalled();
         if (installedIdevicesJSON && installedIdevicesJSON.idevices) {

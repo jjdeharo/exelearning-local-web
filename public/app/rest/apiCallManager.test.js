@@ -180,6 +180,15 @@ describe('ApiCallManager', () => {
       expect(mockFunc.get).toHaveBeenCalledWith('http://localhost/idevices');
       expect(mockFunc.get).toHaveBeenCalledWith('http://localhost/themes');
     });
+
+    it('should include locale param when requesting idevices', async () => {
+      apiManager.endpoints.api_idevices_installed = { path: 'http://localhost/idevices' };
+      apiManager.app.eXeLearning.config.locale = 'es';
+
+      await apiManager.getIdevicesInstalled();
+
+      expect(mockFunc.get).toHaveBeenCalledWith('http://localhost/idevices?locale=es');
+    });
   });
 
   describe('_buildProjectUrl', () => {

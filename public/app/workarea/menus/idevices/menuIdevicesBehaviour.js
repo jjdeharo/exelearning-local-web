@@ -2,6 +2,21 @@ export default class MenuIdevicesBehaviour {
     constructor(parent) {
         this.parent = parent;
         this.activeLabel = null;
+        this.closeEvents = [
+            'click',
+            'dragstart',
+            'drag',
+            'dragend',
+            'dragenter',
+            'dragover',
+            'dragleave',
+            'drop',
+        ];
+        this.boundCloseMenuHandler = this.handleCloseMenu.bind(this);
+        this.boundResizeHandler = this.handleResize.bind(this);
+        this.attributeObserver = null;
+        this.documentEventsBound = false;
+        this.resizeListenerBound = false;
     }
 
     /**
@@ -18,6 +33,8 @@ export default class MenuIdevicesBehaviour {
      */
     addEventClickIdeviceCategory() {
         this.parent.categoriesIdevicesLabels.forEach((label) => {
+            if (label.dataset.ideviceMenuBound === '1') return;
+            label.dataset.ideviceMenuBound = '1';
             label.addEventListener('click', (event) => {
                 let category = label.parentNode;
 
@@ -53,45 +70,45 @@ export default class MenuIdevicesBehaviour {
             });
         });
 
-        [
-            'click',
-            'dragstart',
-            'drag',
-            'dragend',
-            'dragenter',
-            'dragover',
-            'dragleave',
-            'drop',
-        ].forEach((closeEvent) => {
-            document.addEventListener(
-                closeEvent,
-                (event) => {
-                    const menu = document.getElementById(
-                        'menu_idevices_content'
-                    );
-                    if (!menu.contains(event.target)) {
-                        this.parent.categoriesIdevices.forEach((element) => {
-                            element.classList.remove('last-open');
-                            element.classList.remove('on');
-                            element.classList.add('off');
-                        });
-                    }
-                    eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
-                },
-                true
-            );
-        });
+        if (!this.documentEventsBound) {
+            this.closeEvents.forEach((closeEvent) => {
+                document.addEventListener(
+                    closeEvent,
+                    this.boundCloseMenuHandler,
+                    true
+                );
+            });
+            this.documentEventsBound = true;
+        }
     }
 
     /**
      *
      */
     addResizeListener() {
-        window.addEventListener('resize', () => {
-            if (this.activeLabel) {
-                this.positionSibling(this.activeLabel);
-            }
-        });
+        if (this.resizeListenerBound) return;
+        window.addEventListener('resize', this.boundResizeHandler);
+        this.resizeListenerBound = true;
+    }
+
+    handleResize() {
+        if (this.activeLabel) {
+            this.positionSibling(this.activeLabel);
+        }
+    }
+
+    handleCloseMenu(event) {
+        const menu = document.getElementById('menu_idevices_content');
+        if (!menu) return;
+
+        if (!menu.contains(event.target)) {
+            this.parent.categoriesIdevices.forEach((element) => {
+                element.classList.remove('last-open');
+                element.classList.remove('on');
+                element.classList.add('off');
+            });
+        }
+        eXeLearning.app.menus.menuStructure.menuStructureBehaviour.checkIfEmptyNode();
     }
 
     /**
@@ -118,7 +135,8 @@ export default class MenuIdevicesBehaviour {
      *
      */
     changeAttributePosBehaviour() {
-        const observer = new MutationObserver((mutations) => {
+        if (this.attributeObserver) return;
+        this.attributeObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (
                     mutation.type === 'attributes' &&
@@ -138,6 +156,8 @@ export default class MenuIdevicesBehaviour {
                 }
             });
         });
-        observer.observe(this.parent.menuIdevices, { attributes: true });
+        this.attributeObserver.observe(this.parent.menuIdevices, {
+            attributes: true,
+        });
     }
 }

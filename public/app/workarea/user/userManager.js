@@ -97,7 +97,9 @@ export default class UserManager {
             eXeLearning.config.locale = lang;
         }
 
-        if (typeof eXeLearning.app.refreshTranslations === 'function') {
+        if (typeof eXeLearning.app.refreshLocaleDependentData === 'function') {
+            await eXeLearning.app.refreshLocaleDependentData();
+        } else if (typeof eXeLearning.app.refreshTranslations === 'function') {
             eXeLearning.app.refreshTranslations();
         }
     }

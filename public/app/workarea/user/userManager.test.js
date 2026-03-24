@@ -24,6 +24,7 @@ describe('UserManager', () => {
         api: {
           postDeleteOdeFilesByDate: vi.fn().mockResolvedValue({}),
         },
+        refreshLocaleDependentData: vi.fn().mockResolvedValue(),
         refreshTranslations: vi.fn(),
         locale: {
           setLocaleLang: vi.fn().mockResolvedValue(),
@@ -106,7 +107,7 @@ describe('UserManager', () => {
       expect(globalThis.eXeLearning.app.locale.setLocaleLang).toHaveBeenCalledWith('es');
       expect(globalThis.eXeLearning.app.locale.loadTranslationsStrings).toHaveBeenCalled();
       expect(globalThis.eXeLearning.config.locale).toBe('es');
-      expect(globalThis.eXeLearning.app.refreshTranslations).toHaveBeenCalled();
+      expect(globalThis.eXeLearning.app.refreshLocaleDependentData).toHaveBeenCalled();
     });
   });
 });
