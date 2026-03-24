@@ -11341,6 +11341,10 @@
         <source>Rating scale</source>
         <target>Escala de valoració</target>
       </trans-unit>
+      <trans-unit id="qnh2d1s_top" resname="Hangman">
+        <source>Hangman</source>
+        <target>Penjat</target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target>L'indicador de funció mostrarà el terme i la seva definició.</target>
@@ -13708,6 +13712,10 @@
       <trans-unit id="xjka4b1" resname="Hangman game">
         <source>Hangman game</source>
         <target>~Joc de l'endevinalla</target>
+      </trans-unit>
+      <trans-unit id="qnh2d1s" resname="Hangman">
+        <source>Hangman</source>
+        <target>~Penjat</target>
       </trans-unit>
       <trans-unit id="05raq1c" resname="Game over">
         <source>Game over</source>

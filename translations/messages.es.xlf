@@ -13712,6 +13712,10 @@
         <source>Hangman game</source>
         <target>Juego del ahorcado</target>
       </trans-unit>
+      <trans-unit id="uhp6k1q" resname="Hangman">
+        <source>Hangman</source>
+        <target>Ahorcado</target>
+      </trans-unit>
       <trans-unit id="b65ikn8" resname="Game over">
         <source>Game over</source>
         <target>Fin del juego</target>

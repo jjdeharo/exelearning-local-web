@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <idevice>
     <name>hangman-random</name>
-    <title>Ahorcado</title>
+    <title>Hangman</title>
     <css-class>hangman-random</css-class>
     <category>Games</category>
     <icon>

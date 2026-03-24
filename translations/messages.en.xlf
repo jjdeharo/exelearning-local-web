@@ -13696,6 +13696,10 @@
         <source>Hangman game</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="po07o1m" resname="Hangman">
+        <source>Hangman</source>
+        <target></target>
+      </trans-unit>
       <trans-unit id="gqni867" resname="Game over">
         <source>Game over</source>
         <target></target>
