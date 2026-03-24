@@ -28,7 +28,7 @@ var $exeDevice = {
                 'Genera una escala con IA fuera de eXe, pega el resultado aqui e importalo.',
             subject: 'Materia',
             course: 'Curso',
-            topic: 'Describe con detalle lo que se evaluara',
+            topic: 'Describe con detalle lo que se evaluará',
             count: 'Numero de indicadores',
             levelsCount: 'Numero de niveles',
             prompt: 'Prompt para generar la escala',
@@ -55,6 +55,7 @@ var $exeDevice = {
                 'Usa exactamente esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "allowComment": true,\n  "commentLabel": "Comentario final",\n  "levels": [\n    { "label": "...", "points": 1 }\n  ],\n  "items": [\n    { "text": "...", "help": "" }\n  ]\n}',
             prompt4:
                 'Reglas obligatorias: crea una sola escala comun para todos los indicadores; no conviertas esto en una rubrica con descriptores diferentes por fila; usa entre 2 y 6 niveles; usa puntos enteros ascendentes; no uses el caracter # dentro de los textos.',
+            prompt5: 'Devuelve exactamente {{count}} indicadores y {{levelsCount}} niveles.',
             scaleInfo:
                 'Usa una escala comun para todos los indicadores. Si necesitas descriptores distintos en cada criterio, eso ya es una rubrica.',
             invalidTitle: 'Debes indicar un titulo para la escala.',
@@ -63,7 +64,7 @@ var $exeDevice = {
                 'Necesitas al menos un indicador con texto para guardar este iDevice.',
             sampleTitle: 'Escala de valoracion de la tarea',
             sampleIntro:
-                'Selecciona el nivel que mejor describe el desempeno en cada indicador.',
+                'Selecciona el nivel que mejor describe el desempeño en cada indicador.',
             sampleIndicator1: 'Comprende la informacion esencial de la actividad.',
             sampleIndicator2: 'Organiza el trabajo con claridad y orden.',
             sampleIndicator3: 'Usa el vocabulario especifico de la materia.',
@@ -127,6 +128,7 @@ var $exeDevice = {
                 'Use exactly this structure:\n{\n  "title": "...",\n  "intro": "...",\n  "allowComment": true,\n  "commentLabel": "Final comment",\n  "levels": [\n    { "label": "...", "points": 1 }\n  ],\n  "items": [\n    { "text": "...", "help": "" }\n  ]\n}',
             prompt4:
                 'Mandatory rules: create one shared scale for all indicators; do not turn this into a rubric with different descriptors per row; use between 2 and 6 levels; use ascending integer points; do not use the # character inside texts.',
+            prompt5: 'Return exactly {{count}} indicators and {{levelsCount}} levels.',
             scaleInfo:
                 'Use one shared scale for all indicators. If each criterion needs its own descriptors, that is already a rubric.',
             invalidTitle: 'You must provide a title for the scale.',
@@ -200,6 +202,7 @@ var $exeDevice = {
                 'Usa exactament esta estructura:\n{\n  "title": "...",\n  "intro": "...",\n  "allowComment": true,\n  "commentLabel": "Comentari final",\n  "levels": [\n    { "label": "...", "points": 1 }\n  ],\n  "items": [\n    { "text": "...", "help": "" }\n  ]\n}',
             prompt4:
                 'Regles obligatories: crea una sola escala comuna per a tots els indicadors; no convertisques aixo en una rubrica amb descriptors diferents per fila; usa entre 2 i 6 nivells; usa punts enters ascendents; no uses el caracter # dins dels textos.',
+            prompt5: 'Torna exactament {{count}} indicadors i {{levelsCount}} nivells.',
             scaleInfo:
                 'Usa una escala comuna per a tots els indicadors. Si cada criteri necessita descriptors propis, aixo ja es una rubrica.',
             invalidTitle: 'Has d indicar un titol per a l escala.',
@@ -253,7 +256,7 @@ var $exeDevice = {
         }
         return {
             title: title,
-            intro: this.q('#ratingScaleIntro').value.trim(),
+            intro: this.getIntroValue(),
             locale: this.lang,
             levels: levels.items,
             items: items.items,
@@ -265,10 +268,13 @@ var $exeDevice = {
     },
 
     createForm: function () {
+        this.destroyRichTextEditor();
         this.ideviceBody.innerHTML = this.getFormHtml();
+        this.setIntroValue(this.state.intro);
         if ($exeDevicesEdition.iDevice.tabs?.init) {
             $exeDevicesEdition.iDevice.tabs.init('ratingScaleIdeviceForm');
         }
+        this.initRichTextEditor();
         this.renderLevels();
         this.renderItems();
         this.bindEvents();
@@ -285,7 +291,7 @@ var $exeDevice = {
             this.input('ratingScaleTitle', this.t('title'), this.state.title) +
             this.checkboxField('ratingScaleAllowComment', this.t('commentOption'), this.state.allowComment) +
             '</div>' +
-            this.textarea('ratingScaleIntro', this.t('intro'), this.state.intro) +
+            this.htmlTextarea('ratingScaleIntro', this.t('intro')) +
             this.input('ratingScaleCommentLabel', this.t('commentLabel'), this.state.commentLabel) +
             '</fieldset>' +
             '<fieldset class="exe-fieldset"><legend><a href="#">' + this.t('levels') + '</a></legend>' +
@@ -389,18 +395,16 @@ var $exeDevice = {
         var lines = [this.t('prompt1')];
         if (subject) lines.push(this.t('subject') + ': ' + subject + '.');
         if (course) lines.push(this.t('course') + ': ' + course + '.');
-        if (topic) lines.push(this.t('topic') + ': ' + topic + '.');
+        if (topic) lines.push(topic);
         lines.push(this.t('count') + ': ' + count + '.');
         lines.push(this.t('levelsCount') + ': ' + levelsCount + '.');
         lines.push(this.t('prompt2'));
         lines.push(this.t('prompt3'));
         lines.push(this.t('prompt4'));
         lines.push(
-            'Devuelve exactamente ' +
-                count +
-                ' indicadores y ' +
-                levelsCount +
-                ' niveles.'
+            this.t('prompt5')
+                .replace('{{count}}', count)
+                .replace('{{levelsCount}}', levelsCount)
         );
         this.q('#ratingScaleAIPrompt').value = lines.join('\n');
     },
@@ -417,7 +421,7 @@ var $exeDevice = {
         this.state.levels = this.normalizeLevels(parsed.levels);
         this.state.items = this.normalizeItems(parsed.items);
         this.q('#ratingScaleTitle').value = this.state.title;
-        this.q('#ratingScaleIntro').value = this.state.intro;
+        this.setIntroValue(this.state.intro);
         this.q('#ratingScaleAllowComment').checked = this.state.allowComment;
         this.q('#ratingScaleCommentLabel').value = this.state.commentLabel;
         this.q('#ratingScaleCommentLabel').disabled = !this.state.allowComment;
@@ -924,6 +928,20 @@ var $exeDevice = {
         );
     },
 
+    htmlTextarea: function (id, label, extraClass) {
+        return (
+            '<div class="rating-scale-textarea' +
+            (extraClass ? ' ' + extraClass : '') +
+            '"><label for="' +
+            id +
+            '">' +
+            this.escape(label) +
+            '</label><textarea id="' +
+            id +
+            '" class="exe-html-editor"></textarea></div>'
+        );
+    },
+
     checkboxField: function (id, label, checked) {
         return (
             '<label class="rating-scale-toggle" for="' +
@@ -978,6 +996,50 @@ var $exeDevice = {
             this.escape(value) +
             '</textarea></div>'
         );
+    },
+
+    initRichTextEditor: function () {
+        if (typeof tinymce === 'undefined' || !tinymce.init || !this.q('#ratingScaleIntro')) {
+            return;
+        }
+        tinymce.init({
+            selector: '#ratingScaleIntro',
+            height: 220,
+            language: 'all',
+            menubar: false,
+            statusbar: false,
+            branding: false,
+            plugins: ['link', 'lists', 'paste', 'code'],
+            paste_as_text: true,
+            entity_encoding: 'raw',
+            toolbar:
+                'undo redo | removeformat | formatselect | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist | link | code',
+        });
+    },
+
+    destroyRichTextEditor: function () {
+        if (typeof tinyMCE === 'undefined' || !tinyMCE.get) return;
+        var editor = tinyMCE.get('ratingScaleIntro');
+        if (editor) editor.remove();
+    },
+
+    getIntroValue: function () {
+        if (typeof tinyMCE !== 'undefined' && tinyMCE.get) {
+            var editor = tinyMCE.get('ratingScaleIntro');
+            if (editor) return editor.getContent().trim();
+        }
+        var field = this.q('#ratingScaleIntro');
+        return field ? field.value.trim() : '';
+    },
+
+    setIntroValue: function (value) {
+        var normalizedValue = String(value || '');
+        var field = this.q('#ratingScaleIntro');
+        if (field) field.value = normalizedValue;
+        if (typeof tinyMCE !== 'undefined' && tinyMCE.get) {
+            var editor = tinyMCE.get('ratingScaleIntro');
+            if (editor) editor.setContent(normalizedValue);
+        }
     },
 
     q: function (selector) {

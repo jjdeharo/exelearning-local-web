@@ -31,7 +31,7 @@ describe('rating-scale export', () => {
         const html = $ratingscale.renderView(
             {
                 title: 'Scale',
-                intro: 'Choose one level.',
+                intro: '<p><strong>Choose</strong> one level.</p>',
                 locale: 'en',
                 allowComment: true,
                 commentLabel: 'Teacher comment',
@@ -54,6 +54,7 @@ describe('rating-scale export', () => {
         expect(html).toContain('Explains the result');
         expect(html).toContain('Calculate');
         expect(html).toContain('Fill in and print');
+        expect(html).toContain('<strong>Choose</strong> one level.');
         expect(html).toContain('value="l2"');
         expect(html).not.toContain('Games-SendScore');
         expect(html).not.toContain('Check');

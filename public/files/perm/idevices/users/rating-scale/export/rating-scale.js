@@ -95,7 +95,7 @@ var $ratingscale = {
             '</h3>' +
             (ldata.intro
                 ? '<div class="rating-scale-intro">' +
-                  this.escape(ldata.intro) +
+                  ldata.intro +
                   '</div>'
                 : '') +
             '</div>';

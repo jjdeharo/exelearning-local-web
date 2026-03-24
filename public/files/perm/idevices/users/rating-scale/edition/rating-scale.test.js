@@ -97,4 +97,42 @@ ITEM: Explains the conclusion clearly`);
         expect(textarea.tagName).toBe('TEXTAREA');
         expect(wrapper).not.toBeNull();
     });
+
+    it('uses only the user description text in the AI prompt', () => {
+        const element = document.createElement('div');
+        document.body.appendChild(element);
+
+        $exeDevice.init(element, {});
+        element.querySelector('#ratingScaleAITopic').value = 'Assess lab report quality and scientific accuracy.';
+        $exeDevice.updateAIPrompt();
+
+        const prompt = element.querySelector('#ratingScaleAIPrompt').value;
+
+        expect(prompt).toContain('Assess lab report quality and scientific accuracy.');
+        expect(prompt).not.toContain('Describe in detail what will be assessed:');
+        expect(prompt).toContain('Return exactly 6 indicators and 4 levels.');
+    });
+
+    it('saves formatted instructions from TinyMCE', () => {
+        const element = document.createElement('div');
+        document.body.appendChild(element);
+        const originalGet = global.tinyMCE.get;
+
+        $exeDevice.init(element, {});
+        global.tinyMCE.get = vi.fn((id) => {
+            if (id === 'ratingScaleIntro') {
+                return {
+                    getContent: () => '<p><strong>Intro</strong> con formato.</p>',
+                    setContent: vi.fn(),
+                    remove: vi.fn(),
+                };
+            }
+            return originalGet ? originalGet(id) : null;
+        });
+
+        const saved = $exeDevice.save();
+
+        expect(saved.intro).toBe('<p><strong>Intro</strong> con formato.</p>');
+        global.tinyMCE.get = originalGet;
+    });
 });
