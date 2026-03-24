@@ -11309,6 +11309,14 @@
         <source>Rating scale</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="fwc1en01" resname="Food web">
+        <source>Food web</source>
+        <target></target>
+      </trans-unit>
+      <trans-unit id="pnsqen01" resname="Punnett square">
+        <source>Punnett square</source>
+        <target></target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target></target>

@@ -11345,6 +11345,14 @@
         <source>Hangman</source>
         <target>Penjat</target>
       </trans-unit>
+      <trans-unit id="fwc1ca01" resname="Food web">
+        <source>Food web</source>
+        <target>Xarxa tròfica</target>
+      </trans-unit>
+      <trans-unit id="pnsqca01" resname="Punnett square">
+        <source>Punnett square</source>
+        <target>Quadre de Punnett</target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target>L'indicador de funció mostrarà el terme i la seva definició.</target>

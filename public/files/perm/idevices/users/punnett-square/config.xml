@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <idevice>
     <name>punnett-square</name>
-    <title>Cuadro de Punnett</title>
+    <title>Punnett square</title>
     <css-class>punnett-square</css-class>
     <category>Science</category>
     <icon>

@@ -11329,6 +11329,14 @@
         <source>Rating scale</source>
         <target>Escala de valoración</target>
       </trans-unit>
+      <trans-unit id="fwc1es01" resname="Food web">
+        <source>Food web</source>
+        <target>Red trófica</target>
+      </trans-unit>
+      <trans-unit id="pnsqes01" resname="Punnett square">
+        <source>Punnett square</source>
+        <target>Cuadro de Punnett</target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target>El bocadillo mostrará el término y su definición.</target>
