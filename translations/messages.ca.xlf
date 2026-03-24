@@ -11337,6 +11337,10 @@
         <source>Timeline</source>
         <target>Línia del temps</target>
       </trans-unit>
+      <trans-unit id="qJ7eRk2" resname="Rating scale">
+        <source>Rating scale</source>
+        <target>Escala de valoració</target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target>L'indicador de funció mostrarà el terme i la seva definició.</target>

@@ -1,12 +1,13 @@
 export default class MenuIdevicesBottom {
     constructor() {
-        this.defaultsMigrationVersion = 'v1';
+        this.defaultsMigrationVersion = 'v3';
         this.defaultIdevices = [
             'text',
             'food-web-c1',
             'punnett-square',
             'timeline',
             'hangman-random',
+            'rating-scale',
         ];
         this.menuIdevices = document.querySelector('#idevices-bottom');
     }

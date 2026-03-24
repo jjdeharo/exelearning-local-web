@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<idevice>
+    <name>rating-scale</name>
+    <title>Rating scale</title>
+    <css-class>rating-scale</css-class>
+    <category>Assessment and tracking</category>
+    <icon>
+        <name>rating-scale-icon</name>
+        <url>rating-scale-icon.svg</url>
+        <type>img</type>
+    </icon>
+    <version>1.0</version>
+    <api-version>3.0</api-version>
+    <component-type>json</component-type>
+    <edition-js>
+        <filename>rating-scale.js</filename>
+    </edition-js>
+    <edition-css>
+        <filename>rating-scale.css</filename>
+    </edition-css>
+    <export-js>
+        <filename>rating-scale.js</filename>
+    </export-js>
+    <export-css>
+        <filename>rating-scale.css</filename>
+    </export-css>
+    <export-template-filename>rating-scale.html</export-template-filename>
+    <export-object>$ratingscale</export-object>
+    <description>Simple ordinal assessment scale with configurable indicators, levels and optional comment.</description>
+    <downloadable>1</downloadable>
+    <default-visibility>0</default-visibility>
+</idevice>

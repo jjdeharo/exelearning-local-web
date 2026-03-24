@@ -1,0 +1,139 @@
+.rating-scale-editor {
+    color: #233041;
+}
+
+.rating-scale-editor .rating-scale-description {
+    margin-bottom: 1rem;
+}
+
+.rating-scale-editor .rating-scale-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+
+.rating-scale-editor .rating-scale-field,
+.rating-scale-editor .rating-scale-textarea,
+.rating-scale-editor .rating-scale-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+}
+
+.rating-scale-editor input[type='text'],
+.rating-scale-editor input[type='number'],
+.rating-scale-editor textarea,
+.rating-scale-editor select {
+    border: 1px solid #c8d0dc;
+    border-radius: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    width: 100%;
+}
+
+.rating-scale-editor textarea {
+    min-height: 5rem;
+    resize: vertical;
+}
+
+.rating-scale-editor .rating-scale-ai-topic {
+    grid-column: 1 / -1;
+}
+
+.rating-scale-editor .rating-scale-ai-topic textarea {
+    min-height: 9rem;
+}
+
+.rating-scale-editor .rating-scale-toggle {
+    align-items: center;
+    display: inline-flex;
+    gap: 0.55rem;
+    margin-bottom: 1rem;
+}
+
+.rating-scale-editor .rating-scale-collection {
+    display: grid;
+    gap: 0.85rem;
+}
+
+.rating-scale-editor .rating-scale-card {
+    background: #f8fafc;
+    border: 1px solid #d6deeb;
+    border-radius: 0.85rem;
+    padding: 1rem;
+}
+
+.rating-scale-editor .rating-scale-card-header {
+    align-items: center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+}
+
+.rating-scale-editor .rating-scale-card-header strong {
+    color: #16324f;
+}
+
+.rating-scale-editor .rating-scale-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.rating-scale-editor .rating-scale-card-actions button,
+.rating-scale-editor .rating-scale-add {
+    background: #eef3ff;
+    border: 1px solid #c7d4f8;
+    border-radius: 999px;
+    color: #1f4cbf;
+    cursor: pointer;
+    padding: 0.45rem 0.85rem;
+}
+
+.rating-scale-editor .rating-scale-card-actions button:hover,
+.rating-scale-editor .rating-scale-add:hover {
+    background: #dfe9ff;
+}
+
+.rating-scale-editor .rating-scale-help {
+    color: #5b6b7f;
+    margin: 0.25rem 0 1rem;
+}
+
+.rating-scale-editor .rating-scale-ai-grid {
+    align-items: end;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+    margin-bottom: 1rem;
+}
+
+.rating-scale-editor .rating-scale-ai-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.rating-scale-editor .rating-scale-ai-actions select {
+    max-width: 14rem;
+}
+
+.rating-scale-editor .rating-scale-disabled-note {
+    color: #7a2f2f;
+    display: none;
+    margin-bottom: 0.75rem;
+}
+
+.rating-scale-editor .rating-scale-disabled-note.is-visible {
+    display: block;
+}
+
+@media (max-width: 720px) {
+    .rating-scale-editor .rating-scale-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}

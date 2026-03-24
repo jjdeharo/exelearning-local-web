@@ -142,6 +142,7 @@ describe('idevice-config-browser', () => {
             expect(getIdeviceConfig('text').componentType).toBe('json');
             expect(getIdeviceConfig('freetext').componentType).toBe('json');
             expect(getIdeviceConfig('reflection').componentType).toBe('json');
+            expect(getIdeviceConfig('rating-scale').componentType).toBe('json');
             // HTML idevices (no JS initialization needed)
             expect(getIdeviceConfig('multi-choice').componentType).toBe('html');
             expect(getIdeviceConfig('unknown').componentType).toBe('html');

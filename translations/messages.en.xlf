@@ -11305,6 +11305,10 @@
         <source>Timeline</source>
         <target></target>
       </trans-unit>
+      <trans-unit id="qJ7eRk2" resname="Rating scale">
+        <source>Rating scale</source>
+        <target></target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target></target>

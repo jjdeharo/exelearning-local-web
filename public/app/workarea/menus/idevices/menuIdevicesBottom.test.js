@@ -154,6 +154,7 @@ describe('MenuIdevicesBottom', () => {
         'punnett-square',
         'timeline',
         'hangman-random',
+        'rating-scale',
       ]);
     });
 
@@ -242,6 +243,7 @@ describe('MenuIdevicesBottom', () => {
         'punnett-square',
         'timeline',
         'hangman-random',
+        'rating-scale',
       ]);
       expect(menuIdevicesBottom.saveIdevices).toHaveBeenCalledWith([
         'text',
@@ -250,6 +252,7 @@ describe('MenuIdevicesBottom', () => {
         'punnett-square',
         'timeline',
         'hangman-random',
+        'rating-scale',
       ]);
     });
 

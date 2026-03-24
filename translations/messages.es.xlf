@@ -11325,6 +11325,10 @@
         <source>Timeline</source>
         <target>Línea de tiempo</target>
       </trans-unit>
+      <trans-unit id="qJ7eRk2" resname="Rating scale">
+        <source>Rating scale</source>
+        <target>Escala de valoración</target>
+      </trans-unit>
       <trans-unit id="qQTzJDT" resname="The tooltip will show the term and its definition.">
         <source>The tooltip will show the term and its definition.</source>
         <target>El bocadillo mostrará el término y su definición.</target>
