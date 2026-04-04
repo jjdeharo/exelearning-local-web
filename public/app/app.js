@@ -29,6 +29,8 @@ import DOMTranslator from './locate/domTranslator.js';
 // Unsaved changes helper
 import UnsavedChangesHelper from './utils/unsavedChangesHelper.js';
 window.UnsavedChangesHelper = UnsavedChangesHelper;
+// Blob paste guard
+import BlobPasteGuard from './common/blobPasteGuard.js';
 
 const STATIC_PROJECT_ID_SESSION_KEY = 'exe-static-project-id';
 const STATIC_RECOVER_PROJECT_ID_KEY = 'exe-static-recover-project-id';
@@ -176,6 +178,15 @@ export default class App {
         await this.flushPendingStaticOpenFilesWhenReady();
         // Process any pending Electron file-open events after project init.
         await this.flushPendingElectronOpenFilesWhenReady();
+        // Show deferred URL import error from static mode (set by ?url= handler)
+        if (window.__exeStaticUrlError && this.modals?.alert) {
+            this.modals.alert.show({
+                title: _('Import Error'),
+                body: window.__exeStaticUrlError,
+                contentId: 'error',
+            });
+            window.__exeStaticUrlError = null;
+        }
         // "Not for production use" warning
         await this.showProvisionalDemoWarning();
         // To review (showProvisionalToDoWarning might be useful for future beta releases)
@@ -1072,6 +1083,7 @@ export default class App {
      */
     async initializedToasts() {
         this.toasts.init();
+        new BlobPasteGuard({ toastsManager: this.toasts }).start();
     }
 
     /**
@@ -1294,6 +1306,17 @@ export default class App {
             typeof window.electronAPI.notifyRendererReadyForOpenFile === 'function'
         ) {
             window.electronAPI.notifyRendererReadyForOpenFile();
+        }
+        if (window.electronAPI?.onGetCloseCopy) {
+            window.electronAPI.onGetCloseCopy(() => {
+                window.electronAPI.sendCloseCopy({
+                    title:              _('Unsaved changes'),
+                    message:            _('You have unsaved changes. Are you sure you want to leave?'),
+                    detail:             _('If you close now, your latest changes will be lost. Stay to save the project first.'),
+                    stayButtonLabel:    _('Stay'),
+                    discardButtonLabel: _('Close without saving'),
+               });
+           });
         }
     }
 
