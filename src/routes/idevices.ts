@@ -263,8 +263,7 @@ export const idevicesRoutes = new Elysia({ name: 'idevices-routes' })
         const baseIdevices = scanIdevices(IDEVICES_BASE_PATH);
         const userIdevices = scanIdevices(IDEVICES_USERS_PATH);
         const locale =
-            (query as { locale?: string })?.locale ||
-            detectLocaleFromHeader(request.headers.get('accept-language'));
+            (query as { locale?: string })?.locale || detectLocaleFromHeader(request.headers.get('accept-language'));
 
         // Merge user iDevices with base, user takes priority
         const ideviceMap = new Map<string, IdeviceConfig>();
@@ -307,8 +306,7 @@ export const idevicesRoutes = new Elysia({ name: 'idevices-routes' })
     .get('/api/idevices/installed/:ideviceId', ({ params, query, request, set }) => {
         const { ideviceId } = params;
         const locale =
-            (query as { locale?: string })?.locale ||
-            detectLocaleFromHeader(request.headers.get('accept-language'));
+            (query as { locale?: string })?.locale || detectLocaleFromHeader(request.headers.get('accept-language'));
 
         // Check user iDevices first
         let configPath = path.join(IDEVICES_USERS_PATH, ideviceId, 'config.xml');

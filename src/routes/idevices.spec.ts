@@ -132,9 +132,7 @@ describe('iDevices Routes', () => {
         });
 
         it('should localize user idevice titles using the requested locale', async () => {
-            const res = await app.handle(
-                new Request('http://localhost/api/idevices/installed?locale=es'),
-            );
+            const res = await app.handle(new Request('http://localhost/api/idevices/installed?locale=es'));
 
             const body = await res.json();
             const idevice = body.idevices.find((item: any) => item.id === 'rating-scale');
